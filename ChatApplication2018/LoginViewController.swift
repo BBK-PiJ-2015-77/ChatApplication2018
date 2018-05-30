@@ -26,6 +26,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func logInAction(_ sender: Any) {
+        //First commit
         //Test
         print("got here1")
         if (self.loginTextField.text?.isEmpty)!
