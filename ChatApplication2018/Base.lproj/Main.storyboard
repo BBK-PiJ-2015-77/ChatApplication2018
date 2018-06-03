@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lkh-1T-LgE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="u7z-kx-KVV">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -83,7 +83,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1649" y="34"/>
+            <point key="canvasLocation" x="2729" y="1052"/>
         </scene>
         <!--Settings-->
         <scene sceneID="OHK-vP-uWH">
@@ -108,7 +108,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ngR-I4-11i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3677.5999999999999" y="410.64467766116945"/>
+            <point key="canvasLocation" x="3678" y="615"/>
         </scene>
         <!--Extra-->
         <scene sceneID="hfR-kb-Ik3">
@@ -124,7 +124,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vk7-TM-F7b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3678" y="1075"/>
+            <point key="canvasLocation" x="4356" y="79"/>
         </scene>
         <!--Chats-->
         <scene sceneID="0SH-jA-hHC">
@@ -149,12 +149,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R8f-ng-Fwn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3677.5999999999999" y="-255.02248875562222"/>
+            <point key="canvasLocation" x="3678" y="-448"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Home Tab Bar Controller-->
         <scene sceneID="HDM-ak-WMm">
             <objects>
-                <tabBarController id="u7z-kx-KVV" sceneMemberID="viewController">
+                <tabBarController id="u7z-kx-KVV" customClass="HomeTabBarController" customModule="ChatApplication2018" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ka9-lP-JtK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -164,44 +164,12 @@
                         <segue destination="pGU-Sl-eHQ" kind="relationship" relationship="viewControllers" id="Djl-p7-qnT"/>
                         <segue destination="cvN-fO-3qp" kind="relationship" relationship="viewControllers" id="hH0-YL-WET"/>
                         <segue destination="ljO-By-35o" kind="relationship" relationship="viewControllers" id="bqn-9w-mgf"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="loginView" id="nUe-bP-B8Q"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TWA-Au-zQt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2729" y="79"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="3Yh-ok-qfn">
-            <objects>
-                <viewController id="lkh-1T-LgE" customClass="ViewController" customModule="ChatApplication2018" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="7wH-oJ-i88">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome! You have succesfully logged on" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rxg-gX-x8Z">
-                                <rect key="frame" x="37.5" y="140" width="300" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="PI2-0K-q5g"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="Rxg-gX-x8Z" firstAttribute="centerX" secondItem="7wH-oJ-i88" secondAttribute="centerX" id="2Ih-e9-Xm1"/>
-                            <constraint firstItem="Rxg-gX-x8Z" firstAttribute="top" secondItem="oxn-lu-1cn" secondAttribute="top" constant="120" id="j52-KV-jYE"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="oxn-lu-1cn"/>
-                    </view>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="loginView" id="SzF-Q7-58O"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="OVq-lh-7up" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="879" y="34"/>
         </scene>
     </scenes>
 </document>
