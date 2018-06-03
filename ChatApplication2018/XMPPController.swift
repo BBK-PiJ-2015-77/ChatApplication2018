@@ -27,6 +27,7 @@ class XMPPController: NSObject {
             throw XMPPControllerError.wrongUserID
         }
         
+        
         self.hostName = hostName
         self.userJID = userJID
         self.hostPort = hostPort

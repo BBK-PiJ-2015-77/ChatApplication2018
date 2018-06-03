@@ -17,6 +17,8 @@
 		B1C631D220C3FC7000CE9F62 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C631D120C3FC7000CE9F62 /* ChatsViewController.swift */; };
 		B1C631D420C3FC8500CE9F62 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C631D320C3FC8500CE9F62 /* SettingsViewController.swift */; };
 		B1C631D620C3FDE300CE9F62 /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C631D520C3FDE300CE9F62 /* HomeTabBarController.swift */; };
+		B1C631D820C42CC100CE9F62 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C631D720C42CC100CE9F62 /* CFNetwork.framework */; };
+		B1C631DA20C42CEA00CE9F62 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C631D920C42CEA00CE9F62 /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		B1C631D120C3FC7000CE9F62 /* ChatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
 		B1C631D320C3FC8500CE9F62 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		B1C631D520C3FDE300CE9F62 /* HomeTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
+		B1C631D720C42CC100CE9F62 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		B1C631D920C42CEA00CE9F62 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		DB0CE08D878C6E2EAE500654 /* Pods-ChatApplication2018.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatApplication2018.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatApplication2018/Pods-ChatApplication2018.debug.xcconfig"; sourceTree = "<group>"; };
 		E43F8F0734B2CCF945C6DF53 /* Pods_ChatApplication2018.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatApplication2018.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -41,6 +45,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1C631DA20C42CEA00CE9F62 /* Security.framework in Frameworks */,
+				B1C631D820C42CC100CE9F62 /* CFNetwork.framework in Frameworks */,
 				15D5AE7D256C8AF1DEDCCD9B /* Pods_ChatApplication2018.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -60,6 +66,8 @@
 		A21A99D3B5C1273815F7C42B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B1C631D920C42CEA00CE9F62 /* Security.framework */,
+				B1C631D720C42CC100CE9F62 /* CFNetwork.framework */,
 				E43F8F0734B2CCF945C6DF53 /* Pods_ChatApplication2018.framework */,
 			);
 			name = Frameworks;
@@ -298,9 +306,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-lxml2";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -349,8 +359,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-lxml2";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
