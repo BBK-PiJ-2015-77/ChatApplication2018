@@ -37,7 +37,7 @@
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uqg-Nn-fVu">
-                                <rect key="frame" x="112" y="240" width="150" height="30"/>
+                                <rect key="frame" x="112.5" y="240" width="150" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="kol-aw-wc1"/>
                                 </constraints>
@@ -48,7 +48,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ANN-yD-v7y">
-                                <rect key="frame" x="37" y="310" width="300" height="0.0"/>
+                                <rect key="frame" x="37.5" y="310" width="300" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="9n2-Dh-Te5"/>
                                 </constraints>
@@ -135,17 +135,25 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Chats" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZhE-fA-ahT">
-                                <rect key="frame" x="166" y="138" width="45" height="21"/>
+                                <rect key="frame" x="165" y="20" width="45" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dnx-tO-9G0">
+                                <rect key="frame" x="67" y="77" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="ktL-Z6-3Cr"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Chats" id="oEC-t3-16u"/>
+                    <connections>
+                        <outlet property="tableView" destination="dnx-tO-9G0" id="72g-4S-2kf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R8f-ng-Fwn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

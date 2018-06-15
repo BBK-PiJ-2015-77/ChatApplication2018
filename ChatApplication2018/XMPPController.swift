@@ -21,6 +21,7 @@ class XMPPController: NSObject {
     let userJID: XMPPJID
     let hostPort: UInt16
     let password: String
+    //let presence: XMPPPresence
     
     init(hostName: String, userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
         guard let userJID = XMPPJID(string: userJIDString) else {
@@ -40,6 +41,14 @@ class XMPPController: NSObject {
         self.xmppStream.startTLSPolicy = XMPPStreamStartTLSPolicy.allowed
         self.xmppStream.myJID = userJID
         
+        //MARK testing presence
+        /*
+        presence = XMPPPresence()
+        self.xmppStream.send(presence)
+        //self.xmppStream.myPresence =
+        print("Presence: \(presence.intShow) -end-")
+ */
+        
         super.init()
         
         self.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
@@ -51,6 +60,12 @@ class XMPPController: NSObject {
         }
         
         try! self.xmppStream.connect(withTimeout: XMPPStreamTimeoutNone)
+    }
+    
+    func setPresenceOnline() {
+        let presence = XMPPPresence()
+        xmppStream.send(presence)
+        print("Presence: \(String(describing: presence?.status())) -end-")
     }
 }
 
@@ -64,6 +79,8 @@ extension XMPPController: XMPPStreamDelegate {
     func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
         self.xmppStream.send(XMPPPresence())
         print("Stream: Authenticated")
+        //MARK testing presence v2
+        setPresenceOnline()
     }
     
     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {

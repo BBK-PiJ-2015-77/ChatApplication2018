@@ -8,8 +8,8 @@
 
 import UIKit
 
-class ChatsViewController: UIViewController {
-
+class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -19,6 +19,14 @@ class ChatsViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    @IBOutlet weak var tableView: UITableView! {
+        didSet {
+            tableView.dataSource = self
+            tableView.delegate = self
+        }
     }
     
 
