@@ -62,11 +62,13 @@ class XMPPController: NSObject {
         try! self.xmppStream.connect(withTimeout: XMPPStreamTimeoutNone)
     }
     
+    /*
     func setPresenceOnline() {
         let presence = XMPPPresence()
         xmppStream.send(presence)
         print("Presence: \(String(describing: presence?.status())) -end-")
     }
+    */
 }
 
 extension XMPPController: XMPPStreamDelegate {
@@ -80,7 +82,7 @@ extension XMPPController: XMPPStreamDelegate {
         self.xmppStream.send(XMPPPresence())
         print("Stream: Authenticated")
         //MARK testing presence v2
-        setPresenceOnline()
+        //setPresenceOnline()
     }
     
     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {

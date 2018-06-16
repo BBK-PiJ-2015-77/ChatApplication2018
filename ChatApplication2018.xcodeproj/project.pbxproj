@@ -19,6 +19,7 @@
 		B1C631D620C3FDE300CE9F62 /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C631D520C3FDE300CE9F62 /* HomeTabBarController.swift */; };
 		B1C631D820C42CC100CE9F62 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C631D720C42CC100CE9F62 /* CFNetwork.framework */; };
 		B1C631DA20C42CEA00CE9F62 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C631D920C42CEA00CE9F62 /* Security.framework */; };
+		B1D72DE320D5780E00EF1FC6 /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D72DE220D5780E00EF1FC6 /* ChatTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		B1C631D520C3FDE300CE9F62 /* HomeTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
 		B1C631D720C42CC100CE9F62 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		B1C631D920C42CEA00CE9F62 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		B1D72DE220D5780E00EF1FC6 /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
 		DB0CE08D878C6E2EAE500654 /* Pods-ChatApplication2018.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatApplication2018.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatApplication2018/Pods-ChatApplication2018.debug.xcconfig"; sourceTree = "<group>"; };
 		E43F8F0734B2CCF945C6DF53 /* Pods_ChatApplication2018.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatApplication2018.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -98,6 +100,7 @@
 				B1C631C720BC4E7400CE9F62 /* LoginViewController.swift */,
 				B1C631C920BC4F5900CE9F62 /* XMPPController.swift */,
 				B1C631B920BC4B6700CE9F62 /* Main.storyboard */,
+				B1D72DE220D5780E00EF1FC6 /* ChatTableViewCell.swift */,
 				B1C631D520C3FDE300CE9F62 /* HomeTabBarController.swift */,
 				B1C631D320C3FC8500CE9F62 /* SettingsViewController.swift */,
 				B1C631D120C3FC7000CE9F62 /* ChatsViewController.swift */,
@@ -231,6 +234,7 @@
 				B1C631B620BC4B6700CE9F62 /* AppDelegate.swift in Sources */,
 				B1C631D620C3FDE300CE9F62 /* HomeTabBarController.swift in Sources */,
 				B1C631D220C3FC7000CE9F62 /* ChatsViewController.swift in Sources */,
+				B1D72DE320D5780E00EF1FC6 /* ChatTableViewCell.swift in Sources */,
 				B1C631CA20BC4F5900CE9F62 /* XMPPController.swift in Sources */,
 				B1C631D420C3FC8500CE9F62 /* SettingsViewController.swift in Sources */,
 			);

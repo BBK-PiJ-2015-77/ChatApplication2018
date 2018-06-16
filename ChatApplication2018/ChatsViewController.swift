@@ -10,26 +10,27 @@ import UIKit
 
 class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    var chatArray = ["Tom", "Dick", "Harry"]
 
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return chatArray.count
     }
     
-    
-    @IBOutlet weak var tableView: UITableView! {
-        didSet {
-            tableView.dataSource = self
-            tableView.delegate = self
-        }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatTableViewCell
+        cell.nameLabel.text = chatArray[indexPath.row]
+        print ("checking table cells are created")
+        return cell
     }
     
+    @IBAction func addChat(_ sender: Any) {
+        //tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+    }
+    
+    //MARK: - CollectionViewDataSource
 
+    
+    
     /*
     // MARK: - Navigation
 
@@ -39,5 +40,16 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view.
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
 
 }
