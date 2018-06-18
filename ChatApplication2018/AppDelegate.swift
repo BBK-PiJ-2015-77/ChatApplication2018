@@ -18,9 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         //For logging
         DDLog.add(DDTTYLogger.sharedInstance, with: DDLogLevel.all)
+        
+        //if I use this script, it means that the login page is the first page, and is not presented modally
+
         /*
         let controllerId = "Login";
-        
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let initViewController: UIViewController = storyboard.instantiateViewController(withIdentifier: controllerId) as UIViewController
         self.window?.rootViewController = initViewController

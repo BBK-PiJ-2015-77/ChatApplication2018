@@ -8,27 +8,13 @@
 
 import UIKit
 import XMPPFramework
+import SwiftKeychainWrapper
 
 class HomeTabBarController: UITabBarController {
 
     weak var loginViewController: LoginViewController?
     var logInPresented = false
     var xmppController: XMPPController!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if !self.logInPresented {
-            self.logInPresented = true
-            self.performSegue(withIdentifier: "loginView", sender: nil)
-        }
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "loginView" {
@@ -42,7 +28,6 @@ class HomeTabBarController: UITabBarController {
         // Dispose of any resources that can be recreated.
     }
     
-
     /*
     // MARK: - Navigation
 
@@ -52,6 +37,30 @@ class HomeTabBarController: UITabBarController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let retrievedPassword: String? = KeychainWrapper.standard.string(forKey: "userPassword")
+        let retrievedUserName: String? = KeychainWrapper.standard.string(forKey: "userName")
+        
+        if retrievedPassword != nil && retrievedUserName != nil {
+            //login with stored credentials
+            //didTouchLogIn(sender: nil, userJID: <#T##String#>, userPassword: <#T##String#>, server: <#T##String#>)
+        }
+        //else bring up login view
+        
+        if !self.logInPresented {
+            self.logInPresented = true
+            self.performSegue(withIdentifier: "loginView", sender: nil)
+        }
+    }
 
 }
 
@@ -76,6 +85,7 @@ extension HomeTabBarController: LoginViewControllerDelegate {
 
 extension HomeTabBarController: XMPPStreamDelegate {
     
+    //if login details are authenticated, the modal view is dismissed
     func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
         self.loginViewController?.dismiss(animated: true, completion: nil)
     }

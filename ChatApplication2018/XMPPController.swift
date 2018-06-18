@@ -8,6 +8,7 @@
 
 import Foundation
 import XMPPFramework
+import SwiftKeychainWrapper
 
 enum XMPPControllerError: Error {
     case wrongUserID
@@ -62,6 +63,14 @@ class XMPPController: NSObject {
         try! self.xmppStream.connect(withTimeout: XMPPStreamTimeoutNone)
     }
     
+    //add autheticated login details to keychain
+    func saveCredentials(userName: String, password: String) {
+        var saveSuccessful: Bool = KeychainWrapper.standard.set(password, forKey: "userPassword")
+        print("Password save was successful: \(saveSuccessful)")
+        saveSuccessful = KeychainWrapper.standard.set(userName, forKey: "userName")
+        print("Username save was successful: \(saveSuccessful)")
+    }
+    
     /*
     func setPresenceOnline() {
         let presence = XMPPPresence()
@@ -79,8 +88,8 @@ extension XMPPController: XMPPStreamDelegate {
     }
     
     func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
-        self.xmppStream.send(XMPPPresence())
         print("Stream: Authenticated")
+        saveCredentials(userName: self.userJID.user, password: self.password)
         //MARK testing presence v2
         //setPresenceOnline()
     }

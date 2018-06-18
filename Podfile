@@ -7,5 +7,6 @@ target 'ChatApplication2018' do
 
   # Pods for ChatApplication2018
   pod 'XMPPFramework', '~> 3.7.0'
+  pod 'SwiftKeychainWrapper', '~> 3.0.1'
 
 end
