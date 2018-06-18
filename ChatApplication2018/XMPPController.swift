@@ -24,13 +24,13 @@ class XMPPController: NSObject {
     let password: String
     //let presence: XMPPPresence
     
-    init(hostName: String, userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
+    init(userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
         guard let userJID = XMPPJID(string: userJIDString) else {
             throw XMPPControllerError.wrongUserID
         }
         
         
-        self.hostName = hostName
+        self.hostName = Constants.Server.address
         self.userJID = userJID
         self.hostPort = hostPort
         self.password = password

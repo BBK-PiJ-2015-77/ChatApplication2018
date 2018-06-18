@@ -17,7 +17,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var errorLabel: UILabel!
     
     weak var delegate: LoginViewControllerDelegate?
-    var awsServer: String = "ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
+    //var awsServer: String = "ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,7 @@ class LoginViewController: UIViewController {
         //Test
         print("got here2")
         
-        let jID: String = self.loginTextField.text! + "@" + awsServer
+        let jID: String = self.loginTextField.text! + "@" + Constants.Server.address
         //Test
         print(jID)
         
@@ -47,7 +47,7 @@ class LoginViewController: UIViewController {
         //Test
         print("got here3")
         
-        self.delegate?.didTouchLogIn(sender: self, userJID: jID, userPassword: self.passwordTextField.text!, server: awsServer)
+        self.delegate?.didTouchLogIn(sender: self, userJID: jID, userPassword: self.passwordTextField.text!)
         //Test
         print("got here4")
         
@@ -90,7 +90,7 @@ class LoginViewController: UIViewController {
 }
 
 protocol LoginViewControllerDelegate: class {
-    func autoLogIn(userJID: String, userPassword: String, server: String)
-    func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String, server: String)
+    func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String)
+    func autoLogIn(userJID: String, userPassword: String)
     //func checkLogin() -> Bool
 }

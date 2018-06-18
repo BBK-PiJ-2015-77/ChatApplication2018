@@ -7,9 +7,25 @@
 //
 
 import UIKit
+import SwiftKeychainWrapper
 
 class SettingsViewController: UIViewController {
 
+    
+    @IBAction func logoutAction(_ sender: Any) {
+        removeCredentials()
+        //return to homescreen
+        self.performSegue(withIdentifier: "logoutToHome", sender: nil)
+    }
+    
+    func removeCredentials() {
+        var removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
+        print("Password removal was successful: \(removeSuccessful)")
+        removeSuccessful = KeychainWrapper.standard.removeObject(forKey: "userName")
+        print("Username removal was successful: \(removeSuccessful)")
+    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

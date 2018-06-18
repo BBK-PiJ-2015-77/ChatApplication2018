@@ -52,7 +52,7 @@ class HomeTabBarController: UITabBarController {
         
         if retrievedPassword != nil && retrievedUserName != nil {
             //login with stored credentials
-            autoLogIn(userJID: retrievedUserName!, userPassword: retrievedPassword!, server: "ec2-35-177-34-255.eu-west-2.compute.amazonaws.com")
+            autoLogIn(userJID: retrievedUserName!, userPassword: retrievedPassword!)
         } else //bring up log in page
         {
             self.logInPresented = true
@@ -64,14 +64,13 @@ class HomeTabBarController: UITabBarController {
 
 extension HomeTabBarController: LoginViewControllerDelegate {
     
-    func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String, server: String) {
+    func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String) {
         //Test
         print("got here5")
         self.loginViewController = sender
         
         do {
-            try self.xmppController = XMPPController(hostName: server,
-                                                     userJIDString: userJID,
+            try self.xmppController = XMPPController(userJIDString: userJID,
                                                      password: userPassword)
             self.xmppController.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
             self.xmppController.connect()
@@ -80,13 +79,12 @@ extension HomeTabBarController: LoginViewControllerDelegate {
         }
     }
     
-    func autoLogIn(userJID: String, userPassword: String, server: String) {
+    func autoLogIn(userJID: String, userPassword: String) {
         do {
             //need to reconfigure so that I am not sending the host name every time
             //May also be issues with userJID - full or with domain?
             //Also, duplicated code
-            try self.xmppController = XMPPController(hostName: server,
-                                                     userJIDString: userJID,
+            try self.xmppController = XMPPController(userJIDString: userJID,
                                                      password: userPassword)
             //init(hostName: String, userJIDString: String, hostPort: UInt16 = 5222, password: String)
             self.xmppController.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)

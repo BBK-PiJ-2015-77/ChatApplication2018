@@ -93,8 +93,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HrV-Aa-KbF">
+                                <rect key="frame" x="147" y="297" width="81" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Logout"/>
+                                <connections>
+                                    <action selector="logoutAction:" destination="cvN-fO-3qp" eventType="touchUpInside" id="eD2-8U-fZ4"/>
+                                </connections>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ahK-bY-apI">
-                                <rect key="frame" x="166" y="122" width="64" height="21"/>
+                                <rect key="frame" x="155" y="120" width="64" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -105,10 +113,13 @@
                         <viewLayoutGuide key="safeArea" id="GVG-K1-Yl4"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" id="Cgl-ac-Mhc"/>
+                    <connections>
+                        <segue destination="u7z-kx-KVV" kind="show" identifier="logoutToHome" id="Hdw-of-o6c"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ngR-I4-11i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3678" y="615"/>
+            <point key="canvasLocation" x="3678" y="640"/>
         </scene>
         <!--Extra-->
         <scene sceneID="hfR-kb-Ik3">
