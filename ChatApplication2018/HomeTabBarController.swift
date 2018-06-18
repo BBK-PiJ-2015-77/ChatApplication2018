@@ -52,11 +52,9 @@ class HomeTabBarController: UITabBarController {
         
         if retrievedPassword != nil && retrievedUserName != nil {
             //login with stored credentials
-            //didTouchLogIn(sender: nil, userJID: <#T##String#>, userPassword: <#T##String#>, server: <#T##String#>)
-        }
-        //else bring up login view
-        
-        if !self.logInPresented {
+            autoLogIn(userJID: retrievedUserName!, userPassword: retrievedPassword!, server: "ec2-35-177-34-255.eu-west-2.compute.amazonaws.com")
+        } else //bring up log in page
+        {
             self.logInPresented = true
             self.performSegue(withIdentifier: "loginView", sender: nil)
         }
@@ -65,6 +63,7 @@ class HomeTabBarController: UITabBarController {
 }
 
 extension HomeTabBarController: LoginViewControllerDelegate {
+    
     func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String, server: String) {
         //Test
         print("got here5")
@@ -78,6 +77,23 @@ extension HomeTabBarController: LoginViewControllerDelegate {
             self.xmppController.connect()
         } catch {
             sender.showErrorMessage(message: "Something went wrong")
+        }
+    }
+    
+    func autoLogIn(userJID: String, userPassword: String, server: String) {
+        do {
+            //need to reconfigure so that I am not sending the host name every time
+            //May also be issues with userJID - full or with domain?
+            //Also, duplicated code
+            try self.xmppController = XMPPController(hostName: server,
+                                                     userJIDString: userJID,
+                                                     password: userPassword)
+            //init(hostName: String, userJIDString: String, hostPort: UInt16 = 5222, password: String)
+            self.xmppController.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
+            self.xmppController.connect()
+        } catch {
+            //need to show an error message to the user, below is just for testing
+            print("something went wrong")
         }
     }
     

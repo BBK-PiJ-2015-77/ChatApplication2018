@@ -90,6 +90,7 @@ class LoginViewController: UIViewController {
 }
 
 protocol LoginViewControllerDelegate: class {
+    func autoLogIn(userJID: String, userPassword: String, server: String)
     func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String, server: String)
     //func checkLogin() -> Bool
 }
