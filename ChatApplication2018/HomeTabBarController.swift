@@ -13,7 +13,7 @@ import SwiftKeychainWrapper
 class HomeTabBarController: UITabBarController {
 
     weak var loginViewController: LoginViewController?
-    var logInPresented = false
+    //var loggedIn = false
     var xmppController: XMPPController!
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -50,13 +50,12 @@ class HomeTabBarController: UITabBarController {
         let retrievedPassword: String? = KeychainWrapper.standard.string(forKey: "userPassword")
         let retrievedUserName: String? = KeychainWrapper.standard.string(forKey: "userName")
         
-        if retrievedPassword != nil && retrievedUserName != nil {
+        if retrievedPassword == nil && retrievedUserName == nil && !Variables.OnlineStatus.loggedIn {
+            //bring up log in page
+            self.performSegue(withIdentifier: "loginView", sender: nil)
+        } else if !Variables.OnlineStatus.loggedIn {
             //login with stored credentials
             autoLogIn(userJID: retrievedUserName!, userPassword: retrievedPassword!)
-        } else //bring up log in page
-        {
-            self.logInPresented = true
-            self.performSegue(withIdentifier: "loginView", sender: nil)
         }
     }
 
@@ -66,17 +65,22 @@ extension HomeTabBarController: LoginViewControllerDelegate {
     
     func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String) {
         //Test
-        print("got here5")
+        print("got here1")
         self.loginViewController = sender
-        
+        //Test
+        print("got here2")
         do {
             try self.xmppController = XMPPController(userJIDString: userJID,
                                                      password: userPassword)
+            print("where am i?")
             self.xmppController.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
+            print("got here9b")
             self.xmppController.connect()
+            print("Logged in with new credentials")
         } catch {
             sender.showErrorMessage(message: "Something went wrong")
         }
+        Variables.OnlineStatus.loggedIn = true
     }
     
     func autoLogIn(userJID: String, userPassword: String) {
@@ -89,10 +93,12 @@ extension HomeTabBarController: LoginViewControllerDelegate {
             //init(hostName: String, userJIDString: String, hostPort: UInt16 = 5222, password: String)
             self.xmppController.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
             self.xmppController.connect()
+            print("Automatically logged in with saved credentials")
         } catch {
             //need to show an error message to the user, below is just for testing
             print("something went wrong")
         }
+        Variables.OnlineStatus.loggedIn = true
     }
     
 }

@@ -24,11 +24,17 @@ class XMPPController: NSObject {
     let password: String
     //let presence: XMPPPresence
     
+    //let xmppRosterStorage: XMPPRosterCoreDataStorage // see framework wiki for coredata details
+    //var xmppRoster: XMPPRoster!
+    
     init(userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
         guard let userJID = XMPPJID(string: userJIDString) else {
             throw XMPPControllerError.wrongUserID
         }
         
+        //Roster Configuration
+        //xmppRosterStorage = XMPPRosterCoreDataStorage()
+        //xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
         
         self.hostName = Constants.Server.address
         self.userJID = userJID
@@ -42,17 +48,25 @@ class XMPPController: NSObject {
         self.xmppStream.startTLSPolicy = XMPPStreamStartTLSPolicy.allowed
         self.xmppStream.myJID = userJID
         
+
         //MARK testing presence
         /*
         presence = XMPPPresence()
         self.xmppStream.send(presence)
         //self.xmppStream.myPresence =
         print("Presence: \(presence.intShow) -end-")
- */
+        */
         
         super.init()
         
         self.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
+        
+        //Test
+        print("got here7")
+        //xmppRoster.activate(xmppStream)
+        
+        //Test
+        print("got here8")
     }
     
     func connect() {

@@ -14,6 +14,7 @@ class SettingsViewController: UIViewController {
     
     @IBAction func logoutAction(_ sender: Any) {
         removeCredentials()
+        Variables.OnlineStatus.loggedIn = false
         //return to homescreen
         self.performSegue(withIdentifier: "logoutToHome", sender: nil)
     }

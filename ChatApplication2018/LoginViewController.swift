@@ -26,15 +26,12 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func logInAction(_ sender: Any) {
-        //Test
-        print("got here1")
+
         if (self.loginTextField.text?.isEmpty)!
         || (self.passwordTextField.text?.isEmpty)!{
             self.errorLabel.text = "Something is missing or wrong!"
             return
         }
-        //Test
-        print("got here2")
         
         let jID: String = self.loginTextField.text! + "@" + Constants.Server.address
         //Test
@@ -44,8 +41,6 @@ class LoginViewController: UIViewController {
             self.errorLabel.text = "Username is not a jid!"
             return
         }
-        //Test
-        print("got here3")
         
         self.delegate?.didTouchLogIn(sender: self, userJID: jID, userPassword: self.passwordTextField.text!)
         //Test
