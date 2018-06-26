@@ -45,20 +45,7 @@ class LoginViewController: UIViewController {
         self.delegate?.didTouchLogIn(sender: self, userJID: jID, userPassword: self.passwordTextField.text!)
         //Test
         print("got here4")
-        
-        //something fundamentally wrong here:
-        /*
-        if self.delegate?.checkLogin() == true {
-            print("got here5")
-            let controllerId = (self.delegate?.checkLogin())! ? "Welcome" : "Login";
-            let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let initViewController: UIViewController = storyboard.instantiateViewController(withIdentifier: controllerId) as UIViewController
-            self.present(initViewController, animated: true, completion: nil)
-        }
-        */
-        //let controllerId = (self.delegate?.checkLogin())! ? "Welcome" : "Login";
-        
- 
+
     }
     
     func showErrorMessage(message: String) {

@@ -16,13 +16,13 @@ class SettingsViewController: UIViewController {
     
     //weak var delegate: SettingsViewControllerDelegate?
     var xmppController: XMPPController!
+    var loggedIn: Bool!
     
     @IBAction func logoutAction(_ sender: Any) {
         
-        //elf.delegate?.didTouchLogIn(sender: self, userJID: jID, userPassword: self.passwordTextField.text!)
         xmppController.xmppStream.disconnect()
         removeCredentials()
-        Variables.OnlineStatus.loggedIn = false
+        loggedIn = false
         //return to homescreen
         self.performSegue(withIdentifier: "logoutToHome", sender: nil)
     }
@@ -39,6 +39,7 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         let htbvc = tabBarController as! HomeTabBarController
         xmppController = htbvc.xmppController // this is how to share data between tab controllers - but do I need access to it?
+        loggedIn = htbvc.loggedIn
         // Do any additional setup after loading the view.
     }
 
@@ -60,12 +61,6 @@ class SettingsViewController: UIViewController {
 
 }
 
-/*
-protocol SettingsViewControllerDelegate: class {
-    func didTouchLogout()
-    //func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String)
-}
- */
 
 
 

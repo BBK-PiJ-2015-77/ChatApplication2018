@@ -13,11 +13,9 @@ import SwiftKeychainWrapper
 class HomeTabBarController: UITabBarController {
 
     weak var loginViewController: LoginViewController?
+
+    var loggedIn = false
     
-    //abc
-    weak var settingsViewController: SettingsViewController?
-    
-    //var loggedIn = false
     var xmppController: XMPPController!
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -54,10 +52,10 @@ class HomeTabBarController: UITabBarController {
         let retrievedPassword: String? = KeychainWrapper.standard.string(forKey: "userPassword")
         let retrievedUserName: String? = KeychainWrapper.standard.string(forKey: "userName")
         
-        if retrievedPassword == nil && retrievedUserName == nil && !Variables.OnlineStatus.loggedIn {
+        if retrievedPassword == nil && retrievedUserName == nil && !loggedIn {
             //bring up log in page
             self.performSegue(withIdentifier: "loginView", sender: nil)
-        } else if !Variables.OnlineStatus.loggedIn {
+        } else if !loggedIn {
             //login with stored credentials
             autoLogIn(userJID: retrievedUserName!, userPassword: retrievedPassword!)
         }
@@ -78,7 +76,7 @@ class HomeTabBarController: UITabBarController {
             //need to show an error message to the user, below is just for testing
             print("something went wrong")
         }
-        Variables.OnlineStatus.loggedIn = true
+        loggedIn = true
     }
 
 }
@@ -102,25 +100,9 @@ extension HomeTabBarController: LoginViewControllerDelegate {
         } catch {
             sender.showErrorMessage(message: "Something went wrong")
         }
-        Variables.OnlineStatus.loggedIn = true
+        loggedIn = true
     }
 }
-
-/*
-extension HomeTabBarController: SettingsViewControllerDelegate {
-    func didTouchLogout() {
-        self.xmppController.xmppStream.disconnect()
-        print("Did Touch logout action")
-    }
-    
-    /*
-    func didTouchLogout(word: String) {
-        self.xmppController.xmppStream.disconnect()
-        print("Did Touch logout action")
-    }
- */
-}
- */
 
 extension HomeTabBarController: XMPPStreamDelegate {
     

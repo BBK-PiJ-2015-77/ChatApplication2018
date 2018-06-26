@@ -49,14 +49,6 @@ class XMPPController: NSObject {
         self.xmppStream.startTLSPolicy = XMPPStreamStartTLSPolicy.allowed
         self.xmppStream.myJID = userJID
         
-
-        //MARK testing presence
-        /*
-        presence = XMPPPresence()
-        self.xmppStream.send(presence)
-        //self.xmppStream.myPresence =
-        print("Presence: \(presence.intShow) -end-")
-        */
         
         super.init()
         
@@ -90,13 +82,6 @@ class XMPPController: NSObject {
         print("Username save was successful: \(saveSuccessful)")
     }
     
-    /*
-    func setPresenceOnline() {
-        let presence = XMPPPresence()
-        xmppStream.send(presence)
-        print("Presence: \(String(describing: presence?.status())) -end-")
-    }
-    */
 }
 
 extension XMPPController: XMPPStreamDelegate {
@@ -109,8 +94,7 @@ extension XMPPController: XMPPStreamDelegate {
     func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
         print("Stream: Authenticated")
         saveCredentials(userName: self.userJID.user, password: self.password)
-        //MARK testing presence v2
-        //setPresenceOnline()
+        print(self.xmppRoster.description)
     }
     
     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
