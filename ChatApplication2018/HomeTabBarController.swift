@@ -13,6 +13,10 @@ import SwiftKeychainWrapper
 class HomeTabBarController: UITabBarController {
 
     weak var loginViewController: LoginViewController?
+    
+    //abc
+    weak var settingsViewController: SettingsViewController?
+    
     //var loggedIn = false
     var xmppController: XMPPController!
     
@@ -58,6 +62,24 @@ class HomeTabBarController: UITabBarController {
             autoLogIn(userJID: retrievedUserName!, userPassword: retrievedPassword!)
         }
     }
+    
+    func autoLogIn(userJID: String, userPassword: String) {
+        do {
+            //need to reconfigure so that I am not sending the host name every time
+            //May also be issues with userJID - full or with domain?
+            //Also, duplicated code
+            try self.xmppController = XMPPController(userJIDString: userJID,
+                                                     password: userPassword)
+            //init(hostName: String, userJIDString: String, hostPort: UInt16 = 5222, password: String)
+            self.xmppController.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
+            self.xmppController.connect()
+            print("Automatically logged in with saved credentials")
+        } catch {
+            //need to show an error message to the user, below is just for testing
+            print("something went wrong")
+        }
+        Variables.OnlineStatus.loggedIn = true
+    }
 
 }
 
@@ -82,26 +104,23 @@ extension HomeTabBarController: LoginViewControllerDelegate {
         }
         Variables.OnlineStatus.loggedIn = true
     }
-    
-    func autoLogIn(userJID: String, userPassword: String) {
-        do {
-            //need to reconfigure so that I am not sending the host name every time
-            //May also be issues with userJID - full or with domain?
-            //Also, duplicated code
-            try self.xmppController = XMPPController(userJIDString: userJID,
-                                                     password: userPassword)
-            //init(hostName: String, userJIDString: String, hostPort: UInt16 = 5222, password: String)
-            self.xmppController.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
-            self.xmppController.connect()
-            print("Automatically logged in with saved credentials")
-        } catch {
-            //need to show an error message to the user, below is just for testing
-            print("something went wrong")
-        }
-        Variables.OnlineStatus.loggedIn = true
+}
+
+/*
+extension HomeTabBarController: SettingsViewControllerDelegate {
+    func didTouchLogout() {
+        self.xmppController.xmppStream.disconnect()
+        print("Did Touch logout action")
     }
     
+    /*
+    func didTouchLogout(word: String) {
+        self.xmppController.xmppStream.disconnect()
+        print("Did Touch logout action")
+    }
+ */
 }
+ */
 
 extension HomeTabBarController: XMPPStreamDelegate {
     

@@ -24,8 +24,8 @@ class XMPPController: NSObject {
     let password: String
     //let presence: XMPPPresence
     
-    //let xmppRosterStorage: XMPPRosterCoreDataStorage // see framework wiki for coredata details
-    //var xmppRoster: XMPPRoster!
+    let xmppRosterStorage: XMPPRosterCoreDataStorage // see framework wiki for coredata details
+    var xmppRoster: XMPPRoster!
     
     init(userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
         guard let userJID = XMPPJID(string: userJIDString) else {
@@ -33,8 +33,9 @@ class XMPPController: NSObject {
         }
         
         //Roster Configuration
-        //xmppRosterStorage = XMPPRosterCoreDataStorage()
-        //xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
+        xmppRosterStorage = XMPPRosterCoreDataStorage()
+        xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
+        print(xmppRosterStorage.databaseFileName)
         
         self.hostName = Constants.Server.address
         self.userJID = userJID
@@ -63,7 +64,7 @@ class XMPPController: NSObject {
         
         //Test
         print("got here7")
-        //xmppRoster.activate(xmppStream)
+        xmppRoster.activate(xmppStream)
         
         //Test
         print("got here8")
@@ -75,6 +76,10 @@ class XMPPController: NSObject {
         }
         
         try! self.xmppStream.connect(withTimeout: XMPPStreamTimeoutNone)
+    }
+    
+    func disconnect() {
+        self.xmppStream.disconnect()
     }
     
     //add autheticated login details to keychain
@@ -110,6 +115,10 @@ extension XMPPController: XMPPStreamDelegate {
     
     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
         print("Stream: Fail to Authenticate")
+    }
+    
+    func xmppStreamDidDisconnect(_ sender: XMPPStream!, withError error: Error!) {
+        print("Stream: Disonnected")
     }
     
 }

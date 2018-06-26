@@ -86,6 +86,6 @@ class LoginViewController: UIViewController {
 
 protocol LoginViewControllerDelegate: class {
     func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String)
-    func autoLogIn(userJID: String, userPassword: String)
+    //func autoLogIn(userJID: String, userPassword: String)
     //func checkLogin() -> Bool
 }
