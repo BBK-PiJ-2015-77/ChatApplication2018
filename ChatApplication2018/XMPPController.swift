@@ -24,8 +24,8 @@ class XMPPController: NSObject {
     let password: String
     //let presence: XMPPPresence
     
-    let xmppRosterStorage: XMPPRosterCoreDataStorage // see framework wiki for coredata details
-    var xmppRoster: XMPPRoster!
+    //let xmppRosterStorage = XMPPRosterCoreDataStorage() // see framework wiki for coredata details
+    //var xmppRoster: XMPPRoster!
     
     init(userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
         guard let userJID = XMPPJID(string: userJIDString) else {
@@ -33,9 +33,9 @@ class XMPPController: NSObject {
         }
         
         //Roster Configuration
-        xmppRosterStorage = XMPPRosterCoreDataStorage()
-        xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
-        print(xmppRosterStorage.databaseFileName)
+        //xmppRosterStorage = XMPPRosterCoreDataStorage()
+        //xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
+        //print(xmppRosterStorage.databaseFileName)
         
         self.hostName = Constants.Server.address
         self.userJID = userJID
@@ -52,11 +52,11 @@ class XMPPController: NSObject {
         
         super.init()
         
-        self.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
-        
         //Test
         print("got here7")
-        xmppRoster.activate(xmppStream)
+        //self.xmppRoster.activate(xmppStream)
+        
+        self.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
         
         //Test
         print("got here8")
@@ -94,7 +94,7 @@ extension XMPPController: XMPPStreamDelegate {
     func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
         print("Stream: Authenticated")
         saveCredentials(userName: self.userJID.user, password: self.password)
-        print(self.xmppRoster.description)
+        //print(self.xmppRoster.description)
     }
     
     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
