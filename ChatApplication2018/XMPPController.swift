@@ -66,13 +66,18 @@ class XMPPController: NSObject {
         if !self.xmppStream.isDisconnected() {
             return
         }
-        
+        print("got here9T")
         try! self.xmppStream.connect(withTimeout: XMPPStreamTimeoutNone)
+    }
+    
+    func isConnected() -> Bool {
+        return self.xmppStream.isConnected()
     }
     
     func disconnect() {
         self.xmppStream.disconnect()
     }
+    
     
     //add autheticated login details to keychain
     func saveCredentials(userName: String, password: String) {
@@ -95,6 +100,10 @@ extension XMPPController: XMPPStreamDelegate {
         print("Stream: Authenticated")
         saveCredentials(userName: self.userJID.user, password: self.password)
         //print(self.xmppRoster.description)
+    }
+    
+    func xmppStream(_ sender: XMPPStream!, didReceiveError error: DDXMLElement!) {
+        print("username or resource is not allowed to create a session")
     }
     
     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
