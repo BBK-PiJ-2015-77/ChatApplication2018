@@ -29,21 +29,27 @@ class XMPPControllerTests: XCTestCase {
     
     class MockXMPPController: XMPPController {
         var didReceiveErrorCount = 0
+        var receivedDidNotAuthenticateError = 0
         
         override func xmppStream(_ sender: XMPPStream!, didReceiveError error: DDXMLElement!) {
             super .xmppStream(sender, didNotAuthenticate: error)
             didReceiveErrorCount += 1
         }
-        
-        var didConnect = 0
-        override func xmppStreamDidConnect(_ stream: XMPPStream!) {
-            super .xmppStreamDidConnect(stream)
-            didConnect += 1
+        /*
+        override func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
+            super .xmppStream(sender, didNotAuthenticate: error)
+            receivedDidNotAuthenticateError += 1
         }
-        //equivalent in swift: multicastDelegate.xmppStream(self, didReceiveError: element)
+        */
+
     }
     
+    
     /*
+     func xmppStream(_ sender: XMPPStream!, didReceiveError error: DDXMLElement!) {
+     print("username or resource is not allowed to create a session")
+     }
+     
      func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
      print("Stream: Fail to Authenticate")
      }
@@ -78,62 +84,53 @@ class XMPPControllerTests: XCTestCase {
     }
     
     func disconnect() {
+        mockXMPPController.xmppRoster.deactivate()
+        mockXMPPController.xmppRoster = nil
         if mockXMPPController.xmppStream.isConnected() {
             print("Disconnected!")
             mockXMPPController.disconnect()
         }
     }
-    /*
+
+    
     func testXMPPStreamConfig() {
-        //given the credentials userJID & userPassword
+        //given a userJID & userPassword
         
         //when stream created
-        initiateXMPPController()
+        initiateMockXMPPController()
         
         //check credentials are as expected
         let hostNameA = "ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
         let hostPortA = UInt16(5222)
         let myJIDA = XMPPJID(string: userJID)
 
-        let hostName = classUnderTest.xmppStream.hostName
-        let hostPort = classUnderTest.xmppStream.hostPort
-        let myJID = classUnderTest.xmppStream.myJID
+        let hostName = mockXMPPController.xmppStream.hostName
+        let hostPort = mockXMPPController.xmppStream.hostPort
+        let myJID = mockXMPPController.xmppStream.myJID
         
         XCTAssertEqual(hostNameA, hostName)
         XCTAssertEqual(hostPortA, hostPort)
         XCTAssertEqual(myJIDA, myJID)
     }
+
     
-    
-    */
-    func testNoUserIDThrowsError() {
-        //given no username
-        let wrongUserID = ""
-        
-        //when an XMPPController is initiated
-        //Throws an error
-        XCTAssertThrowsError(try MockXMPPController(userJIDString: wrongUserID, password: userPassword))
-    }
-    
-    func testWrongUserIDFailsAuthorization() {
-        //given the wrong username
-        let wrongUserID = "abc"
-        
-        //when an XMPPController is initiated
-        initiateMockXMPPController(id: wrongUserID)
+    func testXMPPStreamConnects() {
+        //given valid credentials
+        initiateMockXMPPController()
         mockXMPPController.connect()
         
-        //Authentication fails
+        //XMPPStream connects successfully
+        //Need to allow some time for connection before asserting whether connection is succesful or not
         
         expectation = expectation(description: "Stream connects")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-            XCTAssertFalse(self.mockXMPPController.xmppStream.isAuthenticating() && self.mockXMPPController.xmppStream.isAuthenticated())
+            XCTAssertTrue(self.mockXMPPController.xmppStream.isConnected())
             self.expectation?.fulfill()
         })
         
-        
         waitForExpectations(timeout: 5, handler: nil)
     }
+    
     
     func testXMPPStreamAuthenticates() {
         //given valid credentials
@@ -152,21 +149,46 @@ class XMPPControllerTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
     }
     
-    func testXMPPStreamConnects() {
-        //given valid credentials
-        initiateMockXMPPController()
+    
+    func testNoUserIDThrowsError() {
+        //given no username
+        let wrongUserID = ""
+        
+        //when an XMPPController is initiated
+        //Throws an error
+        XCTAssertThrowsError(try MockXMPPController(userJIDString: wrongUserID, password: userPassword))
+    }
+    
+    
+    func testWrongUserIDFailsAuthorization() {
+        //given the wrong username
+        let wrongUserID = "abc"
+        
+        //when an XMPPController is initiated
+        initiateMockXMPPController(id: wrongUserID)
         mockXMPPController.connect()
         
-        //XMPPStream connects successfully
-        //Need to allow some time for connection before asserting whether connection is succesful or not
-    
+        //Authentication fails
+        
         expectation = expectation(description: "Stream connects")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-            XCTAssertTrue(self.mockXMPPController.isConnected())
+            XCTAssertFalse(self.mockXMPPController.xmppStream.isAuthenticating() && self.mockXMPPController.xmppStream.isAuthenticated())
             self.expectation?.fulfill()
         })
         
         waitForExpectations(timeout: 5, handler: nil)
     }
     
+    func testRosterActive() {
+        //given a stream setup/connection
+        initiateMockXMPPController()
+        mockXMPPController.connect()
+        
+        //check roster is created
+        XCTAssertTrue(mockXMPPController.xmppRoster.hasRoster)
+        
+    }
+    
+    
 }
+

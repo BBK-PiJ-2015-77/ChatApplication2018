@@ -24,8 +24,8 @@ class XMPPController: NSObject {
     let password: String
     //let presence: XMPPPresence
     
-    //let xmppRosterStorage = XMPPRosterCoreDataStorage() // see framework wiki for coredata details
-    //var xmppRoster: XMPPRoster!
+    let xmppRosterStorage = XMPPRosterCoreDataStorage() // see framework wiki for coredata details
+    var xmppRoster: XMPPRoster!
     
     init(userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
         guard let userJID = XMPPJID(string: userJIDString) else {
@@ -49,14 +49,17 @@ class XMPPController: NSObject {
         self.xmppStream.startTLSPolicy = XMPPStreamStartTLSPolicy.allowed
         self.xmppStream.myJID = userJID
         
+        //Roster Configuration
+        self.xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
+        self.xmppRoster.activate(xmppStream)
         
         super.init()
         
         //Test
         print("got here7")
-        //self.xmppRoster.activate(xmppStream)
         
         self.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
+        self.xmppRoster.addDelegate(self, delegateQueue: DispatchQueue.main)
         
         //Test
         print("got here8")
@@ -68,10 +71,6 @@ class XMPPController: NSObject {
         }
         print("got here9T")
         try! self.xmppStream.connect(withTimeout: XMPPStreamTimeoutNone)
-    }
-    
-    func isConnected() -> Bool {
-        return self.xmppStream.isConnected()
     }
     
     func disconnect() {
@@ -111,7 +110,7 @@ extension XMPPController: XMPPStreamDelegate {
     }
     
     func xmppStreamDidDisconnect(_ sender: XMPPStream!, withError error: Error!) {
-        print("Stream: Disonnected")
+        print("Stream: Disconnected")
     }
     
 }
