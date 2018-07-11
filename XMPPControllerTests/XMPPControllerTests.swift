@@ -65,11 +65,15 @@ class XMPPControllerTests: XCTestCase {
     }
     
     override func tearDown() {
+        //delete username and password
         var removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
         removeSuccessful = KeychainWrapper.standard.removeObject(forKey: "userName")
+        
         if mockXMPPController != nil {
-            disconnect()
+            mockXMPPController.disconnect()
+            print("Disconnected in teardown")
         }
+        
         mockXMPPController = nil
         super.tearDown()
     }
@@ -83,15 +87,6 @@ class XMPPControllerTests: XCTestCase {
         }
     }
     
-    func disconnect() {
-        mockXMPPController.xmppRoster.deactivate()
-        mockXMPPController.xmppRoster = nil
-        if mockXMPPController.xmppStream.isConnected() {
-            print("Disconnected!")
-            mockXMPPController.disconnect()
-        }
-    }
-
     
     func testXMPPStreamConfig() {
         //given a userJID & userPassword
@@ -104,9 +99,9 @@ class XMPPControllerTests: XCTestCase {
         let hostPortA = UInt16(5222)
         let myJIDA = XMPPJID(string: userJID)
 
-        let hostName = mockXMPPController.xmppStream.hostName
-        let hostPort = mockXMPPController.xmppStream.hostPort
-        let myJID = mockXMPPController.xmppStream.myJID
+        let hostName = mockXMPPController.xmppStream?.hostName
+        let hostPort = mockXMPPController.xmppStream?.hostPort
+        let myJID = mockXMPPController.xmppStream?.myJID
         
         XCTAssertEqual(hostNameA, hostName)
         XCTAssertEqual(hostPortA, hostPort)
@@ -124,7 +119,7 @@ class XMPPControllerTests: XCTestCase {
         
         expectation = expectation(description: "Stream connects")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-            XCTAssertTrue(self.mockXMPPController.xmppStream.isConnected())
+            XCTAssertTrue((self.mockXMPPController.xmppStream?.isConnected())!)
             self.expectation?.fulfill()
         })
         
@@ -142,7 +137,7 @@ class XMPPControllerTests: XCTestCase {
         
         expectation = expectation(description: "Stream connects")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-            XCTAssertTrue(self.mockXMPPController.xmppStream.isAuthenticated())
+            XCTAssertTrue((self.mockXMPPController.xmppStream?.isAuthenticated())!)
             self.expectation?.fulfill()
         })
         
@@ -172,7 +167,7 @@ class XMPPControllerTests: XCTestCase {
         
         expectation = expectation(description: "Stream connects")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-            XCTAssertFalse(self.mockXMPPController.xmppStream.isAuthenticating() && self.mockXMPPController.xmppStream.isAuthenticated())
+            XCTAssertFalse((self.mockXMPPController.xmppStream?.isAuthenticating())! && (self.mockXMPPController.xmppStream?.isAuthenticated())!)
             self.expectation?.fulfill()
         })
         
@@ -184,8 +179,13 @@ class XMPPControllerTests: XCTestCase {
         initiateMockXMPPController()
         mockXMPPController.connect()
         
+        let noRoster = false
+        let noRosterString = "No roster"
+        
         //check roster is created
-        XCTAssertTrue(mockXMPPController.xmppRoster.hasRoster)
+        print("Has roster? : \(mockXMPPController.xmppRoster?.hasRoster ?? noRoster)")
+        print("Modeule name : \(mockXMPPController.xmppRoster?.moduleName() ?? noRosterString)")
+        print(mockXMPPController.xmppRoster?.description ?? "No Roster")
         
     }
     

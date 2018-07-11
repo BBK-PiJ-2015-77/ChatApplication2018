@@ -20,7 +20,7 @@ class SettingsViewController: UIViewController {
     
     @IBAction func logoutAction(_ sender: Any) {
         
-        xmppController.xmppStream.disconnect()
+        xmppController.xmppStream?.disconnect()
         removeCredentials()
         loggedIn = false
         //return to homescreen

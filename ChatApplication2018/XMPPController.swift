@@ -16,7 +16,7 @@ enum XMPPControllerError: Error {
 
 class XMPPController: NSObject {
     
-    var xmppStream: XMPPStream
+    var xmppStream: XMPPStream?
     
     let hostName: String
     let userJID: XMPPJID
@@ -25,7 +25,7 @@ class XMPPController: NSObject {
     //let presence: XMPPPresence
     
     let xmppRosterStorage = XMPPRosterCoreDataStorage() // see framework wiki for coredata details
-    var xmppRoster: XMPPRoster!
+    var xmppRoster: XMPPRoster?
     
     init(userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
         guard let userJID = XMPPJID(string: userJIDString) else {
@@ -44,38 +44,44 @@ class XMPPController: NSObject {
         
         //Stream Configuration
         self.xmppStream = XMPPStream()
-        self.xmppStream.hostName = hostName
-        self.xmppStream.hostPort = hostPort
-        self.xmppStream.startTLSPolicy = XMPPStreamStartTLSPolicy.allowed
-        self.xmppStream.myJID = userJID
+        self.xmppStream?.hostName = hostName
+        self.xmppStream?.hostPort = hostPort
+        self.xmppStream?.startTLSPolicy = XMPPStreamStartTLSPolicy.allowed
+        self.xmppStream?.myJID = userJID
         
         //Roster Configuration
         self.xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
-        self.xmppRoster.activate(xmppStream)
+        self.xmppRoster?.activate(xmppStream)
+        
+        //there is a problem when logging out
         
         super.init()
         
         //Test
         print("got here7")
         
-        self.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
-        self.xmppRoster.addDelegate(self, delegateQueue: DispatchQueue.main)
+        self.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
+        self.xmppRoster?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
         //Test
         print("got here8")
     }
     
     func connect() {
-        if !self.xmppStream.isDisconnected() {
+        if !(self.xmppStream?.isDisconnected())!{
             return
         }
         print("got here9T")
-        try! self.xmppStream.connect(withTimeout: XMPPStreamTimeoutNone)
+        try! self.xmppStream?.connect(withTimeout: XMPPStreamTimeoutNone)
     }
     
     func disconnect() {
-        self.xmppStream.disconnect()
+        self.xmppRoster!.deactivate()
+        self.xmppRoster = nil
+        self.xmppStream?.disconnect()
+        self.xmppStream = nil
     }
+    
     
     
     //add autheticated login details to keychain

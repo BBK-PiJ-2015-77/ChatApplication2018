@@ -69,7 +69,7 @@ class HomeTabBarController: UITabBarController {
             try self.xmppController = XMPPController(userJIDString: userJID,
                                                      password: userPassword)
             //init(hostName: String, userJIDString: String, hostPort: UInt16 = 5222, password: String)
-            self.xmppController.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
+            self.xmppController.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
             self.xmppController.connect()
             print("Automatically logged in with saved credentials")
         } catch {
@@ -93,7 +93,7 @@ extension HomeTabBarController: LoginViewControllerDelegate {
             try self.xmppController = XMPPController(userJIDString: userJID,
                                                      password: userPassword)
             print("where am i?")
-            self.xmppController.xmppStream.addDelegate(self, delegateQueue: DispatchQueue.main)
+            self.xmppController.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
             print("got here9b")
             self.xmppController.connect()
             print("Logged in with new credentials")
