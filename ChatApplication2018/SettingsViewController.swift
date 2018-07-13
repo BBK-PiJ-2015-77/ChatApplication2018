@@ -14,15 +14,16 @@ class SettingsViewController: UIViewController {
     //Use viewWillAppear to have something update everytime the view is switched
     //viewDidLoad only happens once for each child view
     
-    //weak var delegate: SettingsViewControllerDelegate?
     var xmppController: XMPPController!
-    var loggedIn: Bool!
+    var homeTabBarController: HomeTabBarController?
+    
     
     @IBAction func logoutAction(_ sender: Any) {
         
-        xmppController.xmppStream?.disconnect()
+        xmppController.disconnect()
         removeCredentials()
-        loggedIn = false
+        homeTabBarController?.loggedIn = false
+        homeTabBarController?.xmppController = nil
         //return to homescreen
         self.performSegue(withIdentifier: "logoutToHome", sender: nil)
     }
@@ -37,10 +38,19 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        homeTabBarController = tabBarController as? HomeTabBarController
+        xmppController = homeTabBarController?.xmppController 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super .viewDidAppear(animated)
+        /*
         let htbvc = tabBarController as! HomeTabBarController
         xmppController = htbvc.xmppController // this is how to share data between tab controllers - but do I need access to it?
         loggedIn = htbvc.loggedIn
-        // Do any additional setup after loading the view.
+        print("Settings view - Logged in? - \(loggedIn)")
+ */
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,8 +70,6 @@ class SettingsViewController: UIViewController {
     */
 
 }
-
-
 
 
 

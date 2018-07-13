@@ -24,7 +24,9 @@ class XMPPController: NSObject {
     let password: String
     //let presence: XMPPPresence
     
-    let xmppRosterStorage = XMPPRosterCoreDataStorage() // see framework wiki for coredata details
+    var loggedIn = false
+    
+    var xmppRosterStorage: XMPPRosterStorage?
     var xmppRoster: XMPPRoster?
     
     init(userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
@@ -50,6 +52,7 @@ class XMPPController: NSObject {
         self.xmppStream?.myJID = userJID
         
         //Roster Configuration
+        self.xmppRosterStorage = XMPPRosterCoreDataStorage()
         self.xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
         self.xmppRoster?.activate(xmppStream)
         
@@ -77,9 +80,10 @@ class XMPPController: NSObject {
     
     func disconnect() {
         self.xmppRoster!.deactivate()
-        self.xmppRoster = nil
         self.xmppStream?.disconnect()
         self.xmppStream = nil
+        self.xmppRoster = nil
+        self.xmppRosterStorage = nil
     }
     
     
