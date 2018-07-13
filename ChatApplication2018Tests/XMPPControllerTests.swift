@@ -179,14 +179,14 @@ class XMPPControllerTests: XCTestCase {
         initiateMockXMPPController()
         mockXMPPController.connect()
         
-        let noRoster = false
-        let noRosterString = "No roster"
-        
         //check roster is created
-        print("Has roster? : \(mockXMPPController.xmppRoster?.hasRoster ?? noRoster)")
-        print("Modeule name : \(mockXMPPController.xmppRoster?.moduleName() ?? noRosterString)")
-        print(mockXMPPController.xmppRoster?.description ?? "No Roster")
+        expectation = expectation(description: "Active roster")
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
+            XCTAssertTrue((self.mockXMPPController.xmppRoster?.hasRoster)!)
+            self.expectation?.fulfill()
+        })
         
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     

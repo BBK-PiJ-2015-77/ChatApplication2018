@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		15D5AE7D256C8AF1DEDCCD9B /* Pods_ChatApplication2018.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E43F8F0734B2CCF945C6DF53 /* Pods_ChatApplication2018.framework */; };
 		326B035EE99BDB6F6287D0D7 /* Pods_XMPPControllerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B7EE0342FD6776030A5AEC3 /* Pods_XMPPControllerTests.framework */; };
+		B113111B20F8D5810038FDD3 /* XMPPRosterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B113111A20F8D5810038FDD3 /* XMPPRosterTests.swift */; };
 		B12D51F920EA4CD100841AB1 /* XMPPControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12D51F820EA4CD100841AB1 /* XMPPControllerTests.swift */; };
 		B12E84FA20D849AE00B2BC67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12E84F920D849AE00B2BC67 /* Constants.swift */; };
 		B1C631B620BC4B6700CE9F62 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C631B520BC4B6700CE9F62 /* AppDelegate.swift */; };
@@ -40,7 +41,8 @@
 		2024F9BA8EB2DBA86F4720DB /* Pods-ChatApplication2018.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatApplication2018.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatApplication2018/Pods-ChatApplication2018.release.xcconfig"; sourceTree = "<group>"; };
 		3B7EE0342FD6776030A5AEC3 /* Pods_XMPPControllerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XMPPControllerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		56309F31BFCC34A0F86BFDA9 /* Pods-XMPPControllerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XMPPControllerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-XMPPControllerTests/Pods-XMPPControllerTests.debug.xcconfig"; sourceTree = "<group>"; };
-		B12D51F620EA4CD100841AB1 /* XMPPControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XMPPControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B113111A20F8D5810038FDD3 /* XMPPRosterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMPPRosterTests.swift; sourceTree = "<group>"; };
+		B12D51F620EA4CD100841AB1 /* ChatApplication2018Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChatApplication2018Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B12D51F820EA4CD100841AB1 /* XMPPControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMPPControllerTests.swift; sourceTree = "<group>"; };
 		B12D51FA20EA4CD100841AB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B12E84F920D849AE00B2BC67 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -106,20 +108,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B12D51F720EA4CD100841AB1 /* XMPPControllerTests */ = {
+		B12D51F720EA4CD100841AB1 /* ChatApplication2018Tests */ = {
 			isa = PBXGroup;
 			children = (
+				B113111A20F8D5810038FDD3 /* XMPPRosterTests.swift */,
 				B12D51F820EA4CD100841AB1 /* XMPPControllerTests.swift */,
 				B12D51FA20EA4CD100841AB1 /* Info.plist */,
 			);
-			path = XMPPControllerTests;
+			path = ChatApplication2018Tests;
 			sourceTree = "<group>";
 		};
 		B1C631A920BC4B6700CE9F62 = {
 			isa = PBXGroup;
 			children = (
 				B1C631B420BC4B6700CE9F62 /* ChatApplication2018 */,
-				B12D51F720EA4CD100841AB1 /* XMPPControllerTests */,
+				B12D51F720EA4CD100841AB1 /* ChatApplication2018Tests */,
 				B1C631B320BC4B6700CE9F62 /* Products */,
 				0523751F1F0C6F0B4B71DB5D /* Pods */,
 				A21A99D3B5C1273815F7C42B /* Frameworks */,
@@ -130,7 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				B1C631B220BC4B6700CE9F62 /* ChatApplication2018.app */,
-				B12D51F620EA4CD100841AB1 /* XMPPControllerTests.xctest */,
+				B12D51F620EA4CD100841AB1 /* ChatApplication2018Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -157,9 +160,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B12D51F520EA4CD100841AB1 /* XMPPControllerTests */ = {
+		B12D51F520EA4CD100841AB1 /* ChatApplication2018Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B12D51FF20EA4CD100841AB1 /* Build configuration list for PBXNativeTarget "XMPPControllerTests" */;
+			buildConfigurationList = B12D51FF20EA4CD100841AB1 /* Build configuration list for PBXNativeTarget "ChatApplication2018Tests" */;
 			buildPhases = (
 				888B64D219D4BE8660222CA3 /* [CP] Check Pods Manifest.lock */,
 				B12D51F220EA4CD100841AB1 /* Sources */,
@@ -172,9 +175,9 @@
 			dependencies = (
 				B12D51FC20EA4CD100841AB1 /* PBXTargetDependency */,
 			);
-			name = XMPPControllerTests;
+			name = ChatApplication2018Tests;
 			productName = XMPPControllerTests;
-			productReference = B12D51F620EA4CD100841AB1 /* XMPPControllerTests.xctest */;
+			productReference = B12D51F620EA4CD100841AB1 /* ChatApplication2018Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		B1C631B120BC4B6700CE9F62 /* ChatApplication2018 */ = {
@@ -231,7 +234,7 @@
 			projectRoot = "";
 			targets = (
 				B1C631B120BC4B6700CE9F62 /* ChatApplication2018 */,
-				B12D51F520EA4CD100841AB1 /* XMPPControllerTests */,
+				B12D51F520EA4CD100841AB1 /* ChatApplication2018Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -353,6 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B12D51F920EA4CD100841AB1 /* XMPPControllerTests.swift in Sources */,
+				B113111B20F8D5810038FDD3 /* XMPPRosterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,7 +418,7 @@
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NZ2C5436VV;
-				INFOPLIST_FILE = XMPPControllerTests/Info.plist;
+				INFOPLIST_FILE = ChatApplication2018Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = tmcgar01.learning.XMPPControllerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -437,7 +441,7 @@
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NZ2C5436VV;
-				INFOPLIST_FILE = XMPPControllerTests/Info.plist;
+				INFOPLIST_FILE = ChatApplication2018Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = tmcgar01.learning.XMPPControllerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -593,7 +597,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B12D51FF20EA4CD100841AB1 /* Build configuration list for PBXNativeTarget "XMPPControllerTests" */ = {
+		B12D51FF20EA4CD100841AB1 /* Build configuration list for PBXNativeTarget "ChatApplication2018Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B12D51FD20EA4CD100841AB1 /* Debug */,
