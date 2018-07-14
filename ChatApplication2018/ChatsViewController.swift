@@ -10,6 +10,9 @@ import UIKit
 
 class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var userTitle: UILabel!
+    @IBOutlet weak var displayStatus: UILabel!
+    
     var chatArray = ["Tom", "Dick", "Harry"]
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -9,11 +9,11 @@
 import XCTest
 import XMPPFramework
 import SwiftKeychainWrapper
+
 @testable import ChatApplication2018
 
 class XMPPControllerTests: XCTestCase {
     
-    var classUnderTest: XMPPController!
     var mockXMPPController: MockXMPPController!
     var expectation: XCTestExpectation? = nil
     
@@ -43,21 +43,6 @@ class XMPPControllerTests: XCTestCase {
         */
 
     }
-    
-    
-    /*
-     func xmppStream(_ sender: XMPPStream!, didReceiveError error: DDXMLElement!) {
-     print("username or resource is not allowed to create a session")
-     }
-     
-     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
-     print("Stream: Fail to Authenticate")
-     }
-     
-     func xmppStreamDidDisconnect(_ sender: XMPPStream!, withError error: Error!) {
-     print("Stream: Disonnected")
-     }
- */
     
     override func setUp() {
         super.setUp()

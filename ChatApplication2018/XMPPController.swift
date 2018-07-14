@@ -29,6 +29,8 @@ class XMPPController: NSObject {
     var xmppRosterStorage: XMPPRosterStorage?
     var xmppRoster: XMPPRoster?
     
+    var presence: XMPPPresence?
+    
     init(userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
         guard let userJID = XMPPJID(string: userJIDString) else {
             throw XMPPControllerError.wrongUserID
@@ -55,6 +57,7 @@ class XMPPController: NSObject {
         self.xmppRosterStorage = XMPPRosterCoreDataStorage()
         self.xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
         self.xmppRoster?.activate(xmppStream)
+        self.xmppRoster?.autoFetchRoster = true
         
         //there is a problem when logging out
         
@@ -79,6 +82,7 @@ class XMPPController: NSObject {
     }
     
     func disconnect() {
+        goOffline()
         self.xmppRoster!.deactivate()
         self.xmppStream?.disconnect()
         self.xmppStream = nil
@@ -86,14 +90,22 @@ class XMPPController: NSObject {
         self.xmppRosterStorage = nil
     }
     
-    
-    
     //add autheticated login details to keychain
     func saveCredentials(userName: String, password: String) {
         var saveSuccessful: Bool = KeychainWrapper.standard.set(password, forKey: "userPassword")
         print("Password save was successful: \(saveSuccessful)")
         saveSuccessful = KeychainWrapper.standard.set(userName, forKey: "userName")
         print("Username save was successful: \(saveSuccessful)")
+    }
+    
+    func goOnline() {
+        presence = XMPPPresence()
+        xmppStream?.send(presence)
+    }
+    
+    func goOffline() {
+        presence = XMPPPresence(type: "unavailable")
+        xmppStream?.send(presence)
     }
     
 }
@@ -109,6 +121,7 @@ extension XMPPController: XMPPStreamDelegate {
         print("Stream: Authenticated")
         saveCredentials(userName: self.userJID.user, password: self.password)
         //print(self.xmppRoster.description)
+        goOnline()
     }
     
     func xmppStream(_ sender: XMPPStream!, didReceiveError error: DDXMLElement!) {

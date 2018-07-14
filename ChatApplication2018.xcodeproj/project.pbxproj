@@ -10,6 +10,8 @@
 		15D5AE7D256C8AF1DEDCCD9B /* Pods_ChatApplication2018.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E43F8F0734B2CCF945C6DF53 /* Pods_ChatApplication2018.framework */; };
 		326B035EE99BDB6F6287D0D7 /* Pods_XMPPControllerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B7EE0342FD6776030A5AEC3 /* Pods_XMPPControllerTests.framework */; };
 		B113111B20F8D5810038FDD3 /* XMPPRosterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B113111A20F8D5810038FDD3 /* XMPPRosterTests.swift */; };
+		B113111E20FA0B750038FDD3 /* XMPPMockStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B113111D20FA0B750038FDD3 /* XMPPMockStream.m */; };
+		B113112020FA0C460038FDD3 /* XMPPMockStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = B113111F20FA0C460038FDD3 /* XMPPMockStream.swift */; };
 		B12D51F920EA4CD100841AB1 /* XMPPControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12D51F820EA4CD100841AB1 /* XMPPControllerTests.swift */; };
 		B12E84FA20D849AE00B2BC67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12E84F920D849AE00B2BC67 /* Constants.swift */; };
 		B1C631B620BC4B6700CE9F62 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C631B520BC4B6700CE9F62 /* AppDelegate.swift */; };
@@ -42,6 +44,9 @@
 		3B7EE0342FD6776030A5AEC3 /* Pods_XMPPControllerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XMPPControllerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		56309F31BFCC34A0F86BFDA9 /* Pods-XMPPControllerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XMPPControllerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-XMPPControllerTests/Pods-XMPPControllerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B113111A20F8D5810038FDD3 /* XMPPRosterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMPPRosterTests.swift; sourceTree = "<group>"; };
+		B113111C20FA0B6A0038FDD3 /* XMPPMockStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPMockStream.h; sourceTree = "<group>"; };
+		B113111D20FA0B750038FDD3 /* XMPPMockStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPMockStream.m; sourceTree = "<group>"; };
+		B113111F20FA0C460038FDD3 /* XMPPMockStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMPPMockStream.swift; sourceTree = "<group>"; };
 		B12D51F620EA4CD100841AB1 /* ChatApplication2018Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChatApplication2018Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B12D51F820EA4CD100841AB1 /* XMPPControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMPPControllerTests.swift; sourceTree = "<group>"; };
 		B12D51FA20EA4CD100841AB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -111,9 +116,12 @@
 		B12D51F720EA4CD100841AB1 /* ChatApplication2018Tests */ = {
 			isa = PBXGroup;
 			children = (
+				B113111D20FA0B750038FDD3 /* XMPPMockStream.m */,
+				B113111C20FA0B6A0038FDD3 /* XMPPMockStream.h */,
 				B113111A20F8D5810038FDD3 /* XMPPRosterTests.swift */,
 				B12D51F820EA4CD100841AB1 /* XMPPControllerTests.swift */,
 				B12D51FA20EA4CD100841AB1 /* Info.plist */,
+				B113111F20FA0C460038FDD3 /* XMPPMockStream.swift */,
 			);
 			path = ChatApplication2018Tests;
 			sourceTree = "<group>";
@@ -211,6 +219,7 @@
 				TargetAttributes = {
 					B12D51F520EA4CD100841AB1 = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						TestTargetID = B1C631B120BC4B6700CE9F62;
 					};
@@ -357,6 +366,8 @@
 			files = (
 				B12D51F920EA4CD100841AB1 /* XMPPControllerTests.swift in Sources */,
 				B113111B20F8D5810038FDD3 /* XMPPRosterTests.swift in Sources */,
+				B113112020FA0C460038FDD3 /* XMPPMockStream.swift in Sources */,
+				B113111E20FA0B750038FDD3 /* XMPPMockStream.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +421,7 @@
 			baseConfigurationReference = 56309F31BFCC34A0F86BFDA9 /* Pods-XMPPControllerTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
@@ -422,6 +434,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = tmcgar01.learning.XMPPControllerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ChatApplication2018.app/ChatApplication2018";
@@ -433,6 +446,7 @@
 			baseConfigurationReference = 12E7D14420EDC0D59D1BAB09 /* Pods-XMPPControllerTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
