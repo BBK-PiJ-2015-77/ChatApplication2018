@@ -13,6 +13,8 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var userTitle: UILabel!
     @IBOutlet weak var displayStatus: UILabel!
     
+    var xmppController: XMPPController?
+    var homeTabBarController: HomeTabBarController?
     var chatArray = ["Tom", "Dick", "Harry"]
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -27,6 +29,12 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBAction func addChat(_ sender: Any) {
         //tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+    }
+    
+    func chatList() {
+        
+        let jids = xmppController?.xmppRosterStorage?.jids(for: xmppController?.xmppStream)
+        print("JID list: \(jids)")
     }
     
     //MARK: - CollectionViewDataSource
@@ -45,9 +53,30 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
+        //the model isn't set up when this view first loads
+        //homeTabBarController = tabBarController as? HomeTabBarController
+        //xmppController = homeTabBarController?.xmppController
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if self.xmppController == nil {
+            homeTabBarController = tabBarController as? HomeTabBarController
+            xmppController = homeTabBarController?.xmppController
+        }
+        //print("JID: \(xmppController?.xmppStream?.myJID.description)")
+        let defaultUsername = "Username"
+        let defaultStatus = "Status"
+        
+        userTitle.text = xmppController?.xmppStream?.myJID.user
+        displayStatus.text = "online"
+        
+        print("Chats view controller's xmppcontroller jid: \(xmppController?.xmppStream?.myJID.full() ?? defaultUsername)")
+        print("Chats view controller's xmppcontroller status: \(xmppController?.xmppStream?.myPresence.description ?? defaultStatus)")
+    }
+    
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -55,3 +84,4 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
 }
+

@@ -11,13 +11,12 @@ import XMPPFramework
 import SwiftKeychainWrapper
 
 class HomeTabBarController: UITabBarController {
-
-    weak var loginViewController: LoginViewController?
     
-
+    weak var loginViewController: LoginViewController?
+    //var chatsViewController: ChatsViewController?
+    var xmppController: XMPPController?
     var loggedIn = false
     
-    var xmppController: XMPPController?
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "loginView" {
@@ -116,5 +115,27 @@ extension HomeTabBarController: XMPPStreamDelegate {
         self.loginViewController?.showErrorMessage(message: "Wrong password or username")
     }
     
+    /*
+    func xmppStream(_ sender: XMPPStream!, didReceive iq: XMPPIQ!) -> Bool {
+       //roster is automatically fetched, but I'm currently doing nothing with that
+        /*
+        let queryElements: [XMPPElement] = iq.elements(forXmlns: "jabber:iq:roster") as! [XMPPElement]
+        if queryElements != nil {
+            let itemElements = queryElements.elements(forName: "item")
+            for i in 0..<(itemElements?.count ?? 0) {
+                print("Friend: \(itemElements?[i].attribute(forName: "jid")?.stringValue ?? "")")
+            }
+        }
+        */
+        print("IQ received")
+        return false
+    }
+ */
+    
+}
+
+protocol HomeTabBarControllerDelegate: class {
+    func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String)
+
 }
 

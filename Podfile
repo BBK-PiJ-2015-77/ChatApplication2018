@@ -8,7 +8,7 @@ target 'ChatApplication2018' do
   reusepods
 end
 
-target 'XMPPControllerTests' do
+target 'ChatApplication2018Tests' do
   use_frameworks!
   reusepods
 end

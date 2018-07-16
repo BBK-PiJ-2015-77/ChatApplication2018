@@ -14,13 +14,13 @@ class SettingsViewController: UIViewController {
     //Use viewWillAppear to have something update everytime the view is switched
     //viewDidLoad only happens once for each child view
     
-    var xmppController: XMPPController!
+    var xmppController: XMPPController?
     var homeTabBarController: HomeTabBarController?
     
     
     @IBAction func logoutAction(_ sender: Any) {
         
-        xmppController.disconnect()
+        xmppController?.disconnect()
         removeCredentials()
         homeTabBarController?.loggedIn = false
         homeTabBarController?.xmppController = nil
@@ -40,7 +40,7 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         
         homeTabBarController = tabBarController as? HomeTabBarController
-        xmppController = homeTabBarController?.xmppController 
+        xmppController = homeTabBarController?.xmppController
     }
     
     override func viewDidAppear(_ animated: Bool) {
