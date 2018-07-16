@@ -55,8 +55,8 @@ class XMPPController: NSObject {
         
         //Roster Configuration
         self.xmppRosterStorage = XMPPRosterCoreDataStorage()
-        self.xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
-        self.xmppRoster?.activate(xmppStream)
+        self.xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage!)
+        self.xmppRoster?.activate(xmppStream!)
         self.xmppRoster?.autoFetchRoster = true
         
         //there is a problem when logging out
@@ -74,7 +74,7 @@ class XMPPController: NSObject {
     }
     
     func connect() {
-        if !(self.xmppStream?.isDisconnected())!{
+        if (self.xmppStream?.isConnected)!{
             return
         }
         print("got here9T")
@@ -100,13 +100,13 @@ class XMPPController: NSObject {
     
     func goOnline() {
         presence = XMPPPresence()
-        xmppStream?.send(presence)
-        print(self.xmppStream?.myPresence.description)
+        xmppStream?.send(presence!)
+        print(self.xmppStream?.myPresence?.description)
     }
     
     func goOffline() {
         presence = XMPPPresence(type: "unavailable")
-        xmppStream?.send(presence)
+        xmppStream?.send(presence!)
     }
     
 }
@@ -120,7 +120,7 @@ extension XMPPController: XMPPStreamDelegate {
     
     func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
         print("Stream: Authenticated")
-        saveCredentials(userName: self.userJID.user, password: self.password)
+        saveCredentials(userName: self.userJID.bare, password: self.password)
         //print(self.xmppRoster.description)
         goOnline()
     }

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B42EBCFDCE430B386E57AA83DA6C6098"
+               BlueprintIdentifier = "4532A5D99B5329C1C33943E0754BF1BE"
                BuildableName = "Pods_ChatApplication2018.framework"
                BlueprintName = "Pods-ChatApplication2018"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -26,7 +26,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
@@ -37,7 +36,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -47,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B42EBCFDCE430B386E57AA83DA6C6098"
+            BlueprintIdentifier = "4532A5D99B5329C1C33943E0754BF1BE"
             BuildableName = "Pods_ChatApplication2018.framework"
             BlueprintName = "Pods-ChatApplication2018"
             ReferencedContainer = "container:Pods.xcodeproj">

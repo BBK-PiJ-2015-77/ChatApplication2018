@@ -32,9 +32,10 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func chatList() {
-        
+        /*
         let jids = xmppController?.xmppRosterStorage?.jids(for: xmppController?.xmppStream)
         print("JID list: \(jids)")
+        */
     }
     
     //MARK: - CollectionViewDataSource
@@ -69,11 +70,11 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let defaultUsername = "Username"
         let defaultStatus = "Status"
         
-        userTitle.text = xmppController?.xmppStream?.myJID.user
+        userTitle.text = xmppController?.xmppStream?.myJID?.user
         displayStatus.text = "online"
         
-        print("Chats view controller's xmppcontroller jid: \(xmppController?.xmppStream?.myJID.full() ?? defaultUsername)")
-        print("Chats view controller's xmppcontroller status: \(xmppController?.xmppStream?.myPresence.description ?? defaultStatus)")
+        print("Chats view controller's xmppcontroller jid: \(xmppController?.xmppStream?.myJID?.full ?? defaultUsername)")
+        print("Chats view controller's xmppcontroller status: \(xmppController?.xmppStream?.myPresence?.description ?? defaultStatus)")
     }
     
     

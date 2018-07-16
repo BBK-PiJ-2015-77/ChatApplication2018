@@ -1,5 +1,5 @@
 def reusepods
-  pod 'XMPPFramework', '~> 3.7.0'
+  pod 'XMPPFramework/Swift'
   pod 'SwiftKeychainWrapper', '~> 3.0.1'
 end
 
