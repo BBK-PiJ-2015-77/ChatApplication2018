@@ -104,7 +104,7 @@ class XMPPControllerTests: XCTestCase {
         
         expectation = expectation(description: "Stream connects")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-            XCTAssertTrue((self.mockXMPPController.xmppStream?.isConnected())!)
+            XCTAssertTrue((self.mockXMPPController.xmppStream?.isConnected)!)
             self.expectation?.fulfill()
         })
         
@@ -122,7 +122,7 @@ class XMPPControllerTests: XCTestCase {
         
         expectation = expectation(description: "Stream connects")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-            XCTAssertTrue((self.mockXMPPController.xmppStream?.isAuthenticated())!)
+            XCTAssertTrue((self.mockXMPPController.xmppStream?.isAuthenticated)!)
             self.expectation?.fulfill()
         })
         
@@ -152,7 +152,7 @@ class XMPPControllerTests: XCTestCase {
         
         expectation = expectation(description: "Stream connects")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-            XCTAssertFalse((self.mockXMPPController.xmppStream?.isAuthenticating())! && (self.mockXMPPController.xmppStream?.isAuthenticated())!)
+            XCTAssertFalse((self.mockXMPPController.xmppStream?.isAuthenticating)! && (self.mockXMPPController.xmppStream?.isAuthenticated)!)
             self.expectation?.fulfill()
         })
         

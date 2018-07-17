@@ -68,7 +68,7 @@ class XMPPRosterTests: XCTestCase {
     
     func testUserAdded() {
         //given this test user
-        let jid = XMPPJID(string: "test@example")
+        let jid = XMPPJID(string: "test@example")!
         
         //when added to the roster
         //test user can be accessed
@@ -76,7 +76,7 @@ class XMPPRosterTests: XCTestCase {
 
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
             self.xmppController.xmppRoster?.addUser(jid, withNickname: "Test User")
-            XCTAssertTrue((self.xmppController.xmppRosterStorage?.userExists(with: jid, xmppStream: self.xmppController.xmppStream))!)
+            XCTAssertTrue((self.xmppController.xmppRosterStorage?.userExists(with: jid, xmppStream: self.xmppController.xmppStream!))!)
             self.expectation?.fulfill()
         })
         waitForExpectations(timeout: 5, handler: nil)
@@ -84,7 +84,7 @@ class XMPPRosterTests: XCTestCase {
     
     func testUserRemoved() {
         //given this test user
-        let jid = XMPPJID(string: "test@example")
+        let jid = XMPPJID(string: "test@example")!
         expectation = expectation(description: "User removed")
         
         
@@ -92,12 +92,12 @@ class XMPPRosterTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
 
             //check user exists
-            XCTAssertTrue((self.xmppController.xmppRosterStorage?.userExists(with: jid, xmppStream: self.xmppController.xmppStream))!)
+            XCTAssertTrue((self.xmppController.xmppRosterStorage?.userExists(with: jid, xmppStream: self.xmppController.xmppStream!))!)
             
             self.xmppController.xmppRoster?.removeUser(jid)
             sleep(2)
             //then check user has been removed
-            XCTAssertFalse((self.xmppController.xmppRosterStorage?.userExists(with: jid, xmppStream: self.xmppController.xmppStream))!)
+            XCTAssertFalse((self.xmppController.xmppRosterStorage?.userExists(with: jid, xmppStream: self.xmppController.xmppStream!))!)
             self.expectation?.fulfill()
         })
         

@@ -12,10 +12,11 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var userTitle: UILabel!
     @IBOutlet weak var displayStatus: UILabel!
+    @IBOutlet weak var chatTableView: UITableView!
     
     var xmppController: XMPPController?
     var homeTabBarController: HomeTabBarController?
-    var chatArray = ["Tom", "Dick", "Harry"]
+    var chatArray: [String] = []
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chatArray.count
@@ -31,12 +32,6 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         //tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
     }
     
-    func chatList() {
-        /*
-        let jids = xmppController?.xmppRosterStorage?.jids(for: xmppController?.xmppStream)
-        print("JID list: \(jids)")
-        */
-    }
     
     //MARK: - CollectionViewDataSource
 
@@ -73,8 +68,18 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         userTitle.text = xmppController?.xmppStream?.myJID?.user
         displayStatus.text = "online"
         
-        print("Chats view controller's xmppcontroller jid: \(xmppController?.xmppStream?.myJID?.full ?? defaultUsername)")
+        print("Chats view controller's xmppcontroller jid: \(xmppController?.xmppStream?.myJID?.user! ?? defaultUsername)")
         print("Chats view controller's xmppcontroller status: \(xmppController?.xmppStream?.myPresence?.description ?? defaultStatus)")
+        print("Buddy IDs:")
+        if self.xmppController != nil {
+            let jids = xmppController?.xmppRosterStorage?.jids(for: (xmppController?.xmppStream)!)
+            
+            for jid in jids! {
+                print(jid.user ?? "None yet")
+                chatArray.append(jid.user!)
+            }
+            self.chatTableView.reloadData()
+        }
     }
     
     
