@@ -119,7 +119,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ngR-I4-11i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3678" y="640"/>
+            <point key="canvasLocation" x="3678" y="898"/>
         </scene>
         <!--Extra-->
         <scene sceneID="hfR-kb-Ik3">
@@ -135,7 +135,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vk7-TM-F7b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4356" y="79"/>
+            <point key="canvasLocation" x="3678" y="79"/>
         </scene>
         <!--Chats-->
         <scene sceneID="0SH-jA-hHC">
@@ -229,11 +229,54 @@
                         <outlet property="chatTableView" destination="CWZ-z1-Br2" id="7wK-nN-iKp"/>
                         <outlet property="displayStatus" destination="N7s-Ag-h6G" id="qd4-3f-Wdt"/>
                         <outlet property="userTitle" destination="mvt-di-mEl" id="r1K-80-bAE"/>
+                        <segue destination="jyw-QR-OZk" kind="presentation" identifier="chatsToChat" id="BzR-at-g2r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R8f-ng-Fwn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3677.5999999999999" y="-448.42578710644682"/>
+            <point key="canvasLocation" x="3678" y="-663"/>
+        </scene>
+        <!--Chat View Controller-->
+        <scene sceneID="YQf-2h-2WV">
+            <objects>
+                <viewController id="jyw-QR-OZk" customClass="ChatViewController" customModule="ChatApplication2018" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Wgr-O7-yuE">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wa4-nc-0p0">
+                                <rect key="frame" x="75" y="108" width="225" height="51"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Chat" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jfL-Vh-eT4">
+                                <rect key="frame" x="287" y="29" width="72" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xdt-KL-RuG">
+                                <rect key="frame" x="22" y="24" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Back"/>
+                                <connections>
+                                    <action selector="backButton:" destination="jyw-QR-OZk" eventType="touchUpInside" id="wic-Rl-Mnc"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="OxU-cQ-wYi"/>
+                    </view>
+                    <connections>
+                        <outlet property="userLabel" destination="Wa4-nc-0p0" id="xFc-dz-ftW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Zl9-HL-TKU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4572" y="-663.41829085457277"/>
         </scene>
         <!--Home Tab Bar Controller-->
         <scene sceneID="HDM-ak-WMm">

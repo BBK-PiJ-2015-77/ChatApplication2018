@@ -17,6 +17,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var xmppController: XMPPController?
     var homeTabBarController: HomeTabBarController?
     var chatArray: [String] = []
+    var chatSelectionIndex = 0
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chatArray.count
@@ -26,6 +27,20 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatTableViewCell
         cell.nameLabel.text = chatArray[indexPath.row]
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //this is how you send data to the segue destination
+        let chatVC: ChatViewController = segue.destination as! ChatViewController
+        chatVC.chatArray = self.chatArray
+        chatVC.chatSelectionIndex = self.chatSelectionIndex
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //set up the stuff for transitioning
+        chatSelectionIndex = indexPath.row
+        //can I give any sender? so that I can send the XMPPJID of the user, or maybe even the xmpp stream
+        performSegue(withIdentifier: "chatsToChat", sender: self)
     }
     
     @IBAction func addChat(_ sender: Any) {
