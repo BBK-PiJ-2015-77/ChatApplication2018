@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import XMPPFramework
 
 class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -16,30 +17,37 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     var xmppController: XMPPController?
     var homeTabBarController: HomeTabBarController?
-    var chatArray: [String] = []
+    var jidArray: [XMPPJID] = []
     var chatSelectionIndex = 0
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chatArray.count
+        return jidArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatTableViewCell
-        cell.nameLabel.text = chatArray[indexPath.row]
+        cell.nameLabel.text = jidArray[indexPath.row].user
         return cell
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //this is how you send data to the segue destination
+        
         let chatVC: ChatViewController = segue.destination as! ChatViewController
-        chatVC.chatArray = self.chatArray
-        chatVC.chatSelectionIndex = self.chatSelectionIndex
+        chatVC.recipientJID = jidArray[(chatTableView.indexPathForSelectedRow?.row)!]
+        chatVC.xmppController = self.xmppController
+        
+        /*
+        if segue.identifier == "chatsToChat",
+        let destination = segue.destination as? ChatViewController,
+            chatIndex = chatTableView.indexPathForSelectedRow?.row {
+            destination.xmppController = self.xmppController
+            destination
+        }
+        */
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //set up the stuff for transitioning
-        chatSelectionIndex = indexPath.row
-        //can I give any sender? so that I can send the XMPPJID of the user, or maybe even the xmpp stream
         performSegue(withIdentifier: "chatsToChat", sender: self)
     }
     
@@ -89,9 +97,12 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if self.xmppController != nil {
             let jids = xmppController?.xmppRosterStorage?.jids(for: (xmppController?.xmppStream)!)
             
+            //guard let x = y, else
             for jid in jids! {
                 print(jid.user ?? "None yet")
-                chatArray.append(jid.user!)
+                if !jidArray.contains(jid) {
+                    jidArray.append(jid)
+                }
             }
             self.chatTableView.reloadData()
         }

@@ -57,7 +57,7 @@ class XMPPRosterTests: XCTestCase {
         //given valid login connection and connection
         //there is an XMPPRoster
         expectation = expectation(description: "Has Roster")
- 
+        
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
             XCTAssertTrue((self.xmppController.xmppRoster?.hasRoster)!)
             self.expectation?.fulfill()

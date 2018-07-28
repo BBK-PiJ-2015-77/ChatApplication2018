@@ -9,7 +9,7 @@
 import UIKit
 import XMPPFramework
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var loginTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -21,8 +21,12 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        //add text fields as delegates and change default 'return' button to 'done'
+        loginTextField.delegate = self
+        passwordTextField.delegate = self
+        loginTextField.returnKeyType = .done
+        passwordTextField.returnKeyType = .done
     }
     
     @IBAction func logInAction(_ sender: Any) {
@@ -56,6 +60,11 @@ class LoginViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
 

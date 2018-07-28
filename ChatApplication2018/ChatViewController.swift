@@ -7,18 +7,26 @@
 //
 
 import UIKit
+import XMPPFramework
 
-class ChatViewController: UIViewController {
+class ChatViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var userLabel: UILabel!
-    var chatArray: [String] = []
-    var chatSelectionIndex = 0
+    @IBOutlet weak var chatInput: UITextField!
+    
+    var xmppController: XMPPController?
+    var recipientJID: XMPPJID?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        userLabel.text = chatArray[chatSelectionIndex]
+        //Shouldn't do this with the whole array
+        userLabel.text = recipientJID?.user
+        
+        chatInput.delegate = self
+        chatInput.returnKeyType = .send
+        
+        //will need a method to dismiss the keyboard without sending a message
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,6 +36,30 @@ class ChatViewController: UIViewController {
     
     @IBAction func backButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    func chatInput(_ textFieldToChange: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        //an example of how to work with text field
+        // limit to 4 characters
+        let characterCountLimit = 4
+        
+        // We need to figure out how many characters would be in the string after the change happens
+        let startingLength = textFieldToChange.text?.count ?? 0
+        let lengthToAdd = string.count
+        let lengthToReplace = range.length
+        
+        let newLength = startingLength + lengthToAdd - lengthToReplace
+        
+        return newLength <= characterCountLimit
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func sendMessage(message: String) {
+        //
     }
 
     /*
