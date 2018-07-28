@@ -32,7 +32,8 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //this is how you send data to the segue destination
-        let chatVC: ChatViewController = segue.destination as! ChatViewController
+        let destinationNavigationController = segue.destination as! UINavigationController
+        let chatVC: ChatViewController = destinationNavigationController.topViewController as! ChatViewController
         chatVC.recipientJID = jidArray[(chatTableView.indexPathForSelectedRow?.row)!]
         chatVC.xmppController = self.xmppController
     }
