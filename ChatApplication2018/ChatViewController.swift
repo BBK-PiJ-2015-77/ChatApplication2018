@@ -55,11 +55,16 @@ class ChatViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        if chatInput.text != nil {
+            sendMessage(message: chatInput.text!)
+        }
         return true
     }
     
     func sendMessage(message: String) {
-        //
+        let xmppMessage = XMPPMessage(type: "chat", to: recipientJID)
+        xmppMessage.addBody(message)
+        self.xmppController?.xmppStream?.send(xmppMessage)
     }
 
     /*

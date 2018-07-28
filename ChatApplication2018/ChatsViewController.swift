@@ -32,19 +32,9 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //this is how you send data to the segue destination
-        
         let chatVC: ChatViewController = segue.destination as! ChatViewController
         chatVC.recipientJID = jidArray[(chatTableView.indexPathForSelectedRow?.row)!]
         chatVC.xmppController = self.xmppController
-        
-        /*
-        if segue.identifier == "chatsToChat",
-        let destination = segue.destination as? ChatViewController,
-            chatIndex = chatTableView.indexPathForSelectedRow?.row {
-            destination.xmppController = self.xmppController
-            destination
-        }
-        */
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
