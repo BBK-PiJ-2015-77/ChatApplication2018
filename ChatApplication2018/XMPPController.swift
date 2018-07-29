@@ -22,12 +22,14 @@ class XMPPController: NSObject {
     let userJID: XMPPJID
     let hostPort: UInt16
     let password: String
-    //let presence: XMPPPresence
     
     var loggedIn = false
     
     var xmppRosterStorage: XMPPRosterStorage?
     var xmppRoster: XMPPRoster?
+    
+    var xmppMessageArchivingStorage: XMPPMessageArchivingCoreDataStorage?
+    var xmppMessageArchiving: XMPPMessageArchiving?
     
     var presence: XMPPPresence?
     
@@ -35,11 +37,6 @@ class XMPPController: NSObject {
         guard let userJID = XMPPJID(string: userJIDString) else {
             throw XMPPControllerError.wrongUserID
         }
-        
-        //Roster Configuration
-        //xmppRosterStorage = XMPPRosterCoreDataStorage()
-        //xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage)
-        //print(xmppRosterStorage.databaseFileName)
         
         self.hostName = Constants.Server.address
         self.userJID = userJID
@@ -59,7 +56,10 @@ class XMPPController: NSObject {
         self.xmppRoster?.activate(xmppStream!)
         self.xmppRoster?.autoFetchRoster = true
         
-        //there is a problem when logging out
+        //Message Archive Confiuration
+        self.xmppMessageArchivingStorage = XMPPMessageArchivingCoreDataStorage()
+        self.xmppMessageArchiving = XMPPMessageArchiving(messageArchivingStorage: xmppMessageArchivingStorage)
+        self.xmppMessageArchiving?.activate(xmppStream!)
         
         super.init()
         
@@ -68,6 +68,7 @@ class XMPPController: NSObject {
         
         self.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
         self.xmppRoster?.addDelegate(self, delegateQueue: DispatchQueue.main)
+        self.xmppMessageArchiving?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
         //Test
         print("got here8")
@@ -84,10 +85,13 @@ class XMPPController: NSObject {
     func disconnect() {
         goOffline()
         self.xmppRoster!.deactivate()
+        self.xmppMessageArchiving!.deactivate()
         self.xmppStream?.disconnect()
         self.xmppStream = nil
         self.xmppRoster = nil
         self.xmppRosterStorage = nil
+        self.xmppMessageArchiving = nil
+        self.xmppMessageArchivingStorage = nil
     }
     
     //add autheticated login details to keychain

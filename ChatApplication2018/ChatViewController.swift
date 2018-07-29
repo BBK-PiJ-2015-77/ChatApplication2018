@@ -7,6 +7,8 @@
 //
 //  Adaptable scrollview/textfield comes from Dzung Nguyen's post from Medium.com
 //  https://medium.com/@dzungnguyen.hcm/autolayout-for-scrollview-keyboard-handling-in-ios-5a47d73fd023
+//  Also similar to Apple's documentation:
+//  https://developer.apple.com/library/archive/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
 
 import UIKit
 import XMPPFramework
@@ -20,6 +22,8 @@ class ChatViewController: UIViewController {
     //data
     var xmppController: XMPPController?
     var recipientJID: XMPPJID?
+    //var xmppMessageArchivingStorage: XMPPMessageArchivingCoreDataStorage?
+    //var xmppMessageArchiving: XMPPMessageArchiving?
     
     //used for adaptive scrolling
     var activeField: UITextField?
@@ -31,9 +35,14 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //Shouldn't do this with the whole array
         self.title = recipientJID?.user
         
+        //initialise archive
+        //Maybe this should be done on the XMPPController?
+        //setupMessageArchiving()
+        //retrieveMessages()
+        
+        //keybaord setup
         chatInput.delegate = self
         chatInput.returnKeyType = .send
         
@@ -59,6 +68,36 @@ class ChatViewController: UIViewController {
         self.xmppController?.xmppStream?.send(xmppMessage)
     }
     
+    /*
+    func setupMessageArchiving() {
+        xmppMessageArchivingStorage = XMPPMessageArchivingCoreDataStorage()
+        xmppMessageArchiving = XMPPMessageArchiving(messageArchivingStorage: xmppMessageArchivingStorage)
+        xmppMessageArchiving?.activate((xmppController?.xmppStream)!)
+        xmppMessageArchiving?.addDelegate(self, delegateQueue: DispatchQueue.main)
+    }
+    */
+    
+    func retrieveMessages() {
+        //let storage = XMPPMessageArchivingCoreDataStorage.sharedInstance()
+        //let moc: NSManagedObjectContext? = storage?.mainThreadManagedObjectContext
+        let moc = xmppController?.xmppMessageArchivingStorage?.mainThreadManagedObjectContext
+        
+        let entityDescription = NSEntityDescription.entity(forEntityName: "XMPPMessageArchiving_Message_CoreDataObject", in: moc!)
+        
+        let request = NSFetchRequest<NSFetchRequestResult>.init(entityName: "XMPPMessageArchiving_Message_CoreDataObject")
+        
+        request.predicate = NSPredicate(format: "bareJidStr = %@ AND streamBareJidStr = %@", recipientJID!)
+        request.entity = entityDescription
+        
+        do {
+            //let messages = try moc?.execute(request)
+            let messages = try moc?.fetch(request) as! [AnyHashable]
+            print(messages)
+        } catch {
+            print("Error retrieving messages")
+        }
+        
+    }
     
     /*
     // MARK: - Navigation
