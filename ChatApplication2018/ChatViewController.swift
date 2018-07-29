@@ -18,12 +18,15 @@ class ChatViewController: UIViewController {
     @IBOutlet weak var chatInput: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var chatText: UITextView!
+    
     
     //data
     var xmppController: XMPPController?
     var recipientJID: XMPPJID?
     //var xmppMessageArchivingStorage: XMPPMessageArchivingCoreDataStorage?
     //var xmppMessageArchiving: XMPPMessageArchiving?
+    var xmppMessages: [XMPPMessage] = []
     
     //used for adaptive scrolling
     var activeField: UITextField?
@@ -40,7 +43,7 @@ class ChatViewController: UIViewController {
         //initialise archive
         //Maybe this should be done on the XMPPController?
         //setupMessageArchiving()
-        //retrieveMessages()
+        retrieveMessages()
         
         //keybaord setup
         chatInput.delegate = self
@@ -78,25 +81,41 @@ class ChatViewController: UIViewController {
     */
     
     func retrieveMessages() {
-        //let storage = XMPPMessageArchivingCoreDataStorage.sharedInstance()
-        //let moc: NSManagedObjectContext? = storage?.mainThreadManagedObjectContext
-        let moc = xmppController?.xmppMessageArchivingStorage?.mainThreadManagedObjectContext
-        
-        let entityDescription = NSEntityDescription.entity(forEntityName: "XMPPMessageArchiving_Message_CoreDataObject", in: moc!)
-        
-        let request = NSFetchRequest<NSFetchRequestResult>.init(entityName: "XMPPMessageArchiving_Message_CoreDataObject")
-        
-        request.predicate = NSPredicate(format: "bareJidStr = %@ AND streamBareJidStr = %@", recipientJID!)
-        request.entity = entityDescription
-        
-        do {
-            //let messages = try moc?.execute(request)
-            let messages = try moc?.fetch(request) as! [AnyHashable]
-            print(messages)
-        } catch {
-            print("Error retrieving messages")
+
+        let storage = xmppController?.xmppMessageArchivingStorage
+            //XMPPMessageArchivingCoreDataStorage.sharedInstance() as? XMPPMessageArchivingCoreDataStorage
+        let moc: NSManagedObjectContext? = storage?.mainThreadManagedObjectContext
+        var entityDescription: NSEntityDescription? = nil
+        if let aMoc = moc {
+            entityDescription = NSEntityDescription.entity(forEntityName: "XMPPMessageArchiving_Message_CoreDataObject", in: aMoc)
         }
+        let request = NSFetchRequest<NSFetchRequestResult>()
+        let predicateFrmt = "bareJidStr like %@ "
+        let predicate = NSPredicate(format: predicateFrmt, recipientJID!.bare)
+        request.predicate = predicate
+        request.entity = entityDescription
+        let messages_arc = try? moc?.fetch(request)
         
+        printMessages(messages_arc as! [AnyHashable])
+
+    }
+    
+    func printMessages(_ messages_arc: [AnyHashable]?) {
+        var messageString = ""
+
+        autoreleasepool {
+            for message: XMPPMessageArchiving_Message_CoreDataObject? in messages_arc as? [XMPPMessageArchiving_Message_CoreDataObject?] ?? [XMPPMessageArchiving_Message_CoreDataObject?]() {
+                let element = try? XMLElement(xmlString: message?.messageStr ?? "")
+                xmppMessages.append(XMPPMessage(from: element!))
+            }
+            
+            for message in xmppMessages {
+                if message.body != nil {
+                    messageString += message.body! + "\n"
+                }
+            }
+            chatText.text = messageString
+        }
     }
     
     /*
