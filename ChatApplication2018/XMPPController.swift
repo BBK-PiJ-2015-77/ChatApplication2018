@@ -140,7 +140,7 @@ extension XMPPController: XMPPStreamDelegate {
     func xmppStreamDidDisconnect(_ sender: XMPPStream, withError error: Error?) {
         print("Stream: Disconnected")
     }
-    
+    /*
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
         print("XMPPMessage sent")
     }
@@ -148,6 +148,7 @@ extension XMPPController: XMPPStreamDelegate {
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
         print("XMPPMessage received")
     }
+    */
     
 }
 

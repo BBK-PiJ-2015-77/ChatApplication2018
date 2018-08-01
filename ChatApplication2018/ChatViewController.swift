@@ -24,6 +24,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //data
     var xmppController: XMPPController?
+    //var xmppStream: XMPPStream?
     var recipientJID: XMPPJID?
     //var xmppMessageArchivingStorage: XMPPMessageArchivingCoreDataStorage?
     //var xmppMessageArchiving: XMPPMessageArchiving?
@@ -40,6 +41,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
 
         self.title = recipientJID?.user
+        //self.xmppStream = xmppController?.xmppStream
         
         //initialise archive
         //Maybe this should be done on the XMPPController?
@@ -71,6 +73,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         let xmppMessage = XMPPMessage(type: "chat", to: recipientJID)
         xmppMessage.addBody(message)
         self.xmppController?.xmppStream?.send(xmppMessage)
+        self.xmppMessages.append(xmppMessage)
+        self.chatTableView.reloadData()
     }
     
     /*
@@ -152,10 +156,12 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 
 }
 
-/*
-extension ChatViewController: XMPPController {
+
+extension ChatViewController: XMPPStreamDelegate {
     
-    override func xmppStream
+    func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
+        print("Message received!")
+    }
     /*
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
         print("message sent")
@@ -166,7 +172,7 @@ extension ChatViewController: XMPPController {
         //print("Message received!")
     }
     */
-}*/
+}
 
 extension ChatViewController: UITextFieldDelegate {
     
