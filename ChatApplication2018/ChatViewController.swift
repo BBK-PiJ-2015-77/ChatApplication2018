@@ -35,29 +35,20 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
 
         self.title = recipientJID?.user
-        //self.xmppStream = xmppController?.xmppStream
         self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
-        //initialise archive
-        //Maybe this should be done on the XMPPController?
-        //setupMessageArchiving()
+        // initialise archive and display messages
         retrieveMessages()
         
-        
-        //keybaord setup
+        // keyboard setup
         chatInput.delegate = self
         chatInput.returnKeyType = .send
         
-        //will need a method to dismiss the keyboard without sending a message
+        // will need a method to dismiss the keyboard without sending a message
         
         // Observe keyboard change
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func backButton(_ sender: Any) {
@@ -70,24 +61,16 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.xmppController?.xmppStream?.send(xmppMessage)
     }
     
-    /*
-    func setupMessageArchiving() {
-        xmppMessageArchivingStorage = XMPPMessageArchivingCoreDataStorage()
-        xmppMessageArchiving = XMPPMessageArchiving(messageArchivingStorage: xmppMessageArchivingStorage)
-        xmppMessageArchiving?.activate((xmppController?.xmppStream)!)
-        xmppMessageArchiving?.addDelegate(self, delegateQueue: DispatchQueue.main)
-    }
-    */
-    
     func retrieveMessages() {
 
         let storage = xmppController?.xmppMessageArchivingStorage
-            //XMPPMessageArchivingCoreDataStorage.sharedInstance() as? XMPPMessageArchivingCoreDataStorage
         let moc: NSManagedObjectContext? = storage?.mainThreadManagedObjectContext
         var entityDescription: NSEntityDescription? = nil
+        
         if let aMoc = moc {
             entityDescription = NSEntityDescription.entity(forEntityName: "XMPPMessageArchiving_Message_CoreDataObject", in: aMoc)
         }
+        
         let request = NSFetchRequest<NSFetchRequestResult>()
         let predicateFrmt = "bareJidStr like %@ "
         let predicate = NSPredicate(format: predicateFrmt, recipientJID!.bare)
@@ -100,27 +83,28 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func printMessages(_ messages_arc: [AnyHashable]?) {
-        var messageString = ""
-
+        
         autoreleasepool {
             for message: XMPPMessageArchiving_Message_CoreDataObject? in messages_arc as? [XMPPMessageArchiving_Message_CoreDataObject?] ?? [XMPPMessageArchiving_Message_CoreDataObject?]() {
                 let element = try? XMLElement(xmlString: message?.messageStr ?? "")
                 xmppMessages.append(XMPPMessage(from: element!))
             }
             
-            for message in xmppMessages {
-                if message.body != nil {
-                    messageString += message.body! + "\n"
-                }
-            }
-            //chatText.text = messageString
             self.chatTableView.reloadData()
             scrollToBottom()
         }
     }
     
+    // MARK: - Scroll to bottom
+    // Called to make sure the most recent messages at the bottom of the table are showing
+    func scrollToBottom() {
+        let index = IndexPath(row: xmppMessages.count-1, section: 0)
+        self.chatTableView.scrollToRow(at: index, at: .bottom, animated: true)
+    }
+    
+    // MARK: - UITableView setup
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("row count \(xmppMessages.count)")
         return xmppMessages.count
     }
 
@@ -137,22 +121,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.setMessage(xmppMessage: message)
         return cell
     }
-    
-    // Called to make sure the most recent messages at the bottom of the table are showing
-    func scrollToBottom() {
-        let index = IndexPath(row: xmppMessages.count-1, section: 0)
-        self.chatTableView.scrollToRow(at: index, at: .bottom, animated: true)
-    }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
@@ -195,7 +163,8 @@ extension ChatViewController: UITextFieldDelegate {
     
 }
 
-//  Keyboard Handling
+// MARK: - Keyboard Handling
+
 extension ChatViewController {
     
     @objc func keyboardWillShow(notification: NSNotification) {
