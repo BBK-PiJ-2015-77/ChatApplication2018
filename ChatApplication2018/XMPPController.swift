@@ -117,28 +117,36 @@ class XMPPController: NSObject {
 
 extension XMPPController: XMPPStreamDelegate {
     
-    func xmppStreamDidConnect(_ stream: XMPPStream!) {
+    func xmppStreamDidConnect(_ stream: XMPPStream) {
         print("Stream: Connected")
         try! stream.authenticate(withPassword: self.password)
     }
     
-    func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
+    func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
         print("Stream: Authenticated")
         saveCredentials(userName: self.userJID.bare, password: self.password)
         //print(self.xmppRoster.description)
         goOnline()
     }
     
-    func xmppStream(_ sender: XMPPStream!, didReceiveError error: DDXMLElement!) {
+    func xmppStream(_ sender: XMPPStream, didReceiveError error: DDXMLElement) {
         print("username or resource is not allowed to create a session")
     }
     
-    func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
+    func xmppStream(_ sender: XMPPStream, didNotAuthenticate error: DDXMLElement) {
         print("Stream: Fail to Authenticate")
     }
     
-    func xmppStreamDidDisconnect(_ sender: XMPPStream!, withError error: Error!) {
+    func xmppStreamDidDisconnect(_ sender: XMPPStream, withError error: Error?) {
         print("Stream: Disconnected")
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
+        print("XMPPMessage sent")
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
+        print("XMPPMessage received")
     }
     
 }

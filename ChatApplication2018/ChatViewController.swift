@@ -13,13 +13,14 @@
 import UIKit
 import XMPPFramework
 
-class ChatViewController: UIViewController {
+class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var chatInput: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var chatText: UITextView!
+    //@IBOutlet weak var chatText: UITextView!
     
+    @IBOutlet weak var chatTableView: UITableView!
     
     //data
     var xmppController: XMPPController?
@@ -44,6 +45,7 @@ class ChatViewController: UIViewController {
         //Maybe this should be done on the XMPPController?
         //setupMessageArchiving()
         retrieveMessages()
+        
         
         //keybaord setup
         chatInput.delegate = self
@@ -114,8 +116,28 @@ class ChatViewController: UIViewController {
                     messageString += message.body! + "\n"
                 }
             }
-            chatText.text = messageString
+            //chatText.text = messageString
+            self.chatTableView.reloadData()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("row count \(xmppMessages.count)")
+        return xmppMessages.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let message = xmppMessages[indexPath.row]
+        let cell: MessageTableViewCell
+
+        if message.to?.bare == recipientJID?.bare {
+            cell = tableView.dequeueReusableCell(withIdentifier: "sentMessageCell") as! MessageTableViewCell
+        } else {
+            cell = tableView.dequeueReusableCell(withIdentifier: "receivedMessageCell") as! MessageTableViewCell
+        }
+        
+        cell.setMessage(xmppMessage: message)
+        return cell
     }
     
     /*
@@ -129,6 +151,22 @@ class ChatViewController: UIViewController {
     */
 
 }
+
+/*
+extension ChatViewController: XMPPController {
+    
+    override func xmppStream
+    /*
+    func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
+        print("message sent")
+        self.chatTableView.reloadData()
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
+        //print("Message received!")
+    }
+    */
+}*/
 
 extension ChatViewController: UITextFieldDelegate {
     
@@ -179,7 +217,7 @@ extension ChatViewController {
             UIView.animate(withDuration: 0.3, animations: {
                 // scroll to the position above keyboard 10 points
                 self.scrollView.contentOffset = CGPoint(x: self.lastOffset.x, y: collapseSpace + 10)
-            })
+            })               
         }
     }
     
