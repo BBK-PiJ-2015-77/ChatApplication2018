@@ -143,6 +143,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
+    
     /*
     // MARK: - Navigation
 
@@ -161,11 +162,16 @@ extension ChatViewController: XMPPStreamDelegate {
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
         self.xmppMessages.append(message)
         self.chatTableView.reloadData()
+        let index = IndexPath(row: xmppMessages.count-1, section: 0)
+        self.chatTableView.scrollToRow(at: index, at: .bottom, animated: true)
     }
     
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
         self.xmppMessages.append(message)
         self.chatTableView.reloadData()
+        //scroll to bottom of table view
+        let index = IndexPath(row: xmppMessages.count-1, section: 0)
+        self.chatTableView.scrollToRow(at: index, at: .bottom, animated: true)
     }
 
 }
