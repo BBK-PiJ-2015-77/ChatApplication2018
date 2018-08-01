@@ -64,8 +64,13 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         //the model isn't set up when this view first loads
+        //why not?
         //homeTabBarController = tabBarController as? HomeTabBarController
         //xmppController = homeTabBarController?.xmppController
+        
+        // Need to move the data set up out of viewDidAppear and into viewDidLoad so that it is not retrieving this data each time the view appears. Can a buffer be set up while establishing a connection?
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -75,15 +80,14 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             homeTabBarController = tabBarController as? HomeTabBarController
             xmppController = homeTabBarController?.xmppController
         }
-        //print("JID: \(xmppController?.xmppStream?.myJID.description)")
-        let defaultUsername = "Username"
-        let defaultStatus = "Status"
-        
         userTitle.text = xmppController?.xmppStream?.myJID?.user
-        displayStatus.text = "online"
+        if (self.xmppController?.xmppStream?.isConnected)! {
+            displayStatus.text = "online"
+        } else {
+            displayStatus.text = "offline"
+        }
         
-        print("Chats view controller's xmppcontroller jid: \(xmppController?.xmppStream?.myJID?.user! ?? defaultUsername)")
-        print("Chats view controller's xmppcontroller status: \(xmppController?.xmppStream?.myPresence?.description ?? defaultStatus)")
+
         print("Buddy IDs:")
         if self.xmppController != nil {
             let jids = xmppController?.xmppRosterStorage?.jids(for: (xmppController?.xmppStream)!)
