@@ -18,24 +18,18 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var chatInput: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
-    //@IBOutlet weak var chatText: UITextView!
-    
     @IBOutlet weak var chatTableView: UITableView!
+    //@IBOutlet weak var constraintContentHeight: NSLayoutConstraint!
     
-    //data
     var xmppController: XMPPController?
-    //var xmppStream: XMPPStream?
     var recipientJID: XMPPJID?
-    //var xmppMessageArchivingStorage: XMPPMessageArchivingCoreDataStorage?
-    //var xmppMessageArchiving: XMPPMessageArchiving?
     var xmppMessages: [XMPPMessage] = []
     
     //used for adaptive scrolling
     var activeField: UITextField?
     var lastOffset: CGPoint!
     var keyboardHeight: CGFloat!
-    // Constraints
-    @IBOutlet weak var constraintContentHeight: NSLayoutConstraint!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,6 +115,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             //chatText.text = messageString
             self.chatTableView.reloadData()
+            scrollToBottom()
         }
     }
     
@@ -143,6 +138,11 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
+    // Called to make sure the most recent messages at the bottom of the table are showing
+    func scrollToBottom() {
+        let index = IndexPath(row: xmppMessages.count-1, section: 0)
+        self.chatTableView.scrollToRow(at: index, at: .bottom, animated: true)
+    }
     
     /*
     // MARK: - Navigation
@@ -162,16 +162,15 @@ extension ChatViewController: XMPPStreamDelegate {
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
         self.xmppMessages.append(message)
         self.chatTableView.reloadData()
-        let index = IndexPath(row: xmppMessages.count-1, section: 0)
-        self.chatTableView.scrollToRow(at: index, at: .bottom, animated: true)
+        scrollToBottom()
     }
     
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
-        self.xmppMessages.append(message)
-        self.chatTableView.reloadData()
-        //scroll to bottom of table view
-        let index = IndexPath(row: xmppMessages.count-1, section: 0)
-        self.chatTableView.scrollToRow(at: index, at: .bottom, animated: true)
+        if message.isMessageWithBody {
+            self.xmppMessages.append(message)
+            self.chatTableView.reloadData()
+            scrollToBottom()
+        }
     }
 
 }
@@ -186,7 +185,7 @@ extension ChatViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        if chatInput.text != nil || chatInput.text != "" {
+        if chatInput.text != nil && chatInput.text != "" {
             sendMessage(message: chatInput.text!)
         }
         chatInput.text = nil

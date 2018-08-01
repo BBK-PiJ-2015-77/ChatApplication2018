@@ -356,7 +356,6 @@
                     <connections>
                         <outlet property="chatInput" destination="YIY-AK-QRM" id="nqJ-Ti-K2s"/>
                         <outlet property="chatTableView" destination="n3B-nI-DC5" id="uKj-0x-6VD"/>
-                        <outlet property="constraintContentHeight" destination="9ze-WA-KiO" id="aTY-fu-D0x"/>
                         <outlet property="contentView" destination="mOR-OL-MSh" id="LY2-Fk-dgW"/>
                         <outlet property="scrollView" destination="uSp-zL-F3t" id="goK-pD-GHb"/>
                     </connections>
