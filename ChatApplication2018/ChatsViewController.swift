@@ -21,6 +21,27 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var chatSelectionIndex = 0
     
 
+    // MARK: - Setup
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        homeTabBarController = tabBarController as? HomeTabBarController
+        if (homeTabBarController?.loggedIn)! {
+            connectToXMPPController()
+        }
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        //if we are logged in and haven't yet connected to the XMPPController
+        if (homeTabBarController?.loggedIn)! && self.xmppController == nil {
+            connectToXMPPController()
+        }
+    }
+    
     // MARK: - UITableView setup
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -49,35 +70,11 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBAction func addChat(_ sender: Any) {
         //tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        //the model isn't set up when this view first loads
-        //why not?
-        //homeTabBarController = tabBarController as? HomeTabBarController
-        //xmppController = homeTabBarController?.xmppController
-        
-        // Need to move the data set up out of viewDidAppear and into viewDidLoad so that it is not retrieving this data each time the view appears. Can a buffer be set up while establishing a connection?
-        
-        homeTabBarController = tabBarController as? HomeTabBarController
-        if (homeTabBarController?.loggedIn)! {
-            print("logged in: \(homeTabBarController?.loggedIn)")
-            connectToXMPPController()
-        }
-        
-        //try and load from viewdidappear. have a method in viwdidload that checks if connected. if not, tries to connect
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        //if we are logged in and haven't yet connected to the XMPPController
-        if (homeTabBarController?.loggedIn)! && self.xmppController == nil {
-            connectToXMPPController()
-        }
-        
+        let addChatVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "addChatPopUp") as! AddChatViewController
+        self.addChildViewController(addChatVC)
+        addChatVC.view.frame = self.view.frame
+        self.view.addSubview(addChatVC.view)
+        addChatVC.didMove(toParentViewController: self)
     }
     
     func connectToXMPPController() {
@@ -92,10 +89,10 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             displayStatus.text = "offline"
         }
         
-        loadChatsTable()
+        updateChatsTable()
     }
     
-    func loadChatsTable() {
+    func updateChatsTable() {
         print("Buddy IDs:")
         if self.xmppController != nil {
             let jids = xmppController?.xmppRosterStorage?.jids(for: (xmppController?.xmppStream)!)
