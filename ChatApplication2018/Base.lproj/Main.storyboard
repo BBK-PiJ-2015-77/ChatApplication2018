@@ -167,7 +167,7 @@
                                 <rect key="frame" x="0.0" y="127.5" width="375" height="490.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="chatCell" rowHeight="65" id="wVe-e2-EEB" customClass="ChatTableViewCell" customModule="ChatApplication2018" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="chatCell" rowHeight="65" id="wVe-e2-EEB" customClass="ChatsTableViewCell" customModule="ChatApplication2018" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="65"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wVe-e2-EEB" id="72a-L8-IZq">
@@ -226,7 +226,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Chats" id="oEC-t3-16u"/>
                     <connections>
-                        <outlet property="chatTableView" destination="CWZ-z1-Br2" id="7wK-nN-iKp"/>
+                        <outlet property="chatsTableView" destination="CWZ-z1-Br2" id="Cfu-n0-0BQ"/>
                         <outlet property="displayStatus" destination="N7s-Ag-h6G" id="qd4-3f-Wdt"/>
                         <outlet property="userTitle" destination="mvt-di-mEl" id="r1K-80-bAE"/>
                         <segue destination="qoL-HK-Dlf" kind="show" identifier="chatsToChat" id="BzR-at-g2r"/>

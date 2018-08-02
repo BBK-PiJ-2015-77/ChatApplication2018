@@ -25,7 +25,7 @@
 		B1C631D620C3FDE300CE9F62 /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C631D520C3FDE300CE9F62 /* HomeTabBarController.swift */; };
 		B1C631D820C42CC100CE9F62 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C631D720C42CC100CE9F62 /* CFNetwork.framework */; };
 		B1C631DA20C42CEA00CE9F62 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C631D920C42CEA00CE9F62 /* Security.framework */; };
-		B1D72DE320D5780E00EF1FC6 /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D72DE220D5780E00EF1FC6 /* ChatTableViewCell.swift */; };
+		B1D72DE320D5780E00EF1FC6 /* ChatsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D72DE220D5780E00EF1FC6 /* ChatsTableViewCell.swift */; };
 		B1FFA37120FE673900ED56BA /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FFA37020FE673900ED56BA /* ChatViewController.swift */; };
 		E2CF3F29F38650E6DED7C019 /* Pods_ChatApplication2018Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACAFD8AAF8A5501E13C1ED9F /* Pods_ChatApplication2018Tests.framework */; };
 /* End PBXBuildFile section */
@@ -68,7 +68,7 @@
 		B1C631D520C3FDE300CE9F62 /* HomeTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
 		B1C631D720C42CC100CE9F62 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		B1C631D920C42CEA00CE9F62 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		B1D72DE220D5780E00EF1FC6 /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
+		B1D72DE220D5780E00EF1FC6 /* ChatsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsTableViewCell.swift; sourceTree = "<group>"; };
 		B1FFA37020FE673900ED56BA /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		C14452E8908839668D20F5AA /* Pods-ChatApplication2018.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatApplication2018.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatApplication2018/Pods-ChatApplication2018.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -157,10 +157,10 @@
 				B1C631C720BC4E7400CE9F62 /* LoginViewController.swift */,
 				B1C631C920BC4F5900CE9F62 /* XMPPController.swift */,
 				B1C631B920BC4B6700CE9F62 /* Main.storyboard */,
-				B1D72DE220D5780E00EF1FC6 /* ChatTableViewCell.swift */,
 				B1C631D520C3FDE300CE9F62 /* HomeTabBarController.swift */,
 				B1C631D320C3FC8500CE9F62 /* SettingsViewController.swift */,
 				B1C631D120C3FC7000CE9F62 /* ChatsViewController.swift */,
+				B1D72DE220D5780E00EF1FC6 /* ChatsTableViewCell.swift */,
 				B1FFA37020FE673900ED56BA /* ChatViewController.swift */,
 				B11594D2210F90C400E8AA01 /* MessageTableViewCell.swift */,
 				B1C631BC20BC4B6700CE9F62 /* Assets.xcassets */,
@@ -390,7 +390,7 @@
 				B1C631D620C3FDE300CE9F62 /* HomeTabBarController.swift in Sources */,
 				B11594D3210F90C400E8AA01 /* MessageTableViewCell.swift in Sources */,
 				B1C631D220C3FC7000CE9F62 /* ChatsViewController.swift in Sources */,
-				B1D72DE320D5780E00EF1FC6 /* ChatTableViewCell.swift in Sources */,
+				B1D72DE320D5780E00EF1FC6 /* ChatsTableViewCell.swift in Sources */,
 				B1C631CA20BC4F5900CE9F62 /* XMPPController.swift in Sources */,
 				B1C631D420C3FC8500CE9F62 /* SettingsViewController.swift in Sources */,
 				B1FFA37120FE673900ED56BA /* ChatViewController.swift in Sources */,
