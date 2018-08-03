@@ -74,6 +74,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.addChildViewController(addChatVC)
         addChatVC.view.frame = self.view.frame
         self.view.addSubview(addChatVC.view)
+        addChatVC.delegate = self
         addChatVC.didMove(toParentViewController: self)
     }
     
@@ -108,5 +109,12 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
 
+}
+
+extension ChatsViewController: AddChatViewControllerDelegate {
+    func addContact(contactJID: String, contactNickName: String) {
+        //do nothing right now
+        //self.xmppController?.xmppRoster?.addUser(<#T##jid: XMPPJID##XMPPJID#>, withNickname: <#T##String?#>)
+    }
 }
 
