@@ -98,6 +98,9 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     // MARK: - Scroll to bottom
     // Called to make sure the most recent messages at the bottom of the table are showing
     func scrollToBottom() {
+        if xmppMessages.count == 0 {
+            return
+        }
         let index = IndexPath(row: xmppMessages.count-1, section: 0)
         self.chatTableView.scrollToRow(at: index, at: .bottom, animated: true)
     }

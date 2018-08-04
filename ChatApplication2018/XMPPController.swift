@@ -55,6 +55,7 @@ class XMPPController: NSObject {
         self.xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage!)
         self.xmppRoster?.activate(xmppStream!)
         self.xmppRoster?.autoFetchRoster = true
+        self.xmppRoster?.autoAcceptKnownPresenceSubscriptionRequests
         
         //Message Archive Confiuration
         self.xmppMessageArchivingStorage = XMPPMessageArchivingCoreDataStorage()

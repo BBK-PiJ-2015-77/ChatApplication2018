@@ -20,7 +20,10 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var jidArray: [XMPPJID] = []
     var chatSelectionIndex = 0
     
+    var invalidJIDAlertController: UIAlertController?
+    var defaultAction: UIAlertAction?
 
+    
     // MARK: - Setup
     
     override func viewDidLoad() {
@@ -31,6 +34,10 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             connectToXMPPController()
         }
         
+        //Create alert if wrong username is entered when adding a contact
+        self.invalidJIDAlertController = UIAlertController(title: "Invalid username", message: "The username entered does not exist", preferredStyle: .alert)
+        self.defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        invalidJIDAlertController?.addAction(defaultAction!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -40,6 +47,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if (homeTabBarController?.loggedIn)! && self.xmppController == nil {
             connectToXMPPController()
         }
+
     }
     
     // MARK: - UITableView setup
@@ -90,6 +98,8 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             displayStatus.text = "offline"
         }
         
+        self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
+        
         updateChatsTable()
     }
     
@@ -100,7 +110,8 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             //guard let x = y, else
             for jid in jids! {
-                print(jid.user ?? "None yet")
+                //print(jid.user ?? "None yet")
+                print(jid.bare)
                 if !jidArray.contains(jid) {
                     jidArray.append(jid)
                 }
@@ -112,9 +123,30 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
 }
 
 extension ChatsViewController: AddChatViewControllerDelegate {
+    
     func addContact(contactJID: String, contactNickName: String) {
         //do nothing right now
-        //self.xmppController?.xmppRoster?.addUser(<#T##jid: XMPPJID##XMPPJID#>, withNickname: <#T##String?#>)
+        let newContactString = contactJID + "@" + Constants.Server.address
+        
+        //This doesn't really add anything
+        guard let newContactJID = XMPPJID(string: newContactString) else {
+            present(invalidJIDAlertController!, animated: true, completion: nil)
+            return
+        }
+        
+        self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactNickName)
     }
+}
+
+extension ChatsViewController: XMPPStreamDelegate {
+    
+    func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
+        if iq.type == "result" {
+            updateChatsTable()
+        }
+        //should respond to a 'get' or 'set' iq with a 'result' iq?
+        return true
+    }
+
 }
 

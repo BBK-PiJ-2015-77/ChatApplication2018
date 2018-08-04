@@ -148,17 +148,17 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jKv-ZQ-3dI">
                                 <rect key="frame" x="47" y="90" width="280" height="210"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="loM-Li-txE">
-                                        <rect key="frame" x="18" y="15" width="68" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="loM-Li-txE">
+                                        <rect key="frame" x="18" y="15" width="88" height="21"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="68" id="9pk-u8-hD4"/>
+                                            <constraint firstAttribute="width" constant="88" id="9pk-u8-hD4"/>
                                             <constraint firstAttribute="height" constant="21" id="zaN-Md-HSw"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="user@example.com" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="k8V-cW-4lK">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Username" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="k8V-cW-4lK">
                                         <rect key="frame" x="18" y="46" width="245" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="245" id="1lb-ay-ncO"/>
