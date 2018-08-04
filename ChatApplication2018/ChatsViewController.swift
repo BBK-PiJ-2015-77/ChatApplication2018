@@ -66,6 +66,17 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         performSegue(withIdentifier: "chatsToChat", sender: self)
     }
     
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+            self.xmppController?.xmppRoster?.removeUser(self.jidArray[indexPath.row])
+            self.jidArray.remove(at: indexPath.row)
+            self.chatsTableView.deleteRows(at: [indexPath], with: .fade)
+        }
+        
+        return [delete]
+    }
+    
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -135,6 +146,7 @@ extension ChatsViewController: AddChatViewControllerDelegate {
         }
         
         self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactNickName)
+        //is this the right method of adding a user?
     }
 }
 
@@ -144,7 +156,7 @@ extension ChatsViewController: XMPPStreamDelegate {
         if iq.type == "result" {
             updateChatsTable()
         }
-        //should respond to a 'get' or 'set' iq with a 'result' iq?
+        //should respond to a 'get' or 'set' iq with a 'result' or 'error' iq?
         return true
     }
 

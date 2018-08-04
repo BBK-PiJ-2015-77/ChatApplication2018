@@ -104,9 +104,9 @@ class XMPPController: NSObject {
     }
     
     func goOnline() {
-        presence = XMPPPresence()
+        presence = XMPPPresence(show: .chat)
         xmppStream?.send(presence!)
-        print(self.xmppStream?.myPresence?.description)
+        print(self.xmppStream?.myPresence?.showType)
     }
     
     func goOffline() {
