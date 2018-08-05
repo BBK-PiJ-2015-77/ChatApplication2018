@@ -31,6 +31,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         homeTabBarController = tabBarController as? HomeTabBarController
         if (homeTabBarController?.loggedIn)! {
+            print("viewDidLoad initialisation")
             connectToXMPPController()
         }
         
@@ -45,6 +46,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         //if we are logged in and haven't yet connected to the XMPPController
         if (homeTabBarController?.loggedIn)! && self.xmppController == nil {
+            print("viewDidAppear initialisation")
             connectToXMPPController()
         }
 

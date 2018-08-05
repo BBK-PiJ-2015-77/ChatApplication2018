@@ -31,6 +31,8 @@ class XMPPController: NSObject {
     var xmppMessageArchivingStorage: XMPPMessageArchivingCoreDataStorage?
     var xmppMessageArchiving: XMPPMessageArchiving?
     
+    var xmppReconnect: XMPPReconnect?
+    
     var presence: XMPPPresence?
     
     init(userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
@@ -62,6 +64,10 @@ class XMPPController: NSObject {
         self.xmppMessageArchiving = XMPPMessageArchiving(messageArchivingStorage: xmppMessageArchivingStorage)
         self.xmppMessageArchiving?.activate(xmppStream!)
         
+        //Reconnection configuration - enables reconnection when closingand re-opening the app, without requirement to login again. Reconnects the XMPPStream
+        self.xmppReconnect = XMPPReconnect()
+        self.xmppReconnect?.activate(xmppStream!)
+        
         super.init()
         
         //Test
@@ -85,14 +91,16 @@ class XMPPController: NSObject {
     
     func disconnect() {
         goOffline()
-        self.xmppRoster!.deactivate()
-        self.xmppMessageArchiving!.deactivate()
+        self.xmppRoster?.deactivate()
+        self.xmppMessageArchiving?.deactivate()
+        self.xmppReconnect?.deactivate()
         self.xmppStream?.disconnect()
         self.xmppStream = nil
         self.xmppRoster = nil
         self.xmppRosterStorage = nil
         self.xmppMessageArchiving = nil
         self.xmppMessageArchivingStorage = nil
+        self.xmppReconnect = nil
     }
     
     //add autheticated login details to keychain
@@ -104,7 +112,7 @@ class XMPPController: NSObject {
     }
     
     func goOnline() {
-        presence = XMPPPresence(show: .chat)
+        presence = XMPPPresence()
         xmppStream?.send(presence!)
         print(self.xmppStream?.myPresence?.showType)
     }
@@ -125,8 +133,12 @@ extension XMPPController: XMPPStreamDelegate {
     
     func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
         print("Stream: Authenticated")
-        saveCredentials(userName: self.userJID.bare, password: self.password)
-        //print(self.xmppRoster.description)
+        
+        //If authenticated with new credentials, overwrite the existing ones
+        if self.userJID.bare != KeychainWrapper.standard.string(forKey: "userName")! ||
+            self.password == KeychainWrapper.standard.string(forKey: "userPassword")! {
+            saveCredentials(userName: self.userJID.bare, password: self.password)
+        }
         goOnline()
     }
     
