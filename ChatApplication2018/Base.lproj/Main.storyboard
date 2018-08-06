@@ -434,6 +434,9 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="w8s-86-sYw">
+                                <rect key="frame" x="120" y="70" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -447,8 +450,10 @@
                             <constraint firstItem="ZhE-fA-ahT" firstAttribute="top" secondItem="ktL-Z6-3Cr" secondAttribute="top" constant="16" id="PA0-cs-Cg1"/>
                             <constraint firstItem="ZhE-fA-ahT" firstAttribute="leading" secondItem="ktL-Z6-3Cr" secondAttribute="leading" constant="16" id="Vhs-Cf-bc7"/>
                             <constraint firstItem="CWZ-z1-Br2" firstAttribute="leading" secondItem="ktL-Z6-3Cr" secondAttribute="leading" id="YMN-jf-RLz"/>
+                            <constraint firstItem="w8s-86-sYw" firstAttribute="centerY" secondItem="mvt-di-mEl" secondAttribute="centerY" id="ivK-5D-XKN"/>
                             <constraint firstItem="CWZ-z1-Br2" firstAttribute="bottom" secondItem="ktL-Z6-3Cr" secondAttribute="bottom" id="kX4-4B-fq6"/>
                             <constraint firstItem="mvt-di-mEl" firstAttribute="top" secondItem="ZhE-fA-ahT" secondAttribute="bottom" constant="8" id="lyF-ya-7hO"/>
+                            <constraint firstItem="w8s-86-sYw" firstAttribute="leading" secondItem="mvt-di-mEl" secondAttribute="trailing" constant="25" id="pyb-gU-5xr"/>
                             <constraint firstItem="N7s-Ag-h6G" firstAttribute="top" secondItem="mvt-di-mEl" secondAttribute="bottom" constant="8" id="rTz-v8-2ci"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ktL-Z6-3Cr"/>
@@ -456,6 +461,7 @@
                     <tabBarItem key="tabBarItem" title="Chats" id="oEC-t3-16u"/>
                     <connections>
                         <outlet property="chatsTableView" destination="CWZ-z1-Br2" id="Cfu-n0-0BQ"/>
+                        <outlet property="connectingIndicator" destination="w8s-86-sYw" id="yhN-WN-rUh"/>
                         <outlet property="displayStatus" destination="N7s-Ag-h6G" id="qd4-3f-Wdt"/>
                         <outlet property="userTitle" destination="mvt-di-mEl" id="r1K-80-bAE"/>
                         <segue destination="qoL-HK-Dlf" kind="show" identifier="chatsToChat" id="BzR-at-g2r"/>

@@ -59,12 +59,12 @@ class XMPPController: NSObject {
         self.xmppRoster?.autoFetchRoster = true
         self.xmppRoster?.autoAcceptKnownPresenceSubscriptionRequests
         
-        //Message Archive Confiuration
+        //Message Archive Configuration
         self.xmppMessageArchivingStorage = XMPPMessageArchivingCoreDataStorage()
         self.xmppMessageArchiving = XMPPMessageArchiving(messageArchivingStorage: xmppMessageArchivingStorage)
         self.xmppMessageArchiving?.activate(xmppStream!)
         
-        //Reconnection configuration - enables reconnection when closingand re-opening the app, without requirement to login again. Reconnects the XMPPStream
+        //Reconnection configuration - enables automatic reconnection to xmpp server when there are accidental disconnections
         self.xmppReconnect = XMPPReconnect()
         self.xmppReconnect?.activate(xmppStream!)
         
@@ -76,6 +76,7 @@ class XMPPController: NSObject {
         self.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
         self.xmppRoster?.addDelegate(self, delegateQueue: DispatchQueue.main)
         self.xmppMessageArchiving?.addDelegate(self, delegateQueue: DispatchQueue.main)
+        //self.xmppReconnect?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
         //Test
         print("got here8")
@@ -134,9 +135,13 @@ extension XMPPController: XMPPStreamDelegate {
     func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
         print("Stream: Authenticated")
         
+        let retrievedPassword: String? = KeychainWrapper.standard.string(forKey: "userPassword")
+        let retrievedUserName: String? = KeychainWrapper.standard.string(forKey: "userName")
+        let enteredPassword: String? = self.password
+        let enteredUserName: String? = self.userJID.bare
+        
         //If authenticated with new credentials, overwrite the existing ones
-        if self.userJID.bare != KeychainWrapper.standard.string(forKey: "userName")! ||
-            self.password == KeychainWrapper.standard.string(forKey: "userPassword")! {
+        if enteredUserName != retrievedUserName || enteredPassword != retrievedPassword {
             saveCredentials(userName: self.userJID.bare, password: self.password)
         }
         goOnline()
@@ -164,6 +169,7 @@ extension XMPPController: XMPPStreamDelegate {
     */
     
 }
+
 
 
 

@@ -17,7 +17,6 @@ class HomeTabBarController: UITabBarController {
     var xmppController: XMPPController?
     var loggedIn = false
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "loginView" {
             let viewController = segue.destination as! LoginViewController
@@ -42,8 +41,10 @@ class HomeTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("HTBC loaded")
         // Do any additional setup after loading the view.
+        
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,6 +60,9 @@ class HomeTabBarController: UITabBarController {
             //login with stored credentials
             autoLogIn(userJID: retrievedUserName!, userPassword: retrievedPassword!)
         }
+        
+        //chatsViewController = self.tabBarController?.viewControllers![0] as! ChatsViewController
+        
     }
     
     func autoLogIn(userJID: String, userPassword: String) {
@@ -77,6 +81,12 @@ class HomeTabBarController: UITabBarController {
             print("something went wrong")
         }
         loggedIn = true
+        
+        
+        //print("chatSelectionIndex:")
+        //print(chatsViewController?.chatSelectionIndex)
+        //chatsViewController?.homeTabBarController = self
+        //chatsViewController?.connectToXMPPController()
     }
 
 }
@@ -101,6 +111,8 @@ extension HomeTabBarController: LoginViewControllerDelegate {
             sender.showErrorMessage(message: "Something went wrong")
         }
         loggedIn = true
+        //chatsViewController?.homeTabBarController = self
+        //chatsViewController?.connectToXMPPController()
     }
 }
 
@@ -109,11 +121,16 @@ extension HomeTabBarController: XMPPStreamDelegate {
     //if login details are authenticated, the modal view is dismissed
     func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
         self.loginViewController?.dismiss(animated: true, completion: nil)
+        
+        let chatsViewController = self.viewControllers![0] as! ChatsViewController
+        chatsViewController.authenticated = true
+        //chatsViewController = self.tabBarController?.viewControllers![0] as! ChatsViewController
     }
     
     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
         self.loginViewController?.showErrorMessage(message: "Wrong password or username")
     }
+    
     
     /*
     func xmppStream(_ sender: XMPPStream!, didReceive iq: XMPPIQ!) -> Bool {
