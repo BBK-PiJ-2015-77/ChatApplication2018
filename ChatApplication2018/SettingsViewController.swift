@@ -23,6 +23,7 @@ class SettingsViewController: UIViewController {
         xmppController?.disconnect()
         removeCredentials()
         homeTabBarController?.loggedIn = false
+        homeTabBarController?.chatsViewController?.authenticated = false
         homeTabBarController?.xmppController = nil
         //return to homescreen
         self.performSegue(withIdentifier: "logoutToHome", sender: nil)

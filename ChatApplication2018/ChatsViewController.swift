@@ -24,11 +24,10 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var invalidJIDAlertController: UIAlertController?
     var defaultAction: UIAlertAction?
     
-    //Computed property used to verify there is an authorised connection before attempting to populate the view
+    //Computed property used to verify there is an authorised connection before attempting to populate the view. Wasn't sure how else to make sure everything was wired up before it was ready
     var authenticated = false {
         didSet {
             if authenticated == true {
-                
                 connectToXMPPController()
             }
         }
@@ -137,6 +136,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     // MARK: - UITableView setup
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("Number of rows in table: \(jidArray.count)")
         return jidArray.count
     }
     
@@ -202,19 +202,33 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
+        self.xmppController?.xmppRoster?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
-        updateChatsTable()
+        
+        
+        //If roster has not yet been received - we should not attempt to update the table view. This can be achieved with the XMPPRoster delegate methods when the roster has finished populating
+        if (self.xmppController?.xmppRoster?.hasRoster)! {
+            updateChatsTable()
+        }
+        
     }
     
     func updateChatsTable() {
         print("Buddy IDs:")
         if self.xmppController != nil {
-            let jids = xmppController?.xmppRosterStorage?.jids(for: (xmppController?.xmppStream)!)
+            let jids = xmppController?.xmppRosterStorage?.jids(for: (self.xmppController?.xmppStream)!)
+            
+            if xmppController?.xmppRosterStorage == nil {
+                print("We have a problem where there is no roster storage")
+            }
+            if jids?.count == 0 {
+                print("We have a problem where there are no buddys on the list")
+            }
             
             //guard let x = y, else
             for jid in jids! {
-                //print(jid.user ?? "None yet")
-                print(jid.bare)
+                print(jid.user ?? "None yet")
+                //print(jid.bare)
                 if !jidArray.contains(jid) {
                     jidArray.append(jid)
                 }
@@ -246,11 +260,17 @@ extension ChatsViewController: XMPPStreamDelegate {
     
     func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
         if iq.type == "result" {
-            //updateChatsTable()
+            updateChatsTable()
         }
         //should respond to a 'get' or 'set' iq with a 'result' or 'error' iq?
         return true
     }
 
+}
+
+extension ChatsViewController: XMPPRosterDelegate {
+    func xmppRosterDidEndPopulating(_ sender: XMPPRoster) {
+        updateChatsTable()
+    }
 }
 

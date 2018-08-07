@@ -13,7 +13,7 @@ import SwiftKeychainWrapper
 class HomeTabBarController: UITabBarController {
     
     weak var loginViewController: LoginViewController?
-    //var chatsViewController: ChatsViewController?
+    var chatsViewController: ChatsViewController?
     var xmppController: XMPPController?
     var loggedIn = false
     
@@ -122,8 +122,8 @@ extension HomeTabBarController: XMPPStreamDelegate {
     func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
         self.loginViewController?.dismiss(animated: true, completion: nil)
         
-        let chatsViewController = self.viewControllers![0] as! ChatsViewController
-        chatsViewController.authenticated = true
+        chatsViewController = self.viewControllers![0] as! ChatsViewController
+        chatsViewController?.authenticated = true
         //chatsViewController = self.tabBarController?.viewControllers![0] as! ChatsViewController
     }
     
