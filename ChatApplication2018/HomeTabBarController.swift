@@ -41,10 +41,7 @@ class HomeTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("HTBC loaded")
         // Do any additional setup after loading the view.
-        
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -60,8 +57,6 @@ class HomeTabBarController: UITabBarController {
             //login with stored credentials
             autoLogIn(userJID: retrievedUserName!, userPassword: retrievedPassword!)
         }
-        
-        //chatsViewController = self.tabBarController?.viewControllers![0] as! ChatsViewController
         
     }
     
@@ -81,12 +76,6 @@ class HomeTabBarController: UITabBarController {
             print("something went wrong")
         }
         loggedIn = true
-        
-        
-        //print("chatSelectionIndex:")
-        //print(chatsViewController?.chatSelectionIndex)
-        //chatsViewController?.homeTabBarController = self
-        //chatsViewController?.connectToXMPPController()
     }
 
 }
@@ -111,43 +100,23 @@ extension HomeTabBarController: LoginViewControllerDelegate {
             sender.showErrorMessage(message: "Something went wrong")
         }
         loggedIn = true
-        //chatsViewController?.homeTabBarController = self
-        //chatsViewController?.connectToXMPPController()
     }
 }
 
 extension HomeTabBarController: XMPPStreamDelegate {
     
-    //if login details are authenticated, the modal view is dismissed
-    func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
+    //if login details are authenticated, the LoginViewController view is dismissed - if it exists
+    func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
         self.loginViewController?.dismiss(animated: true, completion: nil)
         
+        //Alert ChatsViewController that the stream is authenticated so can begin populating chatList
         chatsViewController = self.viewControllers![0] as! ChatsViewController
         chatsViewController?.authenticated = true
-        //chatsViewController = self.tabBarController?.viewControllers![0] as! ChatsViewController
     }
     
     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
         self.loginViewController?.showErrorMessage(message: "Wrong password or username")
     }
-    
-    
-    /*
-    func xmppStream(_ sender: XMPPStream!, didReceive iq: XMPPIQ!) -> Bool {
-       //roster is automatically fetched, but I'm currently doing nothing with that
-        /*
-        let queryElements: [XMPPElement] = iq.elements(forXmlns: "jabber:iq:roster") as! [XMPPElement]
-        if queryElements != nil {
-            let itemElements = queryElements.elements(forName: "item")
-            for i in 0..<(itemElements?.count ?? 0) {
-                print("Friend: \(itemElements?[i].attribute(forName: "jid")?.stringValue ?? "")")
-            }
-        }
-        */
-        print("IQ received")
-        return false
-    }
- */
     
 }
 
