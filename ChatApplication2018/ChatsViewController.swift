@@ -19,7 +19,6 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var xmppController: XMPPController?
     var homeTabBarController: HomeTabBarController?
     var jidArray: [XMPPJID] = []
-    //var chatSelectionIndex = 0
     
     var invalidJIDAlertController: UIAlertController?
     var defaultAction: UIAlertAction?
@@ -38,48 +37,10 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("viewDidLoad is called")
-        //need to have some sort of delay for connection
-        //display a view that shows connection attempt
-        
-        
-        //NEW
-        /*
-        attemptConnection { () -> () in
-            self.connectToXMPPController()
-        }
-        */
-        
-        
-        //homeTabBarController = tabBarController as? HomeTabBarController
-        //print("authenticated? \(homeTabBarController?.authenticatedStream)")
-        //this currently executes
-        /*
-        if homeTabBarController?.authenticatedStream == false {
-            attemptingConnection()
-        }
-        */
-        
-        /*
-        if (homeTabBarController?.xmppController == nil) {
-            attemptConnection()
-        }
-        */
-       // print("User JID: \(homeTabBarController?.xmppController?.userJID.bare ?? "no xmppcontroller")")
-        
-        //KEEP
         homeTabBarController = tabBarController as? HomeTabBarController
         waitingToConnect()
-        print("Logged in?: \(homeTabBarController?.loggedIn)")
         
-        /*
-        if (homeTabBarController?.loggedIn)! {
-            print("viewDidLoad initialisation")
-            connectToXMPPController()
-        }
-        */
-        
-        //Create alert if wrong username is entered when adding a contact
+        //Create alert view if wrong username is entered when adding a contact
         self.invalidJIDAlertController = UIAlertController(title: "Invalid username", message: "The username entered does not exist", preferredStyle: .alert)
         self.defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         invalidJIDAlertController?.addAction(defaultAction!)
@@ -101,38 +62,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTitle.text = "Connecting..."
         self.connectingIndicator.startAnimating()
     }
-    
-    /*
-    func attemptingConnection() {
-        /*
-        self.userTitle.text = "Connecting..."
-        self.connectingIndicator.startAnimating()
-        while !(homeTabBarController?.loggedIn)! {
-            print("waiting in while loop")
-        }
-        print("outside of while loop")
-        connectToXMPPController()
-        */
-        self.userTitle.text = "Connecting..."
-        self.connectingIndicator.startAnimating()
-        print("attempting connection")
-    }
-    */
-    
-    //NEW
-    /*
-    func attemptConnection(completionHandler: @escaping () -> ()) {
-        self.userTitle.text = "Connecting..."
-        self.connectingIndicator.startAnimating()
-        homeTabBarController = tabBarController as? HomeTabBarController
-        while !(homeTabBarController?.loggedIn)! {
-            //do nothing
-        }
-        completionHandler()
-    }
-    */
-    
-    
+
     // MARK: - UITableView setup
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -164,7 +94,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //this is how you send data to the segue destination
+        // Send data to ChatViewController
         let destinationNavigationController = segue.destination as! UINavigationController
         let chatVC: ChatViewController = destinationNavigationController.topViewController as! ChatViewController
         chatVC.recipientJID = jidArray[(chatsTableView.indexPathForSelectedRow?.row)!]
@@ -182,13 +112,6 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func connectToXMPPController() {
-        //NEW
-        /*
-        if !(homeTabBarController?.loggedIn)! {
-            print("Shit!")
-            return
-        }
-        */
         
         self.connectingIndicator.stopAnimating()
         xmppController = homeTabBarController?.xmppController
@@ -208,6 +131,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         //If roster has not yet been received - we should not attempt to update the table view. This can be achieved with the XMPPRoster delegate methods when the roster has finished populating
         if (self.xmppController?.xmppRoster?.hasRoster)! {
+            print("connectToXMPPController called updateChatsTable")
             updateChatsTable()
         }
         
@@ -225,10 +149,9 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 print("We have a problem where there are no buddys on the list")
             }
             
-            //guard let x = y, else
             for jid in jids! {
-                print(jid.user ?? "None yet")
-                //print(jid.bare)
+                //print(jid.user ?? "None yet")
+                print(jid.bare)
                 if !jidArray.contains(jid) {
                     jidArray.append(jid)
                 }
@@ -242,7 +165,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
 extension ChatsViewController: AddChatViewControllerDelegate {
     
     func addContact(contactJID: String, contactNickName: String) {
-        //do nothing right now
+
         let newContactString = contactJID + "@" + Constants.Server.address
         
         //This doesn't really add anything
@@ -252,14 +175,14 @@ extension ChatsViewController: AddChatViewControllerDelegate {
         }
         
         self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactNickName)
-        //is this the right method of adding a user?
     }
 }
 
 extension ChatsViewController: XMPPStreamDelegate {
     
     func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
-        if iq.type == "result" {
+        if iq.type == "result" && (self.xmppController?.xmppRoster?.hasRoster)! {
+            print("XMPPStreamDelegate called updateChatsTable")
             updateChatsTable()
         }
         //should respond to a 'get' or 'set' iq with a 'result' or 'error' iq?
@@ -270,6 +193,7 @@ extension ChatsViewController: XMPPStreamDelegate {
 
 extension ChatsViewController: XMPPRosterDelegate {
     func xmppRosterDidEndPopulating(_ sender: XMPPRoster) {
+        print("XMPPRosterDelegate called updateChatsTable")
         updateChatsTable()
     }
 }
