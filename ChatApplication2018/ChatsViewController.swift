@@ -41,7 +41,9 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
 
         print("CVC viewdidload")
+        homeTabBarController = tabBarController as? HomeTabBarController
         
+        // Display spinner to show the user that is something is happening in the background
         waitingToConnect()
         
         //Create alert view if wrong username is entered when adding a contact
@@ -49,13 +51,10 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         invalidJIDAlertController?.addAction(defaultAction!)
         
-        //TRY Notification Center
+        // Only obtain access to the XMPPController once we know we have an autheticated stream connected. This Observer will create a pointer to the HomeTabBarController's XMPPController
         NotificationCenter.default.addObserver(self, selector: #selector(connectToXMPPController(notfication:)), name: .streamAuthenticated, object: nil)
         
-        //Each time we log out the controller is discarded, so we need a pointer to the new one
-        //Don't think this is true actually because we asign the xmppController fresh each time
-        NotificationCenter.default.addObserver(self, selector: #selector(connectToHTBC(notfication:)), name: .loggedIn, object: nil)
-        
+        // Once the user has logged out, the view will switch back to this ChatsViewController tab. This Observer makes sure that the LoginViewController view is presented
         NotificationCenter.default.addObserver(self, selector: #selector(showLoginView(notfication:)), name: .loggedOut, object: nil)
     }
     
@@ -76,6 +75,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         */
     }
     
+    // Used to display to the user that the stream has not yet conencted
     func waitingToConnect() {
         self.userTitle.text = "Connecting..."
         self.connectingIndicator.startAnimating()
@@ -119,18 +119,15 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         chatVC.xmppController = self.xmppController
     }
     
+    // Creates a pop-up box for the user to enter a new user they wish to add to their list
+    
     @IBAction func addChat(_ sender: Any) {
-        //tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
         let addChatVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "addChatPopUp") as! AddChatViewController
         self.addChildViewController(addChatVC)
         addChatVC.view.frame = self.view.frame
         self.view.addSubview(addChatVC.view)
         addChatVC.delegate = self
         addChatVC.didMove(toParentViewController: self)
-    }
-    
-    @objc func connectToHTBC(notfication: NSNotification) {
-        homeTabBarController = tabBarController as? HomeTabBarController
     }
     
     @objc func showLoginView(notfication: NSNotification) {
@@ -140,11 +137,8 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @objc func connectToXMPPController(notfication: NSNotification) {
-        
         print("Observer initiated connectToXMPPController")
-        print("HTBC Count: \(homeTabBarController?.count)")
         connectToXMPPController()
-        
     }
     
     func connectToXMPPController() {
@@ -182,14 +176,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         print("Buddy IDs:")
         if self.xmppController != nil {
             let jids = xmppController?.xmppRosterStorage?.jids(for: (self.xmppController?.xmppStream)!)
-            
-            if xmppController?.xmppRosterStorage == nil {
-                print("We have a problem where there is no roster storage")
-            }
-            if jids?.count == 0 {
-                print("We have a problem where there are no buddys on the list")
-            }
-            
+        
             for jid in jids! {
                 //print(jid.user ?? "None yet")
                 print(jid.bare)
