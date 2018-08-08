@@ -131,9 +131,11 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 extension ChatViewController: XMPPStreamDelegate {
     
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
-        self.xmppMessages.append(message)
-        self.chatTableView.reloadData()
-        scrollToBottom()
+        if message.isChatMessage {
+            self.xmppMessages.append(message)
+            self.chatTableView.reloadData()
+            scrollToBottom()
+        }
     }
     
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {

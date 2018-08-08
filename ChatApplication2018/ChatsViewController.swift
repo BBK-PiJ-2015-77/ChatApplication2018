@@ -56,7 +56,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         //Don't think this is true actually because we asign the xmppController fresh each time
         NotificationCenter.default.addObserver(self, selector: #selector(connectToHTBC(notfication:)), name: .loggedIn, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(removeHTBC(notfication:)), name: .loggedOut, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showLoginView(notfication:)), name: .loggedOut, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -133,7 +133,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         homeTabBarController = tabBarController as? HomeTabBarController
     }
     
-    @objc func removeHTBC(notfication: NSNotification) {
+    @objc func showLoginView(notfication: NSNotification) {
         //homeTabBarController = nil
         //print("HTBC is nil as logged out")
         homeTabBarController?.performSegue(withIdentifier: "loginView", sender: nil)
