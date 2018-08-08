@@ -51,10 +51,10 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         invalidJIDAlertController?.addAction(defaultAction!)
         
-        // Only obtain access to the XMPPController once we know we have an autheticated stream connected. This Observer will create a pointer to the HomeTabBarController's XMPPController
+        // Only obtain access to the XMPPController once we know we have an autheticated stream connected. This Observer will create a pointer to the HomeTabBarController's XMPPController. Broadcast by HomeTabBarController
         NotificationCenter.default.addObserver(self, selector: #selector(connectToXMPPController(notfication:)), name: .streamAuthenticated, object: nil)
         
-        // Once the user has logged out, the view will switch back to this ChatsViewController tab. This Observer makes sure that the LoginViewController view is presented
+        // Once the user has logged out, the view will switch back to this ChatsViewController tab. This Observer makes sure that the LoginViewController view is presented. Broadcast by SettingsViewController
         NotificationCenter.default.addObserver(self, selector: #selector(showLoginView(notfication:)), name: .loggedOut, object: nil)
     }
     

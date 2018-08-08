@@ -43,6 +43,9 @@ class HomeTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        // Once the user has logged out, change variable 'loggedIn' to false, disconnect XMPPController and remove pointer. Broadcast by SettingsViewController
+        NotificationCenter.default.addObserver(self, selector: #selector(logOut(notfication:)), name: .loggedOut, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -88,6 +91,12 @@ class HomeTabBarController: UITabBarController {
         }
         loggedIn = true
         NotificationCenter.default.post(name: .loggedIn, object: nil)
+    }
+    
+    @objc func logOut(notfication: NSNotification) {
+        self.xmppController?.disconnect()
+        self.loggedIn = false
+        self.xmppController = nil
     }
 
 }
