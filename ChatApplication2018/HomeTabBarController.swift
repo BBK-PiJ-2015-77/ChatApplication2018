@@ -13,7 +13,6 @@ import SwiftKeychainWrapper
 class HomeTabBarController: UITabBarController {
     
     weak var loginViewController: LoginViewController?
-    var chatsViewController: ChatsViewController?
     var xmppController: XMPPController?
     var loggedIn = false
     
@@ -95,29 +94,6 @@ extension HomeTabBarController: LoginViewControllerDelegate {
             sender.showErrorMessage(message: "Something went wrong")
         }
     }
-    /*
-    func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String) {
-        //Test
-        print("got here1")
-        self.loginViewController = sender
-        //Test
-        print("got here2")
-        do {
-            try self.xmppController = XMPPController(userJIDString: userJID,
-                                                     password: userPassword)
-            print("where am i?")
-            self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
-            print("got here9b")
-            self.xmppController?.connect()
-            
-            print("Logged in with new credentials")
-        } catch {
-            sender.showErrorMessage(message: "Something went wrong")
-        }
-        loggedIn = true
-        NotificationCenter.default.post(name: .loggedIn, object: nil)
-    }
-    */
 }
 
 extension HomeTabBarController: XMPPStreamDelegate {
@@ -125,10 +101,6 @@ extension HomeTabBarController: XMPPStreamDelegate {
     //if login details are authenticated, the LoginViewController view is dismissed - if it exists
     func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
         self.loginViewController?.dismiss(animated: true, completion: nil)
-        
-        //Alert ChatsViewController that the stream is authenticated so can begin populating chatList
-        //chatsViewController = self.viewControllers![0] as! ChatsViewController
-        //chatsViewController?.authenticated = true
         NotificationCenter.default.post(name: .streamAuthenticated, object: nil)
     }
     
