@@ -24,6 +24,8 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var defaultAction: UIAlertAction?
     
     //Computed property used to verify there is an authorised connection before attempting to populate the view. Wasn't sure how else to make sure everything was wired up before it was ready
+    
+    /*
     var authenticated = false {
         didSet {
             if authenticated == true {
@@ -31,31 +33,47 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
     }
+    */
     
     // MARK: - Setup
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        homeTabBarController = tabBarController as? HomeTabBarController
+        print("CVC viewdidload")
+        
         waitingToConnect()
         
         //Create alert view if wrong username is entered when adding a contact
         self.invalidJIDAlertController = UIAlertController(title: "Invalid username", message: "The username entered does not exist", preferredStyle: .alert)
         self.defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         invalidJIDAlertController?.addAction(defaultAction!)
+        
+        //TRY Notification Center
+        NotificationCenter.default.addObserver(self, selector: #selector(connectToXMPPController(notfication:)), name: .streamAuthenticated, object: nil)
+        
+        //Each time we log out the controller is discarded, so we need a pointer to the new one
+        //Don't think this is true actually because we asign the xmppController fresh each time
+        NotificationCenter.default.addObserver(self, selector: #selector(connectToHTBC(notfication:)), name: .loggedIn, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(removeHTBC(notfication:)), name: .loggedOut, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("viewDidAppear is called")
         
+        if xmppController == nil {
+            print("No HTBC!")
+        }
+        
         //if we are logged in and haven't yet connected to the XMPPController
+        /*
         if (homeTabBarController?.loggedIn)! && self.xmppController == nil {
             print("viewDidAppear initialisation")
             connectToXMPPController()
         }
-        
+        */
     }
     
     func waitingToConnect() {
@@ -111,14 +129,37 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         addChatVC.didMove(toParentViewController: self)
     }
     
+    @objc func connectToHTBC(notfication: NSNotification) {
+        homeTabBarController = tabBarController as? HomeTabBarController
+    }
+    
+    @objc func removeHTBC(notfication: NSNotification) {
+        //homeTabBarController = nil
+        //print("HTBC is nil as logged out")
+        homeTabBarController?.performSegue(withIdentifier: "loginView", sender: nil)
+    }
+    
+    @objc func connectToXMPPController(notfication: NSNotification) {
+        
+        print("Observer initiated connectToXMPPController")
+        print("HTBC Count: \(homeTabBarController?.count)")
+        connectToXMPPController()
+        
+    }
+    
     func connectToXMPPController() {
         
         self.connectingIndicator.stopAnimating()
         xmppController = homeTabBarController?.xmppController
 
+        if homeTabBarController == nil {
+            print("HTBC is nil sow hat can we do")
+        }
+        print("XMPPController: \(xmppController?.userJID.user)")
+        
         userTitle.text = xmppController?.xmppStream?.myJID?.user
         
-        if (self.xmppController?.xmppStream?.isConnected)! {
+        if (self.xmppController?.xmppStream?.isConnected)! { //
             displayStatus.text = "online"
         } else {
             displayStatus.text = "offline"
@@ -197,4 +238,6 @@ extension ChatsViewController: XMPPRosterDelegate {
         updateChatsTable()
     }
 }
+
+
 

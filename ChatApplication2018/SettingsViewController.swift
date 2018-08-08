@@ -23,10 +23,17 @@ class SettingsViewController: UIViewController {
         xmppController?.disconnect()
         removeCredentials()
         homeTabBarController?.loggedIn = false
-        homeTabBarController?.chatsViewController?.authenticated = false
+        //homeTabBarController?.chatsViewController?.authenticated = false
+        
+        
         homeTabBarController?.xmppController = nil
         //return to homescreen
-        self.performSegue(withIdentifier: "logoutToHome", sender: nil)
+        NotificationCenter.default.post(name: .loggedOut, object: nil)
+        
+        
+        self.tabBarController?.selectedIndex = 0
+        
+        //self.performSegue(withIdentifier: "logoutToHome", sender: nil)
     }
     
     func removeCredentials() {

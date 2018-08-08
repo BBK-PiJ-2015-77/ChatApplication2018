@@ -16,6 +16,7 @@ class HomeTabBarController: UITabBarController {
     var chatsViewController: ChatsViewController?
     var xmppController: XMPPController?
     var loggedIn = false
+    var count = 0
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "loginView" {
@@ -60,22 +61,33 @@ class HomeTabBarController: UITabBarController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        print("HTBC will disappear")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        print("HTBC did disappear")
+    }
+    
     func autoLogIn(userJID: String, userPassword: String) {
         do {
             //need to reconfigure so that I am not sending the host name every time
             //May also be issues with userJID - full or with domain?
             //Also, duplicated code
+            count = 6
             try self.xmppController = XMPPController(userJIDString: userJID,
                                                      password: userPassword)
             //init(hostName: String, userJIDString: String, hostPort: UInt16 = 5222, password: String)
             self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
             self.xmppController?.connect()
+            
             print("Automatically logged in with saved credentials")
         } catch {
             //need to show an error message to the user, below is just for testing
             print("something went wrong")
         }
         loggedIn = true
+        NotificationCenter.default.post(name: .loggedIn, object: nil)
     }
 
 }
@@ -89,17 +101,20 @@ extension HomeTabBarController: LoginViewControllerDelegate {
         //Test
         print("got here2")
         do {
+            count = 3
             try self.xmppController = XMPPController(userJIDString: userJID,
                                                      password: userPassword)
             print("where am i?")
             self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
             print("got here9b")
             self.xmppController?.connect()
+            
             print("Logged in with new credentials")
         } catch {
             sender.showErrorMessage(message: "Something went wrong")
         }
         loggedIn = true
+        NotificationCenter.default.post(name: .loggedIn, object: nil)
     }
 }
 
@@ -110,8 +125,9 @@ extension HomeTabBarController: XMPPStreamDelegate {
         self.loginViewController?.dismiss(animated: true, completion: nil)
         
         //Alert ChatsViewController that the stream is authenticated so can begin populating chatList
-        chatsViewController = self.viewControllers![0] as! ChatsViewController
-        chatsViewController?.authenticated = true
+        //chatsViewController = self.viewControllers![0] as! ChatsViewController
+        //chatsViewController?.authenticated = true
+        NotificationCenter.default.post(name: .streamAuthenticated, object: nil)
     }
     
     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {

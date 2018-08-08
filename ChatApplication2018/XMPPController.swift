@@ -115,7 +115,7 @@ class XMPPController: NSObject {
     func goOnline() {
         presence = XMPPPresence()
         xmppStream?.send(presence!)
-        print(self.xmppStream?.myPresence?.showType)
+        print("Presence: \(self.xmppStream?.myPresence?.showType)")
     }
     
     func goOffline() {
@@ -145,6 +145,7 @@ extension XMPPController: XMPPStreamDelegate {
             saveCredentials(userName: self.userJID.bare, password: self.password)
         }
         goOnline()
+        
     }
     
     func xmppStream(_ sender: XMPPStream, didReceiveError error: DDXMLElement) {
@@ -170,7 +171,11 @@ extension XMPPController: XMPPStreamDelegate {
     
 }
 
-
+extension Notification.Name {
+    static let streamAuthenticated = Notification.Name("streamAuthenticated")
+    static let loggedIn = Notification.Name("loggedIn")
+    static let loggedOut = Notification.Name("loggedOut")
+}
 
 
 
