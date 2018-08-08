@@ -37,6 +37,9 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.title = recipientJID?.user
         self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
+        // Size the table cells appropriately
+        setTableConstraints()
+        
         // initialise archive and display messages
         retrieveMessages()
         
@@ -123,6 +126,11 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         cell.setMessage(xmppMessage: message)
         return cell
+    }
+    
+    func setTableConstraints() {
+        chatTableView.rowHeight = UITableViewAutomaticDimension
+        chatTableView.estimatedRowHeight = 140
     }
 
 }
