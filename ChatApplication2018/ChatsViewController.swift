@@ -91,6 +91,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatsTableViewCell
         cell.nameLabel.text = jidArray[indexPath.row].user
+        
         return cell
     }
     
@@ -176,9 +177,10 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         print("Buddy IDs:")
         if self.xmppController != nil {
             let jids = xmppController?.xmppRosterStorage?.jids(for: (self.xmppController?.xmppStream)!)
-        
+            //let user: XMPPUserCoreDataStorageObject
+            
             for jid in jids! {
-                //print(jid.user ?? "None yet")
+                //print(jid.user ?? "None yet")                
                 print(jid.bare)
                 if !jidArray.contains(jid) {
                     jidArray.append(jid)

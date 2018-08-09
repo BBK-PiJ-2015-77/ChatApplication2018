@@ -76,6 +76,10 @@ class HomeTabBarController: UITabBarController {
     }
     
     @objc func logOut(notfication: NSNotification) {
+        logOut()
+    }
+    
+    func logOut() {
         self.xmppController?.disconnect()
         self.loggedIn = false
         self.xmppController = nil
@@ -106,6 +110,7 @@ extension HomeTabBarController: XMPPStreamDelegate {
     
     func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
         self.loginViewController?.showErrorMessage(message: "Wrong password or username")
+        logOut()
     }
     
 }
