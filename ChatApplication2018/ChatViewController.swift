@@ -30,10 +30,13 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     var lastOffset: CGPoint!
     var keyboardHeight: CGFloat!
     
+    var count = 0
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        print("Chat View Controller did load")
         self.title = recipientJID?.user
         self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
@@ -52,15 +55,29 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Observe keyboard change
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        //Clear chats when logging out
+        //Not necessarry
+        //NotificationCenter.default.addObserver(self, selector: #selector(clearChats(notfication:)), name: .loggedOut, object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        count += 1
+        print("Chat view controller loaded. Count: \(count)")
     }
     
     @IBAction func backButton(_ sender: Any) {
+        //Shouldn't be required as view is removed from memory
+        //self.xmppMessages = []
         dismiss(animated: true, completion: nil)
     }
     
     func sendMessage(message: String) {
         let xmppMessage = XMPPMessage(type: "chat", to: recipientJID)
+        
+        
         xmppMessage.addBody(message)
+        
         self.xmppController?.xmppStream?.send(xmppMessage)
     }
     
@@ -75,11 +92,55 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         let request = NSFetchRequest<NSFetchRequestResult>()
-        let predicateFrmt = "bareJidStr like %@ "
-        let predicate = NSPredicate(format: predicateFrmt, recipientJID!.bare)
-        request.predicate = predicate
+        
+        /*
+         
+        */
+        
+        //currently, this just fetches all messages from the person you're having the conversation with
+        //let predicateFormat = "bareJidStr like %@ "
+        //let predicatFormat2 = "timestamp"
+        //let predicate = NSPredicate(format: predicateFormat, (self.xmppController?.xmppStream?.myJID?.bare)!)
+        //let predicate = NSCompoundPredicate(type: .and, subpredicates: [NSPredicate(format: predicateFormat, recipientJID!.bare)])
+        
+        //request.predicate = predicate
+        
+        /**
+         As users can login and out of any device, the following was required to restrict the messages being retrieved to just those concerned between the logged in user and the other chat participant
+         **/
+        
+        
+        //// Delete section
+        let predicateFormat = "bareJidStr like %@ "
+        let predicateFormat2 = "streamBareJidStr like %@ "
+        //let predicate = NSPredicate(format: predicateFormat2, (self.xmppController?.userJID.bare)!)
+        //
+        
+        // predicate1 matches "bareJidStr" - which is the other chat participant's JID - with the JID of the the other chat participant in this ChatViewController AND  matches "streamBareJidStr" with the current user's JID. If we consider 2 users, user1 & user2, we can think of this predicate as retrieving all messages sent and received between user1 and user2 on user1's stream
+        let predicate1 = NSCompoundPredicate(type: .and, subpredicates: [NSPredicate(format: predicateFormat, recipientJID!.bare),NSPredicate(format: predicateFormat2, (self.xmppController?.userJID.bare)!)])
+        
+        // Similarly to predicate1 above, we can consider this as retrieving al messages sent and received between user1 and user2 on user2's stream
+        let predicate2 = NSCompoundPredicate(type: .and, subpredicates: [NSPredicate(format: predicateFormat, (self.xmppController?.userJID.bare)!),NSPredicate(format: predicateFormat2, recipientJID!.bare)])
+        
+        // The final predicate ensures we only retrieve messages between user1 and user2 from the server, regardless of which user's stream the messages were sent
+        let andOrPredicate = NSCompoundPredicate(type: .or, subpredicates: [predicate1,predicate2])
+        request.predicate = andOrPredicate
+        
+        ////
+        
         request.entity = entityDescription
         let messages_arc = try? moc?.fetch(request)
+        
+        /*
+        print("Testing what messages are received:")
+        var count = 0
+        
+        for message in (messages_arc as! [AnyHashable]) {
+            let x: XMPPMessageArchiving_Message_CoreDataObject = message as! XMPPMessageArchiving_Message_CoreDataObject
+            count += 1
+            print("\(count) : \(x.messageStr)")
+        }
+        */
         
         printMessages(messages_arc as! [AnyHashable])
 
@@ -90,13 +151,22 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         autoreleasepool {
             for message: XMPPMessageArchiving_Message_CoreDataObject? in messages_arc as? [XMPPMessageArchiving_Message_CoreDataObject?] ?? [XMPPMessageArchiving_Message_CoreDataObject?]() {
                 let element = try? XMLElement(xmlString: message?.messageStr ?? "")
-                xmppMessages.append(XMPPMessage(from: element!))
+                let message = XMPPMessage(from: element!)
+                xmppMessages.append(message)
             }
             
             self.chatTableView.reloadData()
             scrollToBottom()
         }
     }
+    
+    //Shouldn't be necesarry
+    /*
+    @objc func clearChats(notfication: NSNotification) {
+        print("Clear chats")
+        self.xmppMessages = []
+    }
+    */
     
     // MARK: - Scroll to bottom
     // Called to make sure the most recent messages at the bottom of the table are showing

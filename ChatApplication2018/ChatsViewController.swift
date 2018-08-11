@@ -91,7 +91,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatsTableViewCell
         cell.nameLabel.text = jidArray[indexPath.row].user
-        
+        cell.dateOfLastMessage.text = "00/00/1900"
         return cell
     }
     
@@ -134,6 +134,9 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func showLoginView(notfication: NSNotification) {
         //homeTabBarController = nil
         //print("HTBC is nil as logged out")
+        
+        //Delete contents of existing jidArray
+        jidArray = []
         homeTabBarController?.performSegue(withIdentifier: "loginView", sender: nil)
     }
     
@@ -182,6 +185,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             for jid in jids! {
                 //print(jid.user ?? "None yet")                
                 print(jid.bare)
+                
                 if !jidArray.contains(jid) {
                     jidArray.append(jid)
                 }

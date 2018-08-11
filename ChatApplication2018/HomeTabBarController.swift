@@ -24,6 +24,10 @@ class HomeTabBarController: UITabBarController {
         
         // Once the user has logged out, change variable 'loggedIn' to false, disconnect XMPPController and remove pointer. Broadcast by SettingsViewController
         NotificationCenter.default.addObserver(self, selector: #selector(logOut(notfication:)), name: .loggedOut, object: nil)
+        
+        //Want to set presence type to "unavailable" when app enters background and "available" when it re-enters the foreground
+        NotificationCenter.default.addObserver(self, selector: #selector(setPresenceUnavailable(notfication:)), name: .presenceUnavailable, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(setPresenceAvailable(notfication:)), name: .presenceAvailable, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -83,6 +87,18 @@ class HomeTabBarController: UITabBarController {
         self.xmppController?.disconnect()
         self.loggedIn = false
         self.xmppController = nil
+    }
+    
+    @objc func setPresenceUnavailable(notfication: NSNotification) {
+        if self.xmppController?.presence?.type != "unavailable" {
+           self.xmppController?.goOffline()
+        }
+    }
+    
+    @objc func setPresenceAvailable(notfication: NSNotification) {
+        if self.xmppController?.presence?.type != "available" {
+          self.xmppController?.goOnline()
+        }
     }
 
 }

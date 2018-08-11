@@ -113,7 +113,11 @@ class XMPPController: NSObject {
     }
     
     func goOnline() {
-        presence = XMPPPresence()
+        //From framework: After establishing a session, a client SHOULD send initial presence to the server in order to signal its availability for communications. As defined herein, the initial presence stanza (1) MUST possess no 'to' address (signalling that it is meant to be broadcasted by the server on behalf of the client) and (2) MUST possess no 'type' attribute (signalling the user's availability). After sending initial presence, an active resource is said to be an "available resource".
+        
+        //need to send presence so that the server sends back presence of users on roster who are subscribed
+        //Presence type is optional - the mere act of sending a presence stanza infroms that you are online
+        presence = XMPPPresence(type: "available")
         xmppStream?.send(presence!)
         print("Presence: \(self.xmppStream?.myPresence?.showType)")
     }
@@ -175,6 +179,8 @@ extension Notification.Name {
     static let streamAuthenticated = Notification.Name("streamAuthenticated")
     static let loggedIn = Notification.Name("loggedIn")
     static let loggedOut = Notification.Name("loggedOut")
+    static let presenceUnavailable = Notification.Name("presenceUnavailable")
+    static let presenceAvailable = Notification.Name("presenceAvailable")
 }
 
 
