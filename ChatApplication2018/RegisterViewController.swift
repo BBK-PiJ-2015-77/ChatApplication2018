@@ -79,8 +79,26 @@ extension RegisterViewController: XMPPStreamDelegate {
     }
     
     func xmppStream(_ sender: XMPPStream, didNotRegister error: DDXMLElement) {
-        print("Unable to register")
-        self.warningLabel.text = "Unable to register user"
+        print("Unable to register.")
+        let childNodes = error.children
+        
+        var errorCodeCheck = 0
+        for node in childNodes! {
+            if node.name == "error" {
+                if node.description.contains("code=\"409\" type=\"cancel\"") {
+                    self.warningLabel.text = "Username is already registered"
+                    errorCodeCheck = 1
+                } else if node.description.contains("code=\"500\" type=\"wait\"") {
+                    self.warningLabel.text = "You can not register another user so quickly"
+                    errorCodeCheck = 1
+                }
+            }
+        }
+        
+        //If another type of error is received
+        if errorCodeCheck == 0 {
+            self.warningLabel.text = "Unable to register user"
+        }
     }
     
     func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
@@ -102,3 +120,4 @@ extension RegisterViewController: XMPPStreamDelegate {
         print("Stream: Disconnected")
     }
 }
+
