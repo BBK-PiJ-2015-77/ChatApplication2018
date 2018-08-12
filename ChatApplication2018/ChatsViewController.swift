@@ -97,6 +97,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "chatsToChat", sender: self)
+        chatsTableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -109,6 +110,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         return [delete]
     }
+    
     
     // MARK: - Navigation
     

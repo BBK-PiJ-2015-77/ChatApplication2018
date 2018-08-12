@@ -41,6 +41,9 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
+        //Following makes sure the keyboard can be dismissed by interacting with the table view
+        self.chatTableView.keyboardDismissMode = .onDrag
+        
         // Size the table cells appropriately
         setTableConstraints()
         
