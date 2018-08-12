@@ -508,16 +508,16 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Send message..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YIY-AK-QRM">
-                                                <rect key="frame" x="0.0" y="573" width="375" height="30"/>
+                                                <rect key="frame" x="0.0" y="563" width="375" height="40"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="30" id="Qnb-GN-Suh"/>
+                                                    <constraint firstAttribute="height" constant="40" id="Qnb-GN-Suh"/>
                                                 </constraints>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="n3B-nI-DC5">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="573"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="563"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="sentMessageCell" id="beJ-ug-l7Q" customClass="MessageTableViewCell" customModule="ChatApplication2018" customModuleProvider="target">
