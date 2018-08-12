@@ -24,7 +24,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     var xmppController: XMPPController?
     var recipientJID: XMPPJID?
     var xmppMessages: [XMPPMessage] = []
-    var presence: String?
+    var userPresence: String = "offline"
     
     //used for adaptive scrolling
     var activeField: UITextField?
@@ -39,7 +39,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         print("Chat View Controller did load")
         //self.title = recipientJID?.user
-        setTitle(username: (recipientJID?.user)!, onlineStatus: "online")
+        
+        
         self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
         // Size the table cells appropriately
@@ -66,6 +67,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidAppear(_ animated: Bool) {
         count += 1
         print("Chat view controller loaded. Count: \(count)")
+        presenceProbe()
+        setTitle()
     }
     
     @IBAction func backButton(_ sender: Any) {
@@ -74,19 +77,26 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         dismiss(animated: true, completion: nil)
     }
     
-    func setTitle(username: String, onlineStatus: String) {
+    func presenceProbe() {
+        let probe = DDXMLElement.element(withName: "presence") as! DDXMLElement
+        probe.addAttribute(withName: "to", stringValue: (self.recipientJID?.bare)!)
+        probe.addAttribute(withName: "type", stringValue: "probe")
+        self.xmppController?.xmppStream?.send(probe)
+    }
+    
+    func setTitle() {
         let titleLabel = UILabel(frame: CGRect(x: 0, y: -2, width: 0, height: 0))
         titleLabel.backgroundColor = .clear
         titleLabel.textColor = .black
         titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-        titleLabel.text = username
+        titleLabel.text = self.recipientJID?.user!
         titleLabel.sizeToFit()
         
         let subtitleLabel = UILabel(frame: CGRect(x: 0, y: 18, width: 0, height: 0))
         subtitleLabel.backgroundColor = .clear
         subtitleLabel.textColor = .gray
         subtitleLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
-        subtitleLabel.text = onlineStatus
+        subtitleLabel.text = self.userPresence
         subtitleLabel.sizeToFit()
         
         let titleView = UIView(frame:  CGRect(x: 0, y: 0, width: max(titleLabel.frame.size.width, subtitleLabel.frame.size.width), height: 30))
@@ -261,9 +271,11 @@ extension ChatViewController: XMPPStreamDelegate {
         print("\(presence.from?.bare)")
         if presence.from?.bare == self.recipientJID?.bare {
             if presence.type == "available" {
-                setTitle(username: (recipientJID?.user)!, onlineStatus: "online")
+                userPresence = "online"
+                setTitle()
             } else if presence.type == "unavailable" {
-                setTitle(username: (recipientJID?.user)!, onlineStatus: "offline")
+                userPresence = "offline"
+                setTitle()
             }
         }
     }

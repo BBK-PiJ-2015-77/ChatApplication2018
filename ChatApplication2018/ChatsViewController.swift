@@ -186,6 +186,8 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 //print(jid.user ?? "None yet")                
                 print(jid.bare)
                 
+                
+                
                 if !jidArray.contains(jid) {
                     jidArray.append(jid)
                 }
@@ -208,7 +210,8 @@ extension ChatsViewController: AddChatViewControllerDelegate {
             return
         }
         
-        self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactNickName)
+        //self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactNickName)
+        self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactNickName, groups: nil, subscribeToPresence: true)
     }
 }
 
@@ -221,6 +224,13 @@ extension ChatsViewController: XMPPStreamDelegate {
         }
         //should respond to a 'get' or 'set' iq with a 'result' or 'error' iq?
         return true
+    }
+    
+    //Automatically accept presence requests
+    func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
+        if presence.type == "subscribe" {
+            self.xmppController?.xmppRoster?.acceptPresenceSubscriptionRequest(from: presence.from!, andAddToRoster: false)
+        }
     }
 
 }
