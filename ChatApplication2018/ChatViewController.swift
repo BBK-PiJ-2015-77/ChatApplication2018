@@ -78,10 +78,32 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func presenceProbe() {
+        //As per XEP-0318
         let probe = DDXMLElement.element(withName: "presence") as! DDXMLElement
         probe.addAttribute(withName: "to", stringValue: (self.recipientJID?.bare)!)
         probe.addAttribute(withName: "type", stringValue: "probe")
         self.xmppController?.xmppStream?.send(probe)
+        
+        //As per XEP-0012
+        let lastActiveQuery = DDXMLElement.element(withName: "iq") as! DDXMLElement
+        lastActiveQuery.addAttribute(withName: "id", stringValue: "last1")
+        lastActiveQuery.addAttribute(withName: "to", stringValue: (self.recipientJID?.bare)!)
+        lastActiveQuery.addAttribute(withName: "type", stringValue: "get")
+        
+        let query = DDXMLElement.element(withName: "query") as! DDXMLElement
+        query.addAttribute(withName: "xmlns", stringValue: "jabber:iq:last")
+        
+        lastActiveQuery.addChild(query)
+        self.xmppController?.xmppStream?.send(lastActiveQuery)
+        
+        /**
+         <iq from='romeo@montague.net/orchard'
+         id='last1'
+         to='juliet@capulet.com'
+         type='get'>
+         <query xmlns='jabber:iq:last'/>
+         </iq>
+        **/
     }
     
     func setTitle() {
@@ -245,6 +267,19 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         chatTableView.rowHeight = UITableViewAutomaticDimension
         chatTableView.estimatedRowHeight = 140
     }
+    
+    func getTimeLastActive(seconds: Double) -> String {
+        let formatter = DateFormatter()
+        
+        //If the user was last active withing 24hrs, just show time, otherwise, show both date and time
+        if seconds < (86400) {
+            formatter.dateFormat = "HH:mm a"
+        } else {
+            formatter.dateFormat = "dd/MM/YYYY HH:mm a"
+        }
+        
+        return formatter.string(from: Date() - seconds)
+    }
 
 }
 
@@ -269,6 +304,11 @@ extension ChatViewController: XMPPStreamDelegate {
     
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
         print("\(presence.from?.bare)")
+        
+        if presence.isErrorPresence {
+            print("Error presence received from \((presence.from?.bare)!)")
+        }
+        
         if presence.from?.bare == self.recipientJID?.bare {
             if presence.type == "available" {
                 userPresence = "online"
@@ -278,6 +318,17 @@ extension ChatViewController: XMPPStreamDelegate {
                 setTitle()
             }
         }
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
+        if iq.elementID == "last1" && iq.type == "result" {
+            let sec = iq.childElement?.attributeDoubleValue(forName: "seconds") as! Double
+            if userPresence == "offline" {
+                self.userPresence = "offline, last active \(getTimeLastActive(seconds: sec))"
+                setTitle()
+            }
+        }
+        return true
     }
 
 }

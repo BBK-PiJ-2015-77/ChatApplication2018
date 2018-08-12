@@ -217,6 +217,8 @@ extension ChatsViewController: AddChatViewControllerDelegate {
 
 extension ChatsViewController: XMPPStreamDelegate {
     
+    
+    //Do I need to do this?
     func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
         if iq.type == "result" && (self.xmppController?.xmppRoster?.hasRoster)! {
             print("XMPPStreamDelegate called updateChatsTable")
@@ -231,6 +233,11 @@ extension ChatsViewController: XMPPStreamDelegate {
         if presence.type == "subscribe" {
             self.xmppController?.xmppRoster?.acceptPresenceSubscriptionRequest(from: presence.from!, andAddToRoster: false)
         }
+    }
+    
+    //Automatically add user to rpster if message received
+    func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
+        <#code#>
     }
 
 }

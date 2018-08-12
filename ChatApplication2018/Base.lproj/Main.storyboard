@@ -405,7 +405,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lFD-Xx-dJV">
-                                                    <rect key="frame" x="25" y="16" width="200" height="20.5"/>
+                                                    <rect key="frame" x="25" y="22" width="200" height="20.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="200" id="B14-Rv-FSZ"/>
                                                         <constraint firstAttribute="height" constant="20.5" id="Nds-bB-WBj"/>
@@ -415,7 +415,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gN8-g7-e8w">
-                                                    <rect key="frame" x="280" y="21" width="70" height="16"/>
+                                                    <rect key="frame" x="280" y="21" width="70" height="23"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="70" id="KOR-HQ-xax"/>
                                                     </constraints>
@@ -423,26 +423,12 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Offline" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zyU-QH-8e8">
-                                                    <rect key="frame" x="25" y="41.5" width="40" height="14"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="14" id="RQO-fM-PAM"/>
-                                                        <constraint firstAttribute="width" constant="40" id="xSA-Rd-Qj9"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="zyU-QH-8e8" firstAttribute="leading" secondItem="72a-L8-IZq" secondAttribute="leading" constant="25" id="I5n-Jw-EUd"/>
+                                                <constraint firstItem="lFD-Xx-dJV" firstAttribute="centerY" secondItem="72a-L8-IZq" secondAttribute="centerY" id="3ue-zd-rpq"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="gN8-g7-e8w" secondAttribute="bottom" constant="10" id="MWB-ek-v1l"/>
-                                                <constraint firstItem="zyU-QH-8e8" firstAttribute="top" secondItem="lFD-Xx-dJV" secondAttribute="bottom" constant="5" id="RdT-uQ-dB7"/>
-                                                <constraint firstItem="lFD-Xx-dJV" firstAttribute="top" secondItem="72a-L8-IZq" secondAttribute="topMargin" constant="5" id="U5e-gl-t7t"/>
                                                 <constraint firstItem="gN8-g7-e8w" firstAttribute="top" secondItem="72a-L8-IZq" secondAttribute="topMargin" constant="10" id="XFh-Dq-7Eq"/>
-                                                <constraint firstAttribute="bottom" secondItem="zyU-QH-8e8" secondAttribute="bottom" constant="5" id="igH-Uw-ixY"/>
                                                 <constraint firstItem="lFD-Xx-dJV" firstAttribute="leading" secondItem="72a-L8-IZq" secondAttribute="leadingMargin" constant="10" id="jyK-kZ-qON"/>
-                                                <constraint firstItem="lFD-Xx-dJV" firstAttribute="top" secondItem="72a-L8-IZq" secondAttribute="topMargin" constant="5" id="koh-g4-oiA"/>
                                                 <constraint firstItem="lFD-Xx-dJV" firstAttribute="leading" secondItem="72a-L8-IZq" secondAttribute="leadingMargin" constant="10" id="lpY-X4-9j2"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="gN8-g7-e8w" secondAttribute="trailing" constant="10" id="lvM-9L-m1B"/>
                                             </constraints>
@@ -450,7 +436,6 @@
                                         <connections>
                                             <outlet property="dateOfLastMessage" destination="gN8-g7-e8w" id="qcX-7U-l69"/>
                                             <outlet property="nameLabel" destination="lFD-Xx-dJV" id="w4d-nq-1Oa"/>
-                                            <outlet property="onlineStatus" destination="zyU-QH-8e8" id="BCe-XD-yk5"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
