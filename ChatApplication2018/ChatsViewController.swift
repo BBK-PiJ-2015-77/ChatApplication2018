@@ -237,7 +237,7 @@ extension ChatsViewController: XMPPStreamDelegate {
     
     //Automatically add user to rpster if message received
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
-        <#code#>
+        //
     }
 
 }
