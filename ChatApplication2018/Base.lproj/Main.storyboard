@@ -414,13 +414,13 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gN8-g7-e8w">
-                                                    <rect key="frame" x="280" y="21" width="70" height="23"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gN8-g7-e8w">
+                                                    <rect key="frame" x="260" y="21" width="90" height="23"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="70" id="KOR-HQ-xax"/>
+                                                        <constraint firstAttribute="width" constant="90" id="KOR-HQ-xax"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="textColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -434,8 +434,8 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="dateOfLastMessage" destination="gN8-g7-e8w" id="qcX-7U-l69"/>
                                             <outlet property="nameLabel" destination="lFD-Xx-dJV" id="w4d-nq-1Oa"/>
+                                            <outlet property="newMessage" destination="gN8-g7-e8w" id="MBj-1d-yvG"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

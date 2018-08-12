@@ -83,11 +83,16 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatsTableViewCell
         cell.nameLabel.text = jidArray[indexPath.row].user
-        cell.dateOfLastMessage.text = "00/00/1900"
+        //cell.newMessage.text = ""
+        //cell.setChatsCellLabels(name: jidArray[indexPath.row].user!, newMessage: false)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatsTableViewCell
+        //cell.newMessage.text = ""
+        let cell = chatsTableView.cellForRow(at: indexPath) as! ChatsTableViewCell
+        cell.newMessage.text = ""
         performSegue(withIdentifier: "chatsToChat", sender: self)
         chatsTableView.deselectRow(at: indexPath, animated: true)
     }
@@ -229,10 +234,22 @@ extension ChatsViewController: XMPPStreamDelegate {
         }
     }
     
-    //Automatically add user to roster if message received
+    
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
-        if !jidArray.contains(message.from!) {
+        //Automatically add user to roster if message received
+        print("Received new message")
+        if !jidArray.contains(message.from!.bareJID) {
+            print("Adding new user to chatsTableView")
             addContact(contactJID: (message.from?.user!)!, contactNickName: (message.from?.user!)!)
+        } else {
+            print("Iterating through ChatsTableView")
+            for cell in self.chatsTableView.visibleCells as! [ChatsTableViewCell] {
+                //cell as! ChatsTableViewCell
+                print("Cell: \(cell.nameLabel.text!), From: \(message.from!.user!)")
+                if cell.nameLabel.text! == message.from!.user! {
+                    cell.newMessage.text = "New Message"
+                }
+            }
         }
         updateChatsTable()
     }
