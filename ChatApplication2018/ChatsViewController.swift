@@ -65,14 +65,6 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if xmppController == nil {
             print("No HTBC!")
         }
-        
-        //if we are logged in and haven't yet connected to the XMPPController
-        /*
-        if (homeTabBarController?.loggedIn)! && self.xmppController == nil {
-            print("viewDidAppear initialisation")
-            connectToXMPPController()
-        }
-        */
     }
     
     // Used to display to the user that the stream has not yet conencted
@@ -237,9 +229,12 @@ extension ChatsViewController: XMPPStreamDelegate {
         }
     }
     
-    //Automatically add user to rpster if message received
+    //Automatically add user to roster if message received
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
-        //
+        if !jidArray.contains(message.from!) {
+            addContact(contactJID: (message.from?.user!)!, contactNickName: (message.from?.user!)!)
+        }
+        updateChatsTable()
     }
 
 }
