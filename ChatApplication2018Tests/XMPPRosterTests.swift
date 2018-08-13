@@ -121,3 +121,20 @@ class XMPPRosterTests: XCTestCase {
     }
  
 }
+
+
+/**
+ Things to test
+    - more bits have been added to XMPPControllerTests
+    HTBC
+    - automatic login
+    - changing presence
+    LoginViewController (already handled I think)
+    RegisterViewController methods
+    - Roster is added to chatlist and names appear on cell
+    - Can add and delete users from list
+    - New messages from new contacts are shown
+    
+    
+ 
+ **/

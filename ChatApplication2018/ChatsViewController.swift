@@ -241,14 +241,15 @@ extension ChatsViewController: XMPPStreamDelegate {
         if !jidArray.contains(message.from!.bareJID) {
             print("Adding new user to chatsTableView")
             addContact(contactJID: (message.from?.user!)!, contactNickName: (message.from?.user!)!)
-        } else {
-            print("Iterating through ChatsTableView")
-            for cell in self.chatsTableView.visibleCells as! [ChatsTableViewCell] {
-                //cell as! ChatsTableViewCell
-                print("Cell: \(cell.nameLabel.text!), From: \(message.from!.user!)")
-                if cell.nameLabel.text! == message.from!.user! {
-                    cell.newMessage.text = "New Message"
-                }
+            updateChatsTable()
+        }
+        //The following process is done for new messages both from known & unknown users
+        print("Iterating through ChatsTableView")
+        for cell in self.chatsTableView.visibleCells as! [ChatsTableViewCell] {
+            //cell as! ChatsTableViewCell
+            print("Cell: \(cell.nameLabel.text!), From: \(message.from!.user!)")
+            if cell.nameLabel.text! == message.from!.user! {
+                cell.newMessage.text = "New Message"
             }
         }
         updateChatsTable()
