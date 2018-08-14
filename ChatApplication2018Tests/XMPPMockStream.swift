@@ -24,7 +24,7 @@ class XMPPMockStream: XMPPStream {
         //super["state"] = XMPPStreamState.STATE_XMPP_CONNECTED
         //super["state"] = STATE_XMPP_CONNECTED
     }
-
+    
     /*
     override func isAuthenticated() -> Bool {
         return true
@@ -49,5 +49,6 @@ class XMPPMockStream: XMPPStream {
         elementReceived!(element)
     }
     */
-    
 }
+
+

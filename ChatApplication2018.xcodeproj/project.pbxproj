@@ -17,6 +17,10 @@
 		B11594D92115FB3000E8AA01 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11594D82115FB3000E8AA01 /* RegisterViewController.swift */; };
 		B12D51F920EA4CD100841AB1 /* XMPPControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12D51F820EA4CD100841AB1 /* XMPPControllerTests.swift */; };
 		B12E84FA20D849AE00B2BC67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12E84F920D849AE00B2BC67 /* Constants.swift */; };
+		B132A7ED2121A102006A0F67 /* XMPPControllerTestv2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B132A7EC2121A102006A0F67 /* XMPPControllerTestv2.swift */; };
+		B132A7EF2121AD1C006A0F67 /* ChatViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B132A7EE2121AD1C006A0F67 /* ChatViewControllerTests.swift */; };
+		B132A7F12121AEF6006A0F67 /* TopLevelUIUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B132A7F02121AEF6006A0F67 /* TopLevelUIUtilities.swift */; };
+		B132A7F62121BF88006A0F67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B132A7F52121BF88006A0F67 /* Constants.swift */; };
 		B1C631B620BC4B6700CE9F62 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C631B520BC4B6700CE9F62 /* AppDelegate.swift */; };
 		B1C631BB20BC4B6700CE9F62 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B1C631B920BC4B6700CE9F62 /* Main.storyboard */; };
 		B1C631BD20BC4B6700CE9F62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1C631BC20BC4B6700CE9F62 /* Assets.xcassets */; };
@@ -61,6 +65,10 @@
 		B12D51F820EA4CD100841AB1 /* XMPPControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMPPControllerTests.swift; sourceTree = "<group>"; };
 		B12D51FA20EA4CD100841AB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B12E84F920D849AE00B2BC67 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		B132A7EC2121A102006A0F67 /* XMPPControllerTestv2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMPPControllerTestv2.swift; sourceTree = "<group>"; };
+		B132A7EE2121AD1C006A0F67 /* ChatViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewControllerTests.swift; sourceTree = "<group>"; };
+		B132A7F02121AEF6006A0F67 /* TopLevelUIUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopLevelUIUtilities.swift; sourceTree = "<group>"; };
+		B132A7F52121BF88006A0F67 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B1C631B220BC4B6700CE9F62 /* ChatApplication2018.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApplication2018.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1C631B520BC4B6700CE9F62 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B1C631BA20BC4B6700CE9F62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -126,12 +134,16 @@
 		B12D51F720EA4CD100841AB1 /* ChatApplication2018Tests */ = {
 			isa = PBXGroup;
 			children = (
+				B132A7F02121AEF6006A0F67 /* TopLevelUIUtilities.swift */,
+				B132A7EE2121AD1C006A0F67 /* ChatViewControllerTests.swift */,
+				B132A7EC2121A102006A0F67 /* XMPPControllerTestv2.swift */,
 				B113111D20FA0B750038FDD3 /* XMPPMockStream.m */,
 				B113111C20FA0B6A0038FDD3 /* XMPPMockStream.h */,
 				B113111A20F8D5810038FDD3 /* XMPPRosterTests.swift */,
 				B12D51F820EA4CD100841AB1 /* XMPPControllerTests.swift */,
 				B12D51FA20EA4CD100841AB1 /* Info.plist */,
 				B113111F20FA0C460038FDD3 /* XMPPMockStream.swift */,
+				B132A7F52121BF88006A0F67 /* Constants.swift */,
 			);
 			path = ChatApplication2018Tests;
 			sourceTree = "<group>";
@@ -385,8 +397,12 @@
 			files = (
 				B12D51F920EA4CD100841AB1 /* XMPPControllerTests.swift in Sources */,
 				B113111B20F8D5810038FDD3 /* XMPPRosterTests.swift in Sources */,
+				B132A7EF2121AD1C006A0F67 /* ChatViewControllerTests.swift in Sources */,
+				B132A7F12121AEF6006A0F67 /* TopLevelUIUtilities.swift in Sources */,
 				B113112020FA0C460038FDD3 /* XMPPMockStream.swift in Sources */,
 				B113111E20FA0B750038FDD3 /* XMPPMockStream.m in Sources */,
+				B132A7ED2121A102006A0F67 /* XMPPControllerTestv2.swift in Sources */,
+				B132A7F62121BF88006A0F67 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -126,6 +126,7 @@ class XMPPRosterTests: XCTestCase {
 /**
  Things to test
     - more bits have been added to XMPPControllerTests
+    - can I add tests as delegates to get completion notifications?
     HTBC
     - automatic login
     - changing presence
@@ -133,8 +134,13 @@ class XMPPRosterTests: XCTestCase {
     RegisterViewController methods
     - Roster is added to chatlist and names appear on cell
     - Can add and delete users from list
-    - New messages from new contacts are shown
-    
+    - New messages from unknown contacts are shown
+    - New messages are labelled as such (only works when on the home screen)
+    ChatViewController
+    - Check all wired up correctly and data is passed to it
+    - Presence and last known active are shown
+    - Messages are sent/received and displayed
+    - Message history retrieved from server
     
  
  **/

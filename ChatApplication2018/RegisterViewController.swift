@@ -13,6 +13,7 @@ class RegisterViewController: UIViewController {
 
     @IBOutlet weak var userNameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    @IBOutlet weak var passwordValidate: UITextField!
     @IBOutlet weak var warningLabel: UILabel!
     
     var xmppRegister: XMPPRegister?
@@ -25,16 +26,26 @@ class RegisterViewController: UIViewController {
             return
         }
         
-        let registerJID = userNameField.text! + "@" + Constants.Server.address
-        print(registerJID)
-        
-        do {
-            try self.xmppRegister = XMPPRegister(registerUserJIDString: registerJID, password: passwordField.text!)
-            self.xmppRegister?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
-            self.xmppRegister?.connect()
-        } catch {
-            print("something went wrong")
+        if !(passwordField.text?.isEmpty)! && (passwordValidate.text?.isEmpty)! {
+            warningLabel.text = "Please enter password twice"
+            return
         }
+        
+        if passwordField.text != passwordValidate.text {
+            warningLabel.text = "Passwords do not match"
+        } else {
+            let registerJID = userNameField.text! + "@" + Constants.Server.address
+            print(registerJID)
+            
+            do {
+                try self.xmppRegister = XMPPRegister(registerUserJIDString: registerJID, password: passwordField.text!)
+                self.xmppRegister?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
+                self.xmppRegister?.connect()
+            } catch {
+                print("something went wrong")
+            }
+        }
+        
     }
     
     @IBAction func backButton(_ sender: Any) {

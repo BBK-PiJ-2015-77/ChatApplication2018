@@ -20,7 +20,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Gly-Yx-3fS">
-                                <rect key="frame" x="37.5" y="100" width="300" height="30"/>
+                                <rect key="frame" x="37.5" y="121" width="300" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="Ekx-pV-W4Q"/>
                                 </constraints>
@@ -29,7 +29,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vNw-h2-tko">
-                                <rect key="frame" x="37.5" y="170" width="300" height="30"/>
+                                <rect key="frame" x="37.5" y="191" width="300" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="eZO-LQ-Vfs"/>
                                 </constraints>
@@ -38,7 +38,7 @@
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uqg-Nn-fVu">
-                                <rect key="frame" x="112.5" y="240" width="150" height="30"/>
+                                <rect key="frame" x="112.5" y="261" width="150" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="kol-aw-wc1"/>
                                 </constraints>
@@ -49,16 +49,17 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ANN-yD-v7y">
-                                <rect key="frame" x="37.5" y="310" width="300" height="0.0"/>
+                                <rect key="frame" x="37.5" y="311" width="300" height="20.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="9n2-Dh-Te5"/>
+                                    <constraint firstAttribute="height" constant="20.5" id="aUu-kM-F6F"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X1b-r9-EH3">
-                                <rect key="frame" x="159" y="318" width="57" height="30"/>
+                                <rect key="frame" x="159" y="351.5" width="57" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="57" id="JVD-t6-bvJ"/>
                                     <constraint firstAttribute="height" constant="30" id="VIO-Se-M2f"/>
@@ -68,19 +69,31 @@
                                     <segue destination="QMU-xP-eZr" kind="show" id="jJb-98-rLR"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chat Application 2018" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Did-ea-BD1">
+                                <rect key="frame" x="96" y="60" width="182" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Of7-nS-Niu"/>
+                                    <constraint firstAttribute="width" constant="182" id="tMm-HI-YkS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="Gly-Yx-3fS" firstAttribute="top" secondItem="Did-ea-BD1" secondAttribute="bottom" constant="40" id="1B6-Ff-NlD"/>
                             <constraint firstItem="X1b-r9-EH3" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6u7-i1-hCJ"/>
                             <constraint firstItem="vNw-h2-tko" firstAttribute="top" secondItem="Gly-Yx-3fS" secondAttribute="bottom" constant="40" id="7g0-ep-Kv0"/>
-                            <constraint firstItem="Gly-Yx-3fS" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="80" id="B2C-Wv-rnk"/>
                             <constraint firstItem="vNw-h2-tko" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="C3P-Lk-Fk9"/>
-                            <constraint firstItem="ANN-yD-v7y" firstAttribute="top" secondItem="Uqg-Nn-fVu" secondAttribute="bottom" constant="40" id="Fr4-Sn-Rv2"/>
+                            <constraint firstItem="Did-ea-BD1" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="Dgg-vJ-gc2"/>
+                            <constraint firstItem="ANN-yD-v7y" firstAttribute="top" secondItem="Uqg-Nn-fVu" secondAttribute="bottom" constant="20" id="Fr4-Sn-Rv2"/>
                             <constraint firstItem="Gly-Yx-3fS" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Hp7-GY-Q3H"/>
+                            <constraint firstItem="Did-ea-BD1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="UE9-GH-0PX"/>
                             <constraint firstItem="ANN-yD-v7y" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YgU-Zc-HsA"/>
                             <constraint firstItem="Uqg-Nn-fVu" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="cPe-Lq-0eY"/>
                             <constraint firstItem="Uqg-Nn-fVu" firstAttribute="top" secondItem="vNw-h2-tko" secondAttribute="bottom" constant="40" id="hPL-px-Eyo"/>
-                            <constraint firstItem="X1b-r9-EH3" firstAttribute="top" secondItem="ANN-yD-v7y" secondAttribute="bottom" constant="8" id="pph-kv-ATI"/>
+                            <constraint firstItem="X1b-r9-EH3" firstAttribute="top" secondItem="ANN-yD-v7y" secondAttribute="bottom" constant="20" id="pph-kv-ATI"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -120,29 +133,8 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Aj-ct-rJr">
-                                <rect key="frame" x="112" y="240" width="150" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="Xrt-Db-wxX"/>
-                                    <constraint firstAttribute="height" constant="30" id="kwY-yn-f8D"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Register"/>
-                                <connections>
-                                    <action selector="registerUser:" destination="QMU-xP-eZr" eventType="touchUpInside" id="rHq-xP-iRB"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to ChatApplication 2018. Enter a username and password in the fields above to register" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l3q-so-7CZ">
-                                <rect key="frame" x="37" y="350" width="300" height="54"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="Cjg-ew-2uJ"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HQq-ti-6QP">
                                 <rect key="frame" x="16" y="20" width="34" height="30"/>
                                 <constraints>
@@ -155,34 +147,69 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ci1-GN-P4f">
-                                <rect key="frame" x="37" y="300" width="300" height="0.0"/>
+                                <rect key="frame" x="37" y="300" width="300" height="20.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="fG2-6d-Lng"/>
+                                    <constraint firstAttribute="height" constant="20.5" id="oYx-dB-vfJ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Aj-ct-rJr">
+                                <rect key="frame" x="112" y="360.5" width="150" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="Xrt-Db-wxX"/>
+                                    <constraint firstAttribute="height" constant="30" id="kwY-yn-f8D"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Register"/>
+                                <connections>
+                                    <action selector="registerUser:" destination="QMU-xP-eZr" eventType="touchUpInside" id="rHq-xP-iRB"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to ChatApplication 2018. Enter a username and password in the fields above to register" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l3q-so-7CZ">
+                                <rect key="frame" x="37" y="430.5" width="300" height="54"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="Cjg-ew-2uJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Re-enter password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HpH-Pd-iDX">
+                                <rect key="frame" x="37.5" y="240" width="300" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="4wJ-aJ-AM1"/>
+                                    <constraint firstAttribute="height" constant="30" id="YfD-Nf-6HP"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="HpH-Pd-iDX" firstAttribute="top" secondItem="mOG-QV-HT9" secondAttribute="bottom" constant="40" id="3ki-d9-7oh"/>
+                            <constraint firstItem="1Aj-ct-rJr" firstAttribute="centerX" secondItem="ZSl-DP-CcA" secondAttribute="centerX" id="4jN-cz-QD9"/>
                             <constraint firstItem="vBZ-Pl-OLZ" firstAttribute="top" secondItem="UCN-Mj-ahy" secondAttribute="top" constant="80" id="7U6-zl-VRr"/>
                             <constraint firstItem="HQq-ti-6QP" firstAttribute="top" secondItem="UCN-Mj-ahy" secondAttribute="top" id="GIF-ve-es4"/>
                             <constraint firstItem="mOG-QV-HT9" firstAttribute="top" secondItem="vBZ-Pl-OLZ" secondAttribute="bottom" constant="40" id="GQ7-6x-Vv0"/>
                             <constraint firstItem="l3q-so-7CZ" firstAttribute="centerX" secondItem="ZSl-DP-CcA" secondAttribute="centerX" id="IED-BI-fdb"/>
                             <constraint firstItem="vBZ-Pl-OLZ" firstAttribute="centerX" secondItem="ZSl-DP-CcA" secondAttribute="centerX" id="VKJ-Zi-vmq"/>
-                            <constraint firstItem="1Aj-ct-rJr" firstAttribute="centerX" secondItem="ZSl-DP-CcA" secondAttribute="centerX" id="b1s-6F-SDs"/>
                             <constraint firstItem="mOG-QV-HT9" firstAttribute="centerX" secondItem="ZSl-DP-CcA" secondAttribute="centerX" id="d07-We-GYb"/>
                             <constraint firstItem="ci1-GN-P4f" firstAttribute="centerX" secondItem="ZSl-DP-CcA" secondAttribute="centerX" id="fGz-px-vQ9"/>
                             <constraint firstItem="HQq-ti-6QP" firstAttribute="leading" secondItem="UCN-Mj-ahy" secondAttribute="leading" constant="16" id="i4y-GF-S00"/>
-                            <constraint firstItem="ci1-GN-P4f" firstAttribute="top" secondItem="1Aj-ct-rJr" secondAttribute="bottom" constant="30" id="jcq-sW-LVC"/>
-                            <constraint firstItem="l3q-so-7CZ" firstAttribute="top" secondItem="1Aj-ct-rJr" secondAttribute="bottom" constant="80" id="lcH-cg-9sM"/>
-                            <constraint firstItem="1Aj-ct-rJr" firstAttribute="top" secondItem="mOG-QV-HT9" secondAttribute="bottom" constant="40" id="mSd-4p-myj"/>
+                            <constraint firstItem="l3q-so-7CZ" firstAttribute="top" secondItem="1Aj-ct-rJr" secondAttribute="bottom" constant="40" id="lcH-cg-9sM"/>
+                            <constraint firstItem="ci1-GN-P4f" firstAttribute="top" secondItem="HpH-Pd-iDX" secondAttribute="bottom" constant="30" id="mid-KM-R3B"/>
+                            <constraint firstItem="HpH-Pd-iDX" firstAttribute="centerX" secondItem="ZSl-DP-CcA" secondAttribute="centerX" id="sIV-3I-ado"/>
+                            <constraint firstItem="1Aj-ct-rJr" firstAttribute="top" secondItem="ci1-GN-P4f" secondAttribute="bottom" constant="40" id="yqs-dk-h5M"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="UCN-Mj-ahy"/>
                     </view>
                     <connections>
                         <outlet property="passwordField" destination="mOG-QV-HT9" id="K2Y-fV-eQo"/>
+                        <outlet property="passwordValidate" destination="HpH-Pd-iDX" id="c8H-bx-yi4"/>
                         <outlet property="userNameField" destination="vBZ-Pl-OLZ" id="Wvg-oH-of5"/>
                         <outlet property="warningLabel" destination="ci1-GN-P4f" id="3Ji-ua-Dld"/>
                     </connections>
@@ -496,7 +523,7 @@
         <!--Chat View Controller-->
         <scene sceneID="YQf-2h-2WV">
             <objects>
-                <viewController id="jyw-QR-OZk" customClass="ChatViewController" customModule="ChatApplication2018" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="chatVC" id="jyw-QR-OZk" customClass="ChatViewController" customModule="ChatApplication2018" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Wgr-O7-yuE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -33,7 +33,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
         if (self.loginTextField.text?.isEmpty)!
         || (self.passwordTextField.text?.isEmpty)!{
-            self.errorLabel.text = "Something is missing or wrong!"
+            showErrorMessage(message: "Please enter a username and password")
             return
         }
         
@@ -42,7 +42,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         print(jID)
         
         guard let _ = XMPPJID(string: jID) else {
-            self.errorLabel.text = "Username is not a jid!"
+            showErrorMessage(message: "Username is not valid")
             return
         }
         
@@ -52,6 +52,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     }
     
+    //Need the following as a function so any delegate classes can access it
     func showErrorMessage(message: String) {
         self.errorLabel.text = message
     }
