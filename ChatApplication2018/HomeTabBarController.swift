@@ -111,7 +111,7 @@ extension HomeTabBarController: LoginViewControllerDelegate {
             print("Logged in with new credentials")
             loggedIn = true
         } catch {
-            sender.showErrorMessage(message: "Something went wrong")
+            sender.showErrorMessage(message: "Error logging in")
         }
     }
 }
