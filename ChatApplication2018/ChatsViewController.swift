@@ -227,17 +227,24 @@ extension ChatsViewController: XMPPStreamDelegate {
         return true
     }
     
-    //Automatically accept presence requests
+    //Automatically accept presence requests. Move to XMPPController
+    
+    /**
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
+        //Need to move to XMPPController
         print("ChatsView Controller XMPPStreamDelegate didReceieve presence")
+        
         
         if presence.type == "subscribe" {
             self.xmppController?.xmppRoster?.acceptPresenceSubscriptionRequest(from: presence.from!, andAddToRoster: false)
         }
+        
     }
-    
+    **/
     
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
+        //Does this only work if the app is open?
+        
         //Automatically add user to roster if message received
         print("Received new message")
         if !jidArray.contains(message.from!.bareJID) {

@@ -164,6 +164,15 @@ extension XMPPController: XMPPStreamDelegate {
     func xmppStreamDidDisconnect(_ sender: XMPPStream, withError error: Error?) {
         print("Stream: Disconnected")
     }
+    
+    //Automatically accept presence requests.
+    func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
+        print("XMPPController XMPPStreamDelegate didReceieve presence")
+        if presence.type == "subscribe" {
+            self.xmppRoster?.acceptPresenceSubscriptionRequest(from: presence.from!, andAddToRoster: false)
+        }
+        
+    }
     /*
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
         print("XMPPMessage sent")
