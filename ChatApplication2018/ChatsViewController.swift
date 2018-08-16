@@ -226,6 +226,15 @@ extension ChatsViewController: AddChatViewControllerDelegate {
         
         //self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactNickName)
         self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactJID, groups: nil, subscribeToPresence: true)
+        addUserToTable(user: newContactJID)
+    }
+    
+    func addUserToTable(user: XMPPJID) {
+        if !jidArray.contains(user) {
+            self.jidArray.append(user)
+            print("Adding \(user)")
+            updateChatsTable()
+        }
     }
 }
 
@@ -275,19 +284,8 @@ extension ChatsViewController: XMPPStreamDelegate {
         */
         
         
-        // When a message is received from an unknown user, the XMPPController is responsible for adding the new JID to the Roster. There is a delay in this process though.
-        //This just created a mess
-        print("JidArray:")
-        for jid in jidArray {
-            print("\(jid.full)")
-        }
-        
-        if !jidArray.contains(message.from!.bareJID) {
-            self.jidArray.append(message.from!.bareJID)
-            print("Adding \(message.from!.bare)")
-            updateChatsTable()
-        }
-        
+        // When a message is received from an unknown user, the XMPPController is responsible for adding the new JID to the Roster, so whenever the roster is loaded going forward, the new user will be included. To add the user to the immediate session, it is added directly to jidArray
+        addUserToTable(user: message.from!.bareJID)
         newMessageAlert(fromUser: (message.from?.user)!, sender: "didReceiveMessage")
     }
 
