@@ -101,6 +101,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
             self.xmppController?.xmppRoster?.removeUser(self.jidArray[indexPath.row])
+            //self.xmppController?.xmppRoster.remove
             self.jidArray.remove(at: indexPath.row)
             self.chatsTableView.deleteRows(at: [indexPath], with: .fade)
         }
@@ -183,16 +184,30 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             for jid in jids! {
                 //print(jid.user ?? "None yet")                
-                print(jid.bare)
+                print(jid.full)
                 
                 
                 
                 if !jidArray.contains(jid) {
-                    jidArray.append(jid)
+                    jidArray.append(jid.bareJID)
                 }
             }
             self.chatsTableView.reloadData()
         }
+    }
+    
+    func newMessageAlert(fromUser: String, sender: String) {
+        print("Iterating through ChatsTableView\n\(fromUser)\n")
+        for cell in self.chatsTableView.visibleCells as! [ChatsTableViewCell] {
+            //cell as! ChatsTableViewCell
+            print("Cell: \(cell.nameLabel.text!), From: \(fromUser)")
+            if cell.nameLabel.text! == fromUser {
+                print("there should be a new message notification!!!!")
+                cell.newMessage.text = "New Message"
+            }
+        }
+        print("\(sender) called updateChatsTable")
+        updateChatsTable()
     }
 
 }
@@ -218,17 +233,19 @@ extension ChatsViewController: XMPPStreamDelegate {
     
     
     //Do I need to do this?
+    /**
     func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
         if iq.type == "result" && (self.xmppController?.xmppRoster?.hasRoster)! {
             print("XMPPStreamDelegate called updateChatsTable")
+            print("\(iq.childElement)")
             updateChatsTable()
         }
         //should respond to a 'get' or 'set' iq with a 'result' or 'error' iq?
         return true
     }
+    **/
     
     //Automatically accept presence requests. Move to XMPPController
-    
     /**
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
         //Need to move to XMPPController
@@ -243,16 +260,9 @@ extension ChatsViewController: XMPPStreamDelegate {
     **/
     
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
-        //Does this only work if the app is open?
         
-        //Automatically add user to roster if message received
-        print("Received new message")
-        if !jidArray.contains(message.from!.bareJID) {
-            print("Adding new user to chatsTableView")
-            addContact(contactJID: (message.from?.user!)!)
-            updateChatsTable()
-        }
         //The following process is done for new messages both from known & unknown users
+        /*
         print("Iterating through ChatsTableView")
         for cell in self.chatsTableView.visibleCells as! [ChatsTableViewCell] {
             //cell as! ChatsTableViewCell
@@ -262,6 +272,23 @@ extension ChatsViewController: XMPPStreamDelegate {
             }
         }
         updateChatsTable()
+        */
+        
+        
+        // When a message is received from an unknown user, the XMPPController is responsible for adding the new JID to the Roster. There is a delay in this process though.
+        //This just created a mess
+        print("JidArray:")
+        for jid in jidArray {
+            print("\(jid.full)")
+        }
+        
+        if !jidArray.contains(message.from!.bareJID) {
+            self.jidArray.append(message.from!.bareJID)
+            print("Adding \(message.from!.bare)")
+            updateChatsTable()
+        }
+        
+        newMessageAlert(fromUser: (message.from?.user)!, sender: "didReceiveMessage")
     }
 
 }
@@ -271,6 +298,40 @@ extension ChatsViewController: XMPPRosterDelegate {
         print("XMPPRosterDelegate called updateChatsTable")
         updateChatsTable()
     }
+    
+    // When a new message is received from an unknown JID, the XMPPController will add the user to the Roster and request presence subscription. The below will make sure that the chatsTable is updated to show the new user in this circumstance.
+    /**
+    func xmppRoster(_ sender: XMPPRoster, didReceiveRosterItem item: DDXMLElement) {
+        print("didReceiveRosterItem called updateChatsTable")
+        updateChatsTable()
+        //This is overkill as received too often. also doesn't allow new message to be displayed
+        //updateChatsTable()
+        print("Received roster item")
+        print("item attribute? \(item.attributeBoolValue(forName: "item"))")
+        print("iq attribute? \(item.attributeBoolValue(forName: "iq"))")
+        print("name attribute? \(item.attributeStringValue(forName: "name"))")
+        
+        let subscription: String? = item.attributeStringValue(forName: "subscription")
+        let user: String? = item.attributeStringValue(forName: "name")
+        if subscription == "to" {
+            print("received roster item from: \(user!)")
+            newMessageAlert(fromUser: user!, sender: "didReceiveRosterItem")
+        }
+        /*
+         <iq xmlns="jabber:client"
+            from="test1@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
+            to="test1@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com/1768755405915782382635304709474747540955648445274620593355"
+            id="push10676426508913265979" type="set">
+            <query xmlns="jabber:iq:roster">
+                <item ask="subscribe" subscription="none" name="test2" jid="test2@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"/>
+            </query>
+         </iq>
+        */
+        
+    }
+    **/
+    
+    
 }
 
 

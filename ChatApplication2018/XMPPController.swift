@@ -57,6 +57,7 @@ class XMPPController: NSObject {
         self.xmppRoster = XMPPRoster(rosterStorage: xmppRosterStorage!)
         self.xmppRoster?.activate(xmppStream!)
         self.xmppRoster?.autoFetchRoster = true
+        
         //Will accept all subscription requests instead
         //self.xmppRoster?.autoAcceptKnownPresenceSubscriptionRequests
         
@@ -170,9 +171,31 @@ extension XMPPController: XMPPStreamDelegate {
         print("XMPPController XMPPStreamDelegate didReceieve presence")
         if presence.type == "subscribe" {
             self.xmppRoster?.acceptPresenceSubscriptionRequest(from: presence.from!, andAddToRoster: false)
+            if !(self.xmppRosterStorage?.jids(for: self.xmppStream!).contains(presence.from!))! {
+                self.xmppRoster?.subscribePresence(toUser: presence.from!)
+            }
         }
         
     }
+    
+    func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
+        // Doesn't work when offline
+        // if receive a message from an unkonw ser, automatically add them to roster
+        print("XMPPController didReceive XMPPMessage")
+        if !(self.xmppRosterStorage?.jids(for: self.xmppStream!).contains(message.from!))! {
+            print("XMPPController XMPPMessage JID not on roster")
+            self.xmppRoster?.addUser(message.from!, withNickname: message.from?.user, groups: nil, subscribeToPresence: true)
+        }
+        
+        /**
+        if !jidArray.contains(message.from!.bareJID) {
+            print("Adding new user to chatsTableView")
+            addContact(contactJID: (message.from?.user!)!)
+            updateChatsTable()
+        }
+        **/
+    }
+    
     /*
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
         print("XMPPMessage sent")
@@ -191,6 +214,7 @@ extension Notification.Name {
     static let loggedOut = Notification.Name("loggedOut")
     static let presenceUnavailable = Notification.Name("presenceUnavailable")
     static let presenceAvailable = Notification.Name("presenceAvailable")
+    static let newMessage = Notification.Name("newMessage")
 }
 
 

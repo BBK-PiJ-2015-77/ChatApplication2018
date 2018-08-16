@@ -351,7 +351,7 @@
 	//   <pref xmlns='urn:xmpp:archive'/>
 	// </iq>
 	
-	NSXMLElement *pref = [NSXMLElement elementWithName:@"pref" xmlns:XMLNS_XMPP_ARCHIVE];
+	NSXMLElement *pref = [NSXMLElement elementWithName:@"prefs" xmlns:@"urn:xmpp:mam:2"];
 	XMPPIQ *iq = [XMPPIQ iqWithType:@"get" to:nil elementID:[xmppStream generateUUID] child:pref];
 	
 	[sender sendElement:iq];
