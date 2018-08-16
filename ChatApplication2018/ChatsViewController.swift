@@ -199,7 +199,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
 extension ChatsViewController: AddChatViewControllerDelegate {
     
-    func addContact(contactJID: String, contactNickName: String) {
+    func addContact(contactJID: String) {
 
         let newContactString = contactJID + "@" + Constants.Server.address
         
@@ -210,7 +210,7 @@ extension ChatsViewController: AddChatViewControllerDelegate {
         }
         
         //self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactNickName)
-        self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactNickName, groups: nil, subscribeToPresence: true)
+        self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactJID, groups: nil, subscribeToPresence: true)
     }
 }
 
@@ -229,6 +229,8 @@ extension ChatsViewController: XMPPStreamDelegate {
     
     //Automatically accept presence requests
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
+        print("ChatsView Controller XMPPStreamDelegate didReceieve presence")
+        
         if presence.type == "subscribe" {
             self.xmppController?.xmppRoster?.acceptPresenceSubscriptionRequest(from: presence.from!, andAddToRoster: false)
         }
@@ -240,7 +242,7 @@ extension ChatsViewController: XMPPStreamDelegate {
         print("Received new message")
         if !jidArray.contains(message.from!.bareJID) {
             print("Adding new user to chatsTableView")
-            addContact(contactJID: (message.from?.user!)!, contactNickName: (message.from?.user!)!)
+            addContact(contactJID: (message.from?.user!)!)
             updateChatsTable()
         }
         //The following process is done for new messages both from known & unknown users

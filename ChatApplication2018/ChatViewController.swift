@@ -257,7 +257,7 @@ extension ChatViewController: XMPPStreamDelegate {
     }
     
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
-        
+        print("ChatViewController XMPPStreamDelegate did receive presence")
         if presence.isErrorPresence {
             print("Error presence received from \((presence.from?.bare)!)")
         }

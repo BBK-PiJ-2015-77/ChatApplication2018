@@ -18,7 +18,7 @@ class AddChatViewController: UIViewController {
     }
 
     @IBOutlet weak var jidTextField: UITextField!
-    @IBOutlet weak var nickNameTextField: UITextField!
+    //@IBOutlet weak var nickNameTextField: UITextField!
     @IBOutlet weak var errorLabel: UILabel!
     
     
@@ -36,15 +36,16 @@ class AddChatViewController: UIViewController {
         
         let jidString = jidTextField.text!
         
+        /**
         let nickNameString: String
         if (nickNameTextField.text?.isEmpty)! {
             nickNameString = jidString
         } else {
             nickNameString = nickNameTextField.text!
         }
+        **/
         
-        
-        self.delegate?.addContact(contactJID: jidString, contactNickName: nickNameString)
+        self.delegate?.addContact(contactJID: jidString)
         self.view.removeFromSuperview()
     }
     
@@ -67,5 +68,5 @@ class AddChatViewController: UIViewController {
 }
 
 protocol AddChatViewControllerDelegate: class {
-    func addContact(contactJID: String, contactNickName: String)
+    func addContact(contactJID: String)
 }
