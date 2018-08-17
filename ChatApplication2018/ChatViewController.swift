@@ -216,6 +216,10 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        chatTableView.deselectRow(at: indexPath, animated: true)
+    }
+    
     func setTableConstraints() {
         chatTableView.rowHeight = UITableViewAutomaticDimension
         chatTableView.estimatedRowHeight = 140

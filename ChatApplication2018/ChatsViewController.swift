@@ -23,18 +23,6 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var invalidJIDAlertController: UIAlertController?
     var defaultAction: UIAlertAction?
     
-    //Computed property used to verify there is an authorised connection before attempting to populate the view. Wasn't sure how else to make sure everything was wired up before it was ready
-    
-    /*
-    var authenticated = false {
-        didSet {
-            if authenticated == true {
-                connectToXMPPController()
-            }
-        }
-    }
-    */
-    
     // MARK: - Setup
     
     override func viewDidLoad() {
@@ -85,6 +73,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cell.nameLabel.text = jidArray[indexPath.row].user
         //cell.newMessage.text = ""
         //cell.setChatsCellLabels(name: jidArray[indexPath.row].user!, newMessage: false)
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
