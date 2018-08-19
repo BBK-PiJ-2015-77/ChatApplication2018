@@ -274,8 +274,15 @@ extension ChatsViewController: XMPPStreamDelegate {
         
         
         // When a message is received from an unknown user, the XMPPController is responsible for adding the new JID to the Roster, so whenever the roster is loaded going forward, the new user will be included. To add the user to the immediate session, it is added directly to jidArray
-        addUserToTable(user: message.from!.bareJID)
-        newMessageAlert(fromUser: (message.from?.user)!, sender: "didReceiveMessage")
+        print("Bare JID: \(message.from!.bareJID)")
+        
+        if message.from?.bare != Constants.Server.address {
+            print("Server address: \(Constants.Server.address)")
+            addUserToTable(user: message.from!.bareJID)
+            newMessageAlert(fromUser: (message.from?.user)!, sender: "didReceiveMessage")
+        }
+        
+        
     }
 
 }

@@ -168,7 +168,7 @@ extension XMPPController: XMPPStreamDelegate {
     
     //Automatically accept presence requests.
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
-        print("XMPPController XMPPStreamDelegate didReceieve presence")
+        print("XMPPController: XMPPStreamDelegate didReceieve presence")
         if presence.type == "subscribe" {
             self.xmppRoster?.acceptPresenceSubscriptionRequest(from: presence.from!, andAddToRoster: false)
             if !(self.xmppRosterStorage?.jids(for: self.xmppStream!).contains(presence.from!))! {
@@ -181,9 +181,11 @@ extension XMPPController: XMPPStreamDelegate {
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
         // Doesn't work when offline
         // if receive a message from an unkonw ser, automatically add them to roster
-        print("XMPPController didReceive XMPPMessage")
-        if !(self.xmppRosterStorage?.jids(for: self.xmppStream!).contains(message.from!))! {
-            print("XMPPController XMPPMessage JID not on roster")
+        print("XMPPController: didReceive XMPPMessage")
+        
+        if message.from?.bare != Constants.Server.address &&
+            !(self.xmppRosterStorage?.jids(for: self.xmppStream!).contains(message.from!))! {
+            print("XMPPController: XMPPMessage JID not on roster")
             self.xmppRoster?.addUser(message.from!, withNickname: message.from?.user, groups: nil, subscribeToPresence: true)
         }
         
