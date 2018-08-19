@@ -23,6 +23,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var invalidJIDAlertController: UIAlertController?
     var defaultAction: UIAlertAction?
     
+    private let server = Constants()
     // MARK: - Setup
     
     override func viewDidLoad() {
@@ -205,7 +206,7 @@ extension ChatsViewController: AddChatViewControllerDelegate {
     
     func addContact(contactJID: String) {
 
-        let newContactString = contactJID + "@" + Constants.Server.address
+        let newContactString = contactJID + "@" + server.getAddress()//Constants.Server.address
         
         //This doesn't really add anything
         guard let newContactJID = XMPPJID(string: newContactString) else {
@@ -276,8 +277,9 @@ extension ChatsViewController: XMPPStreamDelegate {
         // When a message is received from an unknown user, the XMPPController is responsible for adding the new JID to the Roster, so whenever the roster is loaded going forward, the new user will be included. To add the user to the immediate session, it is added directly to jidArray
         print("Bare JID: \(message.from!.bareJID)")
         
-        if message.from?.bare != Constants.Server.address {
-            print("Server address: \(Constants.Server.address)")
+        //if message.from?.bare != Constants.Server.address {
+        if message.from?.bare != server.getAddress() {
+            print("Server address: \(server.getAddress())")
             addUserToTable(user: message.from!.bareJID)
             newMessageAlert(fromUser: (message.from?.user)!, sender: "didReceiveMessage")
         }

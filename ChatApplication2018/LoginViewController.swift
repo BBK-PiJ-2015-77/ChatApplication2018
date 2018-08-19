@@ -19,6 +19,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     weak var delegate: LoginViewControllerDelegate?
     //var awsServer: String = "ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
     
+    private let server = Constants()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -37,7 +39,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        let jID: String = self.loginTextField.text! + "@" + Constants.Server.address
+        let jID: String = self.loginTextField.text! + "@" + server.getAddress()//Constants.Server.address
         //Test
         print(jID)
         

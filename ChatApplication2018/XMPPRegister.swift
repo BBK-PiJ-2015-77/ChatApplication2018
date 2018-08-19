@@ -24,6 +24,8 @@ class XMPPRegister: NSObject {
     let hostPort: UInt16
     let password: String
     
+    private let server = Constants()
+    
     //var loggedIn = false
     
     //var xmppRosterStorage: XMPPRosterStorage?
@@ -39,7 +41,7 @@ class XMPPRegister: NSObject {
             throw XMPPControllerError.wrongUserID
         }
         
-        self.hostName = Constants.Server.address
+        self.hostName = server.getAddress()//Constants.Server.address
         self.userJID = registerUserJID
         self.hostPort = hostPort
         self.password = password

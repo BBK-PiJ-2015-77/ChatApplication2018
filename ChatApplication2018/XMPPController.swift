@@ -35,12 +35,14 @@ class XMPPController: NSObject {
     
     var presence: XMPPPresence?
     
+    private let server = Constants()
+    
     init(userJIDString: String, hostPort: UInt16 = 5222, password: String) throws {
         guard let userJID = XMPPJID(string: userJIDString) else {
             throw XMPPControllerError.wrongUserID
         }
         
-        self.hostName = Constants.Server.address
+        self.hostName = server.getAddress()//Constants.Server.address
         self.userJID = userJID
         self.hostPort = hostPort
         self.password = password
@@ -183,7 +185,8 @@ extension XMPPController: XMPPStreamDelegate {
         // if receive a message from an unkonw ser, automatically add them to roster
         print("XMPPController: didReceive XMPPMessage")
         
-        if message.from?.bare != Constants.Server.address &&
+        //if message.from?.bare != Constants.Server.address &&
+        if message.from?.bare != server.getAddress() &&
             !(self.xmppRosterStorage?.jids(for: self.xmppStream!).contains(message.from!))! {
             print("XMPPController: XMPPMessage JID not on roster")
             self.xmppRoster?.addUser(message.from!, withNickname: message.from?.user, groups: nil, subscribeToPresence: true)

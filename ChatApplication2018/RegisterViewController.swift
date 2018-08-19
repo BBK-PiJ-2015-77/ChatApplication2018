@@ -20,6 +20,8 @@ class RegisterViewController: UIViewController {
     var registrationAlertController: UIAlertController?
     var defaultAction: UIAlertAction?
     
+    private let server = Constants()
+    
     @IBAction func registerUser(_ sender: Any) {
         if (userNameField.text?.isEmpty)! || (passwordField.text?.isEmpty)! {
             warningLabel.text = "Please enter a username and password"
@@ -34,7 +36,7 @@ class RegisterViewController: UIViewController {
         if passwordField.text != passwordValidate.text {
             warningLabel.text = "Passwords do not match"
         } else {
-            let registerJID = userNameField.text! + "@" + Constants.Server.address
+            let registerJID = userNameField.text! + "@" + server.getAddress()//Constants.Server.address
             print(registerJID)
             
             do {
