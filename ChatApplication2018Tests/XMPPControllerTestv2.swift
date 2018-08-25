@@ -6,83 +6,171 @@
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
 
+/**
+ The following tests are to make sure that the implementation of the XMPPFramework is working correctly and that communication with the server is working correctly, not to necessarily test the framework itself.
+ **/
+
 import XCTest
 import XMPPFramework
 import SwiftKeychainWrapper
+
 @testable import ChatApplication2018
 
-
-class XMPPControllerTestv2: XCTestCase {
-    /**
-    var xmppController: XMPPController?
-    var expectation: XCTestExpectation?
+class XMPPControllerTestsv2: XCTestCase, XMPPStreamDelegate {
     
-    let userJIDTest = "test1@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
-    let userPasswordTest = "password1"
+    var xmppController: XMPPController!
+    var expectation: XCTestExpectation? = nil
+    
+    let userJID = "testuser2@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
+    let userPassword = "password2"
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        do {
-            try xmppController = XMPPController(userJIDString: userJID, password: userPassword)
-        } catch {
-            print("Something went wrong")
-        }
-        self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
     }
     
     override func tearDown() {
+        //delete username and password
+        var removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: "userPassword")
+        removeSuccessful = KeychainWrapper.standard.removeObject(forKey: "userName")
+        
         if xmppController != nil {
-            xmppController?.disconnect()
+            xmppController.disconnect()
             print("Disconnected in teardown")
         }
         
         xmppController = nil
+        usleep(200000)
         super.tearDown()
     }
     
-    class MockXMPPController: XMPPController {
-        
-    }
     
-    func initiateXMPPController(id: String = "test1@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com", password: String = "password1") {
+    func initiateXMPPController(id: String = "testuser2@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com", password: String = "password2", addDelegate: Bool = false) {
         do {
             try xmppController = XMPPController(userJIDString: id, password: password)
         } catch {
             print("Something went wrong")
         }
+        
+        if addDelegate {
+            self.xmppController.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
+        }
     }
     
     func testXMPPStreamConfig() {
+        //given a valid userJID & userPassword
+        
+        //when stream created
         initiateXMPPController()
-        expectation = expectation(description: "Connected and credentials are correct")
-        //expectation is fulfilled in xmppStreamDidConnect()
         
         //check credentials are as expected
         let hostNameA = "ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
         let hostPortA = UInt16(5222)
         let myJIDA = XMPPJID(string: userJID)
         
-        let hostName = xmppController?.xmppStream?.hostName
-        let hostPort = xmppController?.xmppStream?.hostPort
-        let myJID = xmppController?.xmppStream?.myJID
+        let hostName = xmppController.xmppStream?.hostName
+        let hostPort = xmppController.xmppStream?.hostPort
+        let myJID = xmppController.xmppStream?.myJID
         
         XCTAssertEqual(hostNameA, hostName)
         XCTAssertEqual(hostPortA, hostPort)
         XCTAssertEqual(myJIDA, myJID)
+    }
+    
+    func testNoUserIDThrowsError() {
+        //given no username
+        let wrongUserID = ""
+        
+        //when an XMPPController is initiated
+        //Throws an error
+        XCTAssertThrowsError(try XMPPController(userJIDString: wrongUserID, password: userPassword))
+    }
+    
+    func testBadFormatIDThrowsError() {
+        //given bad username, i.e. will not conform to JID format
+        let wrongUserID = "@"
+        
+        //when an XMPPController is initiated
+        //Throws an error
+        XCTAssertThrowsError(try XMPPController(userJIDString: wrongUserID, password: userPassword))
+    }
+    
+    var authenticationExpectation: XCTestExpectation? = nil
+    
+    func testXMPPStreamAuthenticates() {
+        self.authenticationExpectation = expectation(description: "Stream authenticates")
+        print("Initiating XMPPController")
+        initiateXMPPController(addDelegate: true)
+        
+        self.xmppController.connect()
         
         waitForExpectations(timeout: 5, handler: nil)
+        XCTAssertTrue((self.xmppController.xmppStream?.isAuthenticated)!)
+    }
+    
+    var failAuthenticationExpectation: XCTestExpectation? = nil
+    
+    func testWrongUserIDFailsAuthorization() {
+        //given the wrong username
+        let wrongUserID = "abc"
+        
+        //when an XMPPController is initiated
+        initiateXMPPController(id: wrongUserID, addDelegate: true)
+        self.xmppController.connect()
+        
+        //Authentication fails
+        self.failAuthenticationExpectation = expectation(description: "Authorisation fails")
+        
+        waitForExpectations(timeout: 5, handler: nil)
+        XCTAssertFalse((self.xmppController.xmppStream?.isAuthenticating)! && (self.xmppController.xmppStream?.isAuthenticated)!)
     }
     
     
+    var activeRosterExpectation: XCTestExpectation? = nil
     
+    func testRosterActive() {
+        //given a stream setup/connection
+        initiateXMPPController(addDelegate: true)
+        xmppController.connect()
+        
+        //check roster is created
+        self.activeRosterExpectation = expectation(description: "Active roster")
+        
+        waitForExpectations(timeout: 5, handler: nil)
+        XCTAssertTrue((self.xmppController.xmppRoster?.hasRoster)!)
+    }
+    
+    /**
+     The following are implementations of the XMPPStreamDelegate. These are required to verify that various asynchronous tasks have completed.
+    **/
+    
+    func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
+        print("Test Stream: Authenticated")
+        self.authenticationExpectation?.fulfill()
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didReceiveError error: DDXMLElement) {
+        print("Test Stream: Error received")
+        
+        if error.children != nil {
+            //Unable to autheticate
+            if error.child(at: 0)?.name! == "host-unknown" {
+                self.failAuthenticationExpectation?.fulfill()
+            }
+        }
+    }
+    
+    func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
+        print("Test Stream: IQ received")
+        /**
+         If a result IQ is received with a 'jabber:iq:roster' query, then there is an active Roster
+        **/
+        if iq.isResultIQ && iq.child(at: 0)?.name! == "query" {
+            if iq.child(at: 0)?.description.range(of: "jabber:iq:roster") != nil {
+                self.activeRosterExpectation?.fulfill()
+            }
+        }
+        return true
+    }
     
 }
 
-extension XMPPControllerTestv2: XMPPStreamDelegate {
-    
-    func xmppStreamDidConnect(_ sender: XMPPStream) {
-        expectation?.fulfill()
-    }
-    **/
-}

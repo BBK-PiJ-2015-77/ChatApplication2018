@@ -174,6 +174,5 @@ class XMPPControllerTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
     }
     
-    
 }
 

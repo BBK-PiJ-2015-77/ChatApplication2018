@@ -6,6 +6,10 @@
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
 
+/**
+ This class controls how the user is able to register on the server, using XMPPRegister.swift
+ **/
+
 import UIKit
 import XMPPFramework
 
@@ -22,21 +26,29 @@ class RegisterViewController: UIViewController {
     
     private let server = Constants()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if xmppRegister != nil {
+            print("disconnecting")
+            xmppRegister?.disconnect()
+        }
+    }
+    
+    //Register a user on the server with the username they have entered
     @IBAction func registerUser(_ sender: Any) {
         if (userNameField.text?.isEmpty)! || (passwordField.text?.isEmpty)! {
             warningLabel.text = "Please enter a username and password"
             return
         }
-        
         if !(passwordField.text?.isEmpty)! && (passwordValidate.text?.isEmpty)! {
             warningLabel.text = "Please enter password twice"
             return
         }
-        
         if passwordField.text != passwordValidate.text {
             warningLabel.text = "Passwords do not match"
         } else {
-            let registerJID = userNameField.text! + "@" + server.getAddress()//Constants.Server.address
+            
+            let registerJID = userNameField.text! + "@" + server.getAddress()
             print(registerJID)
             
             do {
@@ -46,14 +58,16 @@ class RegisterViewController: UIViewController {
             } catch {
                 print("something went wrong")
             }
+            
         }
-        
     }
     
+    //Remove the view when the 'Back' button is pressed
     @IBAction func backButton(_ sender: Any) {
         dismissRegisterVC()
     }
     
+    //A UIAlert is dispalyed to the user when registration is successful
     func presentRegistrationSuccessAlert() {
         self.registrationAlertController = UIAlertController(title: "Registration succesful", message: "You can now login to ChatApplication2018", preferredStyle: .alert)
         self.defaultAction = UIAlertAction(title: "OK", style: .default, handler: { action in
@@ -63,14 +77,7 @@ class RegisterViewController: UIViewController {
         present(registrationAlertController!, animated: true, completion: nil)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        if xmppRegister != nil {
-            print("disconnecting")
-            xmppRegister?.disconnect()
-        }
-    }
-    
+    //Method for removing this ViewController
     func dismissRegisterVC() {
         navigationController?.popViewController(animated: true)
         dismiss(animated: true, completion: nil)
@@ -95,6 +102,7 @@ extension RegisterViewController: XMPPStreamDelegate {
         print("Unable to register.")
         let childNodes = error.children
         
+        //Check what errors are received, to update the user on what is causing the error
         var errorCodeCheck = 0
         for node in childNodes! {
             if node.name == "error" {
@@ -108,12 +116,13 @@ extension RegisterViewController: XMPPStreamDelegate {
             }
         }
         
-        //If another type of error is received
+        //If any other type of error, apart from the ones listed above, is received
         if errorCodeCheck == 0 {
             self.warningLabel.text = "Unable to register user"
         }
     }
     
+    //Once the stream has sucesfully authenticated, it is disconnected, and a UIAlert is presented to the user
     func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
         print("Stream: Authenticated")
         self.warningLabel.text = ""
