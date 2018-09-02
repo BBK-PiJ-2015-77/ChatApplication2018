@@ -6,6 +6,10 @@
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
 
+/**
+ This class controls the login view, and therefore how the user is able to login to the server. The loogin function, didTouchLogIn, to be implemented by a LoginViewController delegate
+ **/
+
 import UIKit
 import XMPPFramework
 
@@ -13,13 +17,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var loginTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    //@IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
     
     weak var delegate: LoginViewControllerDelegate?
-    //var awsServer: String = "ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
     
     private let server = Constants()
+    
+    // MARK: - Navigation
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +35,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.returnKeyType = .done
     }
     
+    // MARK: - @IBAction methods
+    
+    //Login a user on the server with the username and password they have entered
     @IBAction func logInAction(_ sender: Any) {
 
         if (self.loginTextField.text?.isEmpty)!
@@ -39,52 +46,34 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        let jID: String = self.loginTextField.text! + "@" + server.getAddress()//Constants.Server.address
-        //Test
-        print(jID)
+        let jID: String = self.loginTextField.text! + "@" + server.getAddress()
+        Log.print("LoginViewController: Log in JID: \(jID)", loggingVerbosity: .high)
         
+        //Make sure the username conforms to JID convention
         guard let _ = XMPPJID(string: jID) else {
             showErrorMessage(message: "Username is not valid")
             return
         }
         
         self.delegate?.didTouchLogIn(sender: self, userJID: jID, userPassword: self.passwordTextField.text!)
-        //Test
-        print("got here4")
-
+        Log.print("LoginViewController didTouchLogIn method called", loggingVerbosity: .high)
     }
     
-    //Need the following as a function so any delegate classes can access it
+    //Need the following as a function to give other classess access to the errorLabel
     func showErrorMessage(message: String) {
         self.errorLabel.text = message
     }
     
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+    //Make sure the keyboard is dismissed when a given UITextField is finished editing
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
+// MARK: - LoginViewControllerDelegate protocol
+
 protocol LoginViewControllerDelegate: class {
     func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String)
-    //func autoLogIn(userJID: String, userPassword: String)
-    //func checkLogin() -> Bool
 }

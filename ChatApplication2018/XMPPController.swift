@@ -46,7 +46,7 @@ class XMPPController: NSObject {
             throw XMPPControllerError.wrongUserID
         }
         
-        self.hostName = server.getAddress()//Constants.Server.address
+        self.hostName = server.getAddress()
         self.userJID = userJID
         self.hostPort = hostPort
         self.password = password
@@ -64,9 +64,6 @@ class XMPPController: NSObject {
         self.xmppRoster?.activate(xmppStream!)
         self.xmppRoster?.autoFetchRoster = true
         
-        //Will accept all subscription requests instead
-        //self.xmppRoster?.autoAcceptKnownPresenceSubscriptionRequests
-        
         //Message Archive Configuration
         self.xmppMessageArchivingStorage = XMPPMessageArchivingCoreDataStorage()
         self.xmppMessageArchiving = XMPPMessageArchiving(messageArchivingStorage: xmppMessageArchivingStorage)
@@ -78,17 +75,12 @@ class XMPPController: NSObject {
         
         super.init()
         
-        //Test
-        //print("got here7")
         Log.print("XMPPController initiated",loggingVerbosity: .high)
         
         self.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
         self.xmppRoster?.addDelegate(self, delegateQueue: DispatchQueue.main)
         self.xmppMessageArchiving?.addDelegate(self, delegateQueue: DispatchQueue.main)
-        //self.xmppReconnect?.addDelegate(self, delegateQueue: DispatchQueue.main)
-        
-        //Test
-        //print("got here8")
+
         Log.print("XMPPController added as delegate fo xmppStream, xmppRoster and xmppMessageArchiving",loggingVerbosity: .high)
     }
     
@@ -96,7 +88,7 @@ class XMPPController: NSObject {
         if (self.xmppStream?.isConnected)!{
             return
         }
-        //print("got here9T")
+        
         Log.print("XMPPStream connecting",loggingVerbosity: .high)
         try! self.xmppStream?.connect(withTimeout: XMPPStreamTimeoutNone)
     }
@@ -118,22 +110,16 @@ class XMPPController: NSObject {
     //add autheticated login details to keychain
     func saveCredentials(userName: String, password: String) {
         var saveSuccessful: Bool = KeychainWrapper.standard.set(password, forKey: "userPassword")
-        //print("Password save was successful: \(saveSuccessful)")
         Log.print("Password save was successful: \(saveSuccessful)",loggingVerbosity: .high)
         saveSuccessful = KeychainWrapper.standard.set(userName, forKey: "userName")
-        //print("Username save was successful: \(saveSuccessful)")
         Log.print("Username save was successful: \(saveSuccessful)",loggingVerbosity: .high)
     }
     
     func goOnline() {
         //From framework: After establishing a session, a client SHOULD send initial presence to the server in order to signal its availability for communications. As defined herein, the initial presence stanza (1) MUST possess no 'to' address (signalling that it is meant to be broadcasted by the server on behalf of the client) and (2) MUST possess no 'type' attribute (signalling the user's availability). After sending initial presence, an active resource is said to be an "available resource".
-        
-        //need to send presence so that the server sends back presence of users on roster who are subscribed
-        //Presence type is optional - the mere act of sending a presence stanza infroms that you are online
         presence = XMPPPresence(type: "available")
         xmppStream?.send(presence!)
-        //print("Presence: \(self.xmppStream?.myPresence?.showType)")
-        Log.print("Presence: \(self.xmppStream?.myPresence?.showType)",loggingVerbosity: .high)
+        Log.print("Sending presence: \(String(describing: self.xmppStream?.myPresence?.showType))",loggingVerbosity: .high)
     }
     
     func goOffline() {
@@ -143,16 +129,16 @@ class XMPPController: NSObject {
     
 }
 
+// MARK: - XMPPStreamDelegate methods
+
 extension XMPPController: XMPPStreamDelegate {
     
     func xmppStreamDidConnect(_ stream: XMPPStream) {
-        //print("Stream: Connected")
         Log.print("Stream: Connected", loggingVerbosity: .high)
         try! stream.authenticate(withPassword: self.password)
     }
     
     func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
-        //print("Stream: Authenticated")
         Log.print("Stream: Authenticated", loggingVerbosity: .high)
         
         let retrievedPassword: String? = KeychainWrapper.standard.string(forKey: "userPassword")
@@ -165,27 +151,22 @@ extension XMPPController: XMPPStreamDelegate {
             saveCredentials(userName: self.userJID.bare, password: self.password)
         }
         goOnline()
-        
     }
     
     func xmppStream(_ sender: XMPPStream, didReceiveError error: DDXMLElement) {
-        //print("username or resource is not allowed to create a session")
         Log.print("username or resource is not allowed to create a session", loggingVerbosity: .high)
     }
     
     func xmppStream(_ sender: XMPPStream, didNotAuthenticate error: DDXMLElement) {
-        //print("Stream: Fail to Authenticate")
         Log.print("Stream: Fail to Authenticate", loggingVerbosity: .high)
     }
     
     func xmppStreamDidDisconnect(_ sender: XMPPStream, withError error: Error?) {
-        //print("Stream: Disconnected")
         Log.print("Stream: Disconnected", loggingVerbosity: .high)
     }
     
     //Automatically accept presence requests.
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
-        //print("XMPPController: XMPPStreamDelegate didReceieve presence")
         Log.print("XMPPController: XMPPStreamDelegate didReceieve presence", loggingVerbosity: .high)
         if presence.type == "subscribe" {
             self.xmppRoster?.acceptPresenceSubscriptionRequest(from: presence.from!, andAddToRoster: false)
@@ -193,23 +174,22 @@ extension XMPPController: XMPPStreamDelegate {
                 self.xmppRoster?.subscribePresence(toUser: presence.from!)
             }
         }
-        
     }
     
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
-        //print("XMPPController: didReceive XMPPMessage")
         Log.print("XMPPController: didReceive XMPPMessage", loggingVerbosity: .high)
         
         //If a message is received from an unknown user, they are automatically added to the roster
         if message.from?.bare != server.getAddress() &&
             !(self.xmppRosterStorage?.jids(for: self.xmppStream!).contains(message.from!))! {
-            //print("XMPPController: XMPPMessage JID not on roster")
             Log.print("XMPPController: XMPPMessage JID not on roster", loggingVerbosity: .high)
             self.xmppRoster?.addUser(message.from!, withNickname: message.from?.user, groups: nil, subscribeToPresence: true)
         }
     }
     
 }
+
+// MARK: - NSNotification names
 
 extension Notification.Name {
     static let streamAuthenticated = Notification.Name("streamAuthenticated")

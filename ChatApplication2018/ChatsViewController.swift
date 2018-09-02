@@ -29,7 +29,8 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("CVC viewdidload")
+        //print("CVC viewdidload")
+        Log.print("ChatsViewController viewDidLoad() is called", loggingVerbosity: .high)
         homeTabBarController = tabBarController as? HomeTabBarController
         
         // Display spinner to show the user that is something is happening in the background
@@ -49,10 +50,11 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("viewDidAppear is called")
+        //print("viewDidAppear is called")
+        Log.print("ChatsViewController viewDidAppear() is called", loggingVerbosity: .high)
         
         if xmppController == nil {
-            print("No HTBC!")
+            Log.print("ChatsViewController - stream not yet autehnticated, no XMPPController pointer yet", loggingVerbosity: .high)
         }
     }
     
@@ -65,7 +67,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     // MARK: - UITableView setup
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("Number of rows in table: \(jidArray.count)")
+        //print("Number of rows in table: \(jidArray.count)")
         return jidArray.count
     }
     

@@ -7,7 +7,7 @@
 //
 
 /**
- This class controls how the user is able to register on the server, using XMPPRegister.swift
+ This class controls the register view, and therefore how the user is able to register on the server, by creating an instance of XMPPRegister
  **/
 
 import UIKit
@@ -26,6 +26,8 @@ class RegisterViewController: UIViewController {
     
     private let server = Constants()
     
+    // MARK: - Navigation
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if xmppRegister != nil {
@@ -33,6 +35,8 @@ class RegisterViewController: UIViewController {
             xmppRegister?.disconnect()
         }
     }
+    
+    // MARK: - @IBAction methods
     
     //Register a user on the server with the username they have entered
     @IBAction func registerUser(_ sender: Any) {
@@ -51,12 +55,18 @@ class RegisterViewController: UIViewController {
             let registerJID = userNameField.text! + "@" + server.getAddress()
             print(registerJID)
             
+            //Make sure the username conforms to JID convention
+            guard let _ = XMPPJID(string: registerJID) else {
+                warningLabel.text = "Username is not valid"
+                return
+            }
+            
             do {
                 try self.xmppRegister = XMPPRegister(registerUserJIDString: registerJID, password: passwordField.text!)
                 self.xmppRegister?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
                 self.xmppRegister?.connect()
             } catch {
-                print("something went wrong")
+                Log.print("RegisterViewController: Unable to initiate XMPPRegister object", loggingVerbosity: .high)
             }
             
         }
@@ -66,6 +76,8 @@ class RegisterViewController: UIViewController {
     @IBAction func backButton(_ sender: Any) {
         dismissRegisterVC()
     }
+    
+    // MARK: - Registration complete / dismiss VC
     
     //A UIAlert is dispalyed to the user when registration is successful
     func presentRegistrationSuccessAlert() {
@@ -83,23 +95,24 @@ class RegisterViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
 
-
 }
+
+// MARK: - XMPPStreamDelegate methods
 
 extension RegisterViewController: XMPPStreamDelegate {
     
     func xmppStreamDidConnect(_ sender: XMPPStream) {
-        print("Stream: Connected")
+        print("Register Stream: Connected")
         try! sender.register(withPassword: (self.xmppRegister?.password)!)
     }
     
     func xmppStreamDidRegister(_ sender: XMPPStream) {
-        print("\(sender.myJID?.user): Registered")
+        Log.print("User registered: \(String(describing: sender.myJID?.user))", loggingVerbosity: .high)
         try! sender.authenticate(withPassword: (self.xmppRegister?.password)!)
     }
     
     func xmppStream(_ sender: XMPPStream, didNotRegister error: DDXMLElement) {
-        print("Unable to register.")
+        Log.print("RegisterViewController: Unable to register", loggingVerbosity: .high)
         let childNodes = error.children
         
         //Check what errors are received, to update the user on what is causing the error
@@ -116,7 +129,7 @@ extension RegisterViewController: XMPPStreamDelegate {
             }
         }
         
-        //If any other type of error, apart from the ones listed above, is received
+        //If any other type of error is received, apart from the ones listed above, give a generic warning
         if errorCodeCheck == 0 {
             self.warningLabel.text = "Unable to register user"
         }
@@ -124,22 +137,22 @@ extension RegisterViewController: XMPPStreamDelegate {
     
     //Once the stream has sucesfully authenticated, it is disconnected, and a UIAlert is presented to the user
     func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
-        print("Stream: Authenticated")
+        Log.print("Register Stream: Authenticated", loggingVerbosity: .high)
         self.warningLabel.text = ""
         self.xmppRegister?.disconnect()
         presentRegistrationSuccessAlert()
     }
     
     func xmppStream(_ sender: XMPPStream, didReceiveError error: DDXMLElement) {
-        print("username or resource is not allowed to create a session")
+        Log.print("RegisterViewController: username or resource is not allowed to create a session", loggingVerbosity: .high)
     }
     
     func xmppStream(_ sender: XMPPStream, didNotAuthenticate error: DDXMLElement) {
-        print("Stream: Fail to Authenticate")
+        Log.print("Register Stream: Fail to Authenticate", loggingVerbosity: .high)
     }
     
     func xmppStreamDidDisconnect(_ sender: XMPPStream, withError error: Error?) {
-        print("Stream: Disconnected")
+        Log.print("Register Stream: Disconnected", loggingVerbosity: .high)
     }
 }
 

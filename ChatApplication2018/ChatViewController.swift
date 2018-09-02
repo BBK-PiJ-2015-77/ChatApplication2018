@@ -149,27 +149,23 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         /**
          As users can login and out of any device, the following was required to restrict the messages being retrieved to just those concerned between the logged in user and the other chat participant
          **/
-        
         let predicateFormat = "bareJidStr like %@ "
         let predicateFormat2 = "streamBareJidStr like %@ "
-        
-        // predicate1 matches "bareJidStr" - which is the other chat participant's JID - with the JID of the the other chat participant in this ChatViewController AND  matches "streamBareJidStr" with the current user's JID. If we consider 2 users, user1 & user2, we can think of this predicate as retrieving all messages sent and received between user1 and user2 on user1's stream
+        /**
+         predicate1 matches "bareJidStr" (the other chat participant's JID) with the JID of the other chat participant in this ChatViewController AND  matches "streamBareJidStr" with the current user's JID. Consider an example with 2 users, user1 & user2 - this predicate retrieves all messages sent and received between user1 and user2 on user1's stream.
+         **/
         let predicate1 = NSCompoundPredicate(type: .and, subpredicates: [NSPredicate(format: predicateFormat, recipientJID!.bare),NSPredicate(format: predicateFormat2, (self.xmppController?.userJID.bare)!)])
         
-        // Similarly to predicate1 above, we can consider this as retrieving al messages sent and received between user1 and user2 on user2's stream
+        // Similarly to predicate1 above, this predicate retrieves all messages sent and received between user1 and user2 on user2's stream
         let predicate2 = NSCompoundPredicate(type: .and, subpredicates: [NSPredicate(format: predicateFormat, (self.xmppController?.userJID.bare)!),NSPredicate(format: predicateFormat2, recipientJID!.bare)])
         
-        // The final predicate ensures we only retrieve messages between user1 and user2 from the server, regardless of which user's stream the messages were sent
+        // The final predicate ensures only messages between user1 and user2 are retrieved from the core data, regardless of which user's stream the messages were sent
         let andOrPredicate = NSCompoundPredicate(type: .or, subpredicates: [predicate1,predicate2])
         request.predicate = andOrPredicate
         
-        ////
-        
         request.entity = entityDescription
         let messages_arc = try? moc?.fetch(request)
-        
-        printMessages(messages_arc as! [AnyHashable])
-
+        printMessages((messages_arc as! [AnyHashable]))
     }
     
     func printMessages(_ messages_arc: [AnyHashable]?) {

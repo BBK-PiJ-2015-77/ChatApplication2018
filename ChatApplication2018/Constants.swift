@@ -8,14 +8,6 @@
 
 import Foundation
 
-/**
-struct Constants {
-    struct Server {
-        static let address = "ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
-    }
-}
- **/
-
 internal class Constants {
     private let address = "ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
     

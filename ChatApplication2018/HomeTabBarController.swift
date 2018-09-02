@@ -6,6 +6,10 @@
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
 
+/**
+ The HomeTabBarController class inherits UITabBarController and is a container for the ChatsViewController and SettingsViewController objects. The LoginViewController is initiated from here also. The HomeTabBarController is responsible for the creation of the XMPPController and all logging in/out, or changes of presence should be communicated through the HomeTabBarController
+ **/
+
 import UIKit
 import XMPPFramework
 import SwiftKeychainWrapper
@@ -20,22 +24,15 @@ class HomeTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
-        // Once the user has logged out, change variable 'loggedIn' to false, disconnect XMPPController and remove pointer. Broadcast by SettingsViewController
-        NotificationCenter.default.addObserver(self, selector: #selector(logOut(notfication:)), name: .loggedOut, object: nil)
-        
-        //Want to set presence type to "unavailable" when app enters background and "available" when it re-enters the foreground
-        NotificationCenter.default.addObserver(self, selector: #selector(setPresenceUnavailable(notfication:)), name: .presenceUnavailable, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(setPresenceAvailable(notfication:)), name: .presenceAvailable, object: nil)
+        initateObservers()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         let retrievedPassword: String? = KeychainWrapper.standard.string(forKey: "userPassword")
         let retrievedUserName: String? = KeychainWrapper.standard.string(forKey: "userName")
         
+        // Check if there is a saved username or password on the device
         if retrievedPassword == nil && retrievedUserName == nil && !loggedIn {
             // Segue to LoginViewController for user to login
             self.performSegue(withIdentifier: "loginView", sender: nil)
@@ -54,27 +51,28 @@ class HomeTabBarController: UITabBarController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        print("HTBC will disappear")
+        //print("HTBC will disappear")
+        Log.print("HomeTabBarController viewWillDisappear() is called", loggingVerbosity: .high)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        print("HTBC did disappear")
+        Log.print("HomeTabBarController: viewDidDisappear() is called", loggingVerbosity: .high)
     }
+    
+    // MARK: - Login methods
     
     func autoLogIn(userJID: String, userPassword: String) {
         do {
             try logIn(userJID: userJID, userPassword: userPassword)
-            print("Automatically logged in with saved credentials")
+            Log.print("HomeTabBarController: Automatically logged in with saved credentials", loggingVerbosity: .high)
             loggedIn = true
         } catch {
-            //need to show an error message to the user, below is just for testing
-            print("something went wrong")
+            Log.print("HomeTabBarController: Unable to login with saved credentials", loggingVerbosity: .high)
         }
     }
     
     func logIn(userJID: String, userPassword: String) throws {
-            try self.xmppController = XMPPController(userJIDString: userJID,
-                                                     password: userPassword)
+            try self.xmppController = XMPPController(userJIDString: userJID, password: userPassword)
             self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
             self.xmppController?.connect()
     }
@@ -89,6 +87,8 @@ class HomeTabBarController: UITabBarController {
         self.xmppController = nil
     }
     
+    // MARK: - Change presence
+    
     @objc func setPresenceUnavailable(notfication: NSNotification) {
         if self.xmppController?.presence?.type != "unavailable" {
            self.xmppController?.goOffline()
@@ -100,21 +100,34 @@ class HomeTabBarController: UITabBarController {
           self.xmppController?.goOnline()
         }
     }
+    
+    func initateObservers() {
+        // Once the user has logged out, change variable 'loggedIn' to false, disconnect XMPPController and remove pointer. Broadcast by SettingsViewController
+        NotificationCenter.default.addObserver(self, selector: #selector(logOut(notfication:)), name: .loggedOut, object: nil)
+        
+        //Want to set presence type to "unavailable" when app enters background and "available" when it re-enters the foreground
+        NotificationCenter.default.addObserver(self, selector: #selector(setPresenceUnavailable(notfication:)), name: .presenceUnavailable, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(setPresenceAvailable(notfication:)), name: .presenceAvailable, object: nil)
+    }
 
 }
+
+// MARK: - LoginViewControllerDelegate implementation
 
 extension HomeTabBarController: LoginViewControllerDelegate {
     func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String) {
         self.loginViewController = sender
         do {
             try logIn(userJID: userJID, userPassword: userPassword)
-            print("Logged in with new credentials")
+            Log.print("HomeTabBarController: Logged in with new credentials", loggingVerbosity: .high)
             loggedIn = true
         } catch {
             sender.showErrorMessage(message: "Error logging in")
         }
     }
 }
+
+// MARK: - XMPPStreamDelegate methods
 
 extension HomeTabBarController: XMPPStreamDelegate {
     
@@ -129,10 +142,5 @@ extension HomeTabBarController: XMPPStreamDelegate {
         logOut()
     }
     
-}
-
-protocol HomeTabBarControllerDelegate: class {
-    func didTouchLogIn(sender: LoginViewController, userJID: String, userPassword: String)
-
 }
 
