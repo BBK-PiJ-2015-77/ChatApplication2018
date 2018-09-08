@@ -5,10 +5,11 @@
 //  Created by Thomas McGarry on 17/07/2018.
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
-//  Adaptable scrollview/textfield comes from Dzung Nguyen's post from Medium.com
+//  Key Resources:
 //  https://medium.com/@dzungnguyen.hcm/autolayout-for-scrollview-keyboard-handling-in-ios-5a47d73fd023
-//  Also similar to Apple's documentation:
 //  https://developer.apple.com/library/archive/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
+//  https://stackoverflow.com/questions/14173251/xmppframework-retrieving-openfire-message-archives
+
 
 import UIKit
 import XMPPFramework

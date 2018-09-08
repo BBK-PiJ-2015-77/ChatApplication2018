@@ -5,9 +5,12 @@
 //  Created by Thomas McGarry on 28/05/2018.
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
+//  Key Resources:
+//  https://www.erlang-solutions.com/blog/build-a-complete-ios-messaging-app-using-xmppframework-part-2.html
+//  https://github.com/jrendel/SwiftKeychainWrapper
 
 /**
- This class is the main logical model for the application. Connecting the XMPPStrem is handled here, as well as instantiation of the roster, message archving and presence.
+ This class is the main logical model for the application. Connecting the XMPPStream is handled here, as well as instantiation of the roster, message archving and presence.
  **/
 
 import Foundation

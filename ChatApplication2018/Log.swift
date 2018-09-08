@@ -5,7 +5,8 @@
 //  Created by Thomas McGarry on 25/08/2018.
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
-//https://medium.com/@sauvik_dolui/developing-a-tiny-logger-in-swift-7221751628e6
+//  Key Resources:
+//  https://medium.com/@sauvik_dolui/developing-a-tiny-logger-in-swift-7221751628e6
 
 import Foundation
 
@@ -30,7 +31,6 @@ class Log {
     
     class func print(_ object: Any, loggingVerbosity: verbosity) {
         var verbosityLevel: Int
-        
         let possibleVerbosityValues = verbosity.allValues
         
         if possibleVerbosityValues.contains(Global.verbosity) {

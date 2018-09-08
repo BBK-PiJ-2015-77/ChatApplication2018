@@ -5,6 +5,8 @@
 //  Created by Thomas McGarry on 04/08/2018.
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
+//  Key Resources:
+//  https://www.erlang-solutions.com/blog/build-a-complete-ios-messaging-app-using-xmppframework-part-2.html
 
 /**
  This class is a more restricted version of the XMPPController.swift class. It allows an XMPPStream to be created and for a user to register on the server. The server supports in-band registration.

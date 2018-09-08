@@ -5,6 +5,8 @@
 //  Created by Thomas McGarry on 28/05/2018.
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
+//  Key Resources:
+//  https://www.erlang-solutions.com/blog/build-a-complete-ios-messaging-app-using-xmppframework-part-2.html
 
 /**
  This class controls the login view, and therefore how the user is able to login to the server. The loogin function, didTouchLogIn, to be implemented by a LoginViewController delegate

@@ -5,6 +5,8 @@
 //  Created by Thomas McGarry on 03/06/2018.
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
+//  Key Resources:
+//  https://learnappmaking.com/notification-center-how-to-swift/
 
 /**
  The HomeTabBarController class inherits UITabBarController and is a container for the ChatsViewController and SettingsViewController objects. The LoginViewController is initiated from here also. The HomeTabBarController is responsible for the creation of the XMPPController and all logging in/out, or changes of presence should be communicated through the HomeTabBarController
@@ -51,7 +53,6 @@ class HomeTabBarController: UITabBarController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        //print("HTBC will disappear")
         Log.print("HomeTabBarController viewWillDisappear() is called", loggingVerbosity: .high)
     }
     
@@ -105,7 +106,7 @@ class HomeTabBarController: UITabBarController {
         // Once the user has logged out, change variable 'loggedIn' to false, disconnect XMPPController and remove pointer. Broadcast by SettingsViewController
         NotificationCenter.default.addObserver(self, selector: #selector(logOut(notfication:)), name: .loggedOut, object: nil)
         
-        //Want to set presence type to "unavailable" when app enters background and "available" when it re-enters the foreground
+        //Set presence type to "unavailable" when app enters background and "available" when it re-enters the foreground
         NotificationCenter.default.addObserver(self, selector: #selector(setPresenceUnavailable(notfication:)), name: .presenceUnavailable, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(setPresenceAvailable(notfication:)), name: .presenceAvailable, object: nil)
     }
@@ -137,7 +138,7 @@ extension HomeTabBarController: XMPPStreamDelegate {
         NotificationCenter.default.post(name: .streamAuthenticated, object: nil)
     }
     
-    func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!) {
+    func xmppStream(_ sender: XMPPStream, didNotAuthenticate error: DDXMLElement) {
         self.loginViewController?.showErrorMessage(message: "Wrong password or username")
         logOut()
     }

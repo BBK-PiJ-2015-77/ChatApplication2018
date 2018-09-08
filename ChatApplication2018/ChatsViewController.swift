@@ -5,6 +5,18 @@
 //  Created by Thomas McGarry on 03/06/2018.
 //  Copyright © 2018 Thomas McGarry. All rights reserved.
 //
+//  Key Resources:
+//  https://www.youtube.com/watch?v=FgCIRMz_3dE
+//  https://medium.com/ios-os-x-development/enable-slide-to-delete-in-uitableview-9311653dfe2
+
+/**
+ The ChatsViewController class provides a table showing all the contacts in the user's roster.
+ Contacts can be added and removed from the roster from here, affecting what is displayed on screen. When a new message is received, there is a notification shown on screen.
+ The user's own name and online status is also displayed
+ Provides segues to:
+    - AddChatViewController
+    - ChatViewController
+ **/
 
 import UIKit
 import XMPPFramework
@@ -19,38 +31,28 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var xmppController: XMPPController?
     var homeTabBarController: HomeTabBarController?
     var jidArray: [XMPPJID] = []
-    
     var invalidJIDAlertController: UIAlertController?
     var defaultAction: UIAlertAction?
-    
     private let server = Constants()
+    
     // MARK: - Setup
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //print("CVC viewdidload")
         Log.print("ChatsViewController viewDidLoad() is called", loggingVerbosity: .high)
         homeTabBarController = tabBarController as? HomeTabBarController
         
-        // Display spinner to show the user that is something is happening in the background
+        // Display spinner to show the user the connection attempt
         waitingToConnect()
         
-        //Create alert view if wrong username is entered when adding a contact
-        self.invalidJIDAlertController = UIAlertController(title: "Invalid username", message: "The username entered does not exist", preferredStyle: .alert)
-        self.defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        invalidJIDAlertController?.addAction(defaultAction!)
+        initateObservers()
         
-        // Only obtain access to the XMPPController once we know we have an autheticated stream connected. This Observer will create a pointer to the HomeTabBarController's XMPPController. Broadcast by HomeTabBarController
-        NotificationCenter.default.addObserver(self, selector: #selector(connectToXMPPController(notfication:)), name: .streamAuthenticated, object: nil)
-        
-        // Once the user has logged out, the view will switch back to this ChatsViewController tab. This Observer makes sure that the LoginViewController view is presented. Broadcast by SettingsViewController
-        NotificationCenter.default.addObserver(self, selector: #selector(showLoginView(notfication:)), name: .loggedOut, object: nil)
+        //Create alert view for case if wrong username is entered when adding a contact
+        createInvalidJIDAlertController()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //print("viewDidAppear is called")
         Log.print("ChatsViewController viewDidAppear() is called", loggingVerbosity: .high)
         
         if xmppController == nil {
@@ -63,19 +65,31 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTitle.text = "Connecting..."
         self.connectingIndicator.startAnimating()
     }
+    
+    func initateObservers() {
+        // Only obtain access to the XMPPController once ther is an authenticated stream. This is critical due to the fact that the ChatsViewController is created when the app is launched - the functionality of the class is largely dependent on an authenticated stream. This Observer will create a pointer to the HomeTabBarController's XMPPController. The notification is broadcast by the HomeTabBarController
+        NotificationCenter.default.addObserver(self, selector: #selector(connectToXMPPController(notfication:)), name: .streamAuthenticated, object: nil)
+        
+        // Once the user has logged out, the view will switch back to this ChatsViewController tab. This Observer makes sure that the LoginViewController view is presented. The notification is broadcast by SettingsViewController
+        NotificationCenter.default.addObserver(self, selector: #selector(showLoginView(notfication:)), name: .loggedOut, object: nil)
+    }
+    
+    // Creates an alert view if wrong username is entered when adding a contact
+    func createInvalidJIDAlertController() {
+        self.invalidJIDAlertController = UIAlertController(title: "Invalid username", message: "The username entered does not exist", preferredStyle: .alert)
+        self.defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        invalidJIDAlertController?.addAction(defaultAction!)
+    }
 
     // MARK: - UITableView setup
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //print("Number of rows in table: \(jidArray.count)")
         return jidArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatsTableViewCell
         cell.nameLabel.text = jidArray[indexPath.row].user
-        //cell.newMessage.text = ""
-        //cell.setChatsCellLabels(name: jidArray[indexPath.row].user!, newMessage: false)
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -201,7 +215,9 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         print("\(sender) called updateChatsTable")
         updateChatsTable()
     }
+    
 
+    
 }
 
 extension ChatsViewController: AddChatViewControllerDelegate {
