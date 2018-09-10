@@ -56,7 +56,7 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         Log.print("ChatsViewController viewDidAppear() is called", loggingVerbosity: .high)
         
         if xmppController == nil {
-            Log.print("ChatsViewController - stream not yet autehnticated, no XMPPController pointer yet", loggingVerbosity: .high)
+            Log.print("ChatsViewController - stream not yet authenticated, no XMPPController pointer yet", loggingVerbosity: .high)
         }
     }
     
@@ -95,8 +95,6 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatsTableViewCell
-        //cell.newMessage.text = ""
         let cell = chatsTableView.cellForRow(at: indexPath) as! ChatsTableViewCell
         cell.newMessage.text = ""
         performSegue(withIdentifier: "chatsToChat", sender: self)
@@ -104,14 +102,11 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
         let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
             self.xmppController?.xmppRoster?.removeUser(self.jidArray[indexPath.row])
-            //self.xmppController?.xmppRoster.remove
             self.jidArray.remove(at: indexPath.row)
             self.chatsTableView.deleteRows(at: [indexPath], with: .fade)
         }
-        
         return [delete]
     }
     
@@ -119,15 +114,14 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Send data to ChatViewController
+        // When a username is selected on the table, provide the ChatViewController with access to the selected JID and the XMPPController
         let destinationNavigationController = segue.destination as! UINavigationController
         let chatVC: ChatViewController = destinationNavigationController.topViewController as! ChatViewController
         chatVC.recipientJID = jidArray[(chatsTableView.indexPathForSelectedRow?.row)!]
         chatVC.xmppController = self.xmppController
     }
     
-    // Creates a pop-up box for the user to enter a new user they wish to add to their list
-    
+    // Creates an 'AddChatViewController' - effectively ahows a pop-up box for the user to enter a new user they wish to add to their roster
     @IBAction func addChat(_ sender: Any) {
         let addChatVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "addChatPopUp") as! AddChatViewController
         self.addChildViewController(addChatVC)
@@ -138,31 +132,24 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @objc func showLoginView(notfication: NSNotification) {
-        //homeTabBarController = nil
-        //print("HTBC is nil as logged out")
-        
-        //Delete contents of existing jidArray
         jidArray = []
         homeTabBarController?.performSegue(withIdentifier: "loginView", sender: nil)
     }
     
     @objc func connectToXMPPController(notfication: NSNotification) {
-        print("Observer initiated connectToXMPPController")
+        Log.print("ChatsViewController - observer initiated connectToXMPPController", loggingVerbosity: .high)
         connectToXMPPController()
     }
     
     func connectToXMPPController() {
-        
         self.connectingIndicator.stopAnimating()
         xmppController = homeTabBarController?.xmppController
-
-        if homeTabBarController == nil {
-            print("HTBC is nil sow hat can we do")
-        }
-        print("XMPPController: \(xmppController?.userJID.user)")
+        Log.print("ChatsViewController - \(xmppController?.userJID.user)'s XMPPController connected", loggingVerbosity: .high)
         
+        // Update username on display
         userTitle.text = xmppController?.xmppStream?.myJID?.user
         
+        // Update user status on display
         if (self.xmppController?.xmppStream?.isConnected)! { //
             displayStatus.text = "online"
         } else {
@@ -172,28 +159,21 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
         self.xmppController?.xmppRoster?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
-        
-        
-        //If roster has not yet been received - we should not attempt to update the table view. This can be achieved with the XMPPRoster delegate methods when the roster has finished populating
+        // There is a delay when receiving the roster from the server. If it has been received, the table will update. If it has not yet been received, the table will be updated with the XMPPRoster delegate methods when the roster has finished populating
         if (self.xmppController?.xmppRoster?.hasRoster)! {
-            print("connectToXMPPController called updateChatsTable")
+            Log.print("ChatsViewController - connectToXMPPController called updateChatsTable", loggingVerbosity: .high)
             updateChatsTable()
         }
         
     }
     
+    // Adds all JIDs from roster storage to the tableview
     func updateChatsTable() {
-        print("Buddy IDs:")
+        Log.print("Buddy IDs:", loggingVerbosity: .high)
         if self.xmppController != nil {
             let jids = xmppController?.xmppRosterStorage?.jids(for: (self.xmppController?.xmppStream)!)
-            //let user: XMPPUserCoreDataStorageObject
-            
             for jid in jids! {
-                //print(jid.user ?? "None yet")                
-                print(jid.full)
-                
-                
-                
+                Log.print(jid.full, loggingVerbosity: .high)
                 if !jidArray.contains(jid) {
                     jidArray.append(jid.bareJID)
                 }
@@ -202,21 +182,17 @@ class ChatsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    func newMessageAlert(fromUser: String, sender: String) {
-        print("Iterating through ChatsTableView\n\(fromUser)\n")
+    func newMessageAlert(fromUser: String) {
+        Log.print("ChatsViewController - iterating through ChatsTableView\n\(fromUser)\n", loggingVerbosity: .high)
         for cell in self.chatsTableView.visibleCells as! [ChatsTableViewCell] {
-            //cell as! ChatsTableViewCell
             print("Cell: \(cell.nameLabel.text!), From: \(fromUser)")
             if cell.nameLabel.text! == fromUser {
-                print("there should be a new message notification!!!!")
                 cell.newMessage.text = "New Message"
             }
         }
-        print("\(sender) called updateChatsTable")
+        Log.print("ChatsViewController - \(fromUser) called updateChatsTable", loggingVerbosity: .high)
         updateChatsTable()
     }
-    
-
     
 }
 
@@ -224,15 +200,13 @@ extension ChatsViewController: AddChatViewControllerDelegate {
     
     func addContact(contactJID: String) {
 
-        let newContactString = contactJID + "@" + server.getAddress()//Constants.Server.address
+        let newContactString = contactJID + "@" + server.getAddress()
         
-        //This doesn't really add anything
         guard let newContactJID = XMPPJID(string: newContactString) else {
             present(invalidJIDAlertController!, animated: true, completion: nil)
             return
         }
         
-        //self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactNickName)
         self.xmppController?.xmppRoster?.addUser(newContactJID, withNickname: contactJID, groups: nil, subscribeToPresence: true)
         addUserToTable(user: newContactJID)
     }
@@ -240,111 +214,38 @@ extension ChatsViewController: AddChatViewControllerDelegate {
     func addUserToTable(user: XMPPJID) {
         if !jidArray.contains(user) {
             self.jidArray.append(user)
-            print("Adding \(user)")
+            Log.print("ChatsViewController - adding \(user) to table", loggingVerbosity: .high)
             updateChatsTable()
         }
     }
+    
 }
 
 extension ChatsViewController: XMPPStreamDelegate {
     
     
-    //Do I need to do this?
-    /**
-    func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
-        if iq.type == "result" && (self.xmppController?.xmppRoster?.hasRoster)! {
-            print("XMPPStreamDelegate called updateChatsTable")
-            print("\(iq.childElement)")
-            updateChatsTable()
-        }
-        //should respond to a 'get' or 'set' iq with a 'result' or 'error' iq?
-        return true
-    }
-    **/
-    
-    //Automatically accept presence requests. Move to XMPPController
-    /**
-    func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
-        //Need to move to XMPPController
-        print("ChatsView Controller XMPPStreamDelegate didReceieve presence")
-        
-        
-        if presence.type == "subscribe" {
-            self.xmppController?.xmppRoster?.acceptPresenceSubscriptionRequest(from: presence.from!, andAddToRoster: false)
-        }
-        
-    }
-    **/
-    
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
         
-        //The following process is done for new messages both from known & unknown users
-        /*
-        print("Iterating through ChatsTableView")
-        for cell in self.chatsTableView.visibleCells as! [ChatsTableViewCell] {
-            //cell as! ChatsTableViewCell
-            print("Cell: \(cell.nameLabel.text!), From: \(message.from!.user!)")
-            if cell.nameLabel.text! == message.from!.user! {
-                cell.newMessage.text = "New Message"
-            }
-        }
-        updateChatsTable()
-        */
-        
-        
-        // When a message is received from an unknown user, the XMPPController is responsible for adding the new JID to the Roster, so whenever the roster is loaded going forward, the new user will be included. To add the user to the immediate session, it is added directly to jidArray
-        print("Bare JID: \(message.from!.bareJID)")
-        
-        //if message.from?.bare != Constants.Server.address {
+        Log.print("ChatsViewController - message received from: \(message.from!.bareJID)", loggingVerbosity: .high)
+
+        // The server can send messages to users (e.g. a welcome message), so the address needs to be checked it's not coming from the server
         if message.from?.bare != server.getAddress() {
-            print("Server address: \(server.getAddress())")
+            // add sender to the table. If the user already exists in the table, they will not be added. Unknown users will also be added to the roster, but this is handled by the XMPPController, to make sure that this occurs when the ChatsViewController is not active.
             addUserToTable(user: message.from!.bareJID)
-            newMessageAlert(fromUser: (message.from?.user)!, sender: "didReceiveMessage")
+            // display new message alert
+            newMessageAlert(fromUser: (message.from?.user)!)
         }
-        
         
     }
 
 }
 
 extension ChatsViewController: XMPPRosterDelegate {
+    
     func xmppRosterDidEndPopulating(_ sender: XMPPRoster) {
         print("XMPPRosterDelegate called updateChatsTable")
         updateChatsTable()
     }
-    
-    // When a new message is received from an unknown JID, the XMPPController will add the user to the Roster and request presence subscription. The below will make sure that the chatsTable is updated to show the new user in this circumstance.
-    /**
-    func xmppRoster(_ sender: XMPPRoster, didReceiveRosterItem item: DDXMLElement) {
-        print("didReceiveRosterItem called updateChatsTable")
-        updateChatsTable()
-        //This is overkill as received too often. also doesn't allow new message to be displayed
-        //updateChatsTable()
-        print("Received roster item")
-        print("item attribute? \(item.attributeBoolValue(forName: "item"))")
-        print("iq attribute? \(item.attributeBoolValue(forName: "iq"))")
-        print("name attribute? \(item.attributeStringValue(forName: "name"))")
-        
-        let subscription: String? = item.attributeStringValue(forName: "subscription")
-        let user: String? = item.attributeStringValue(forName: "name")
-        if subscription == "to" {
-            print("received roster item from: \(user!)")
-            newMessageAlert(fromUser: user!, sender: "didReceiveRosterItem")
-        }
-        /*
-         <iq xmlns="jabber:client"
-            from="test1@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"
-            to="test1@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com/1768755405915782382635304709474747540955648445274620593355"
-            id="push10676426508913265979" type="set">
-            <query xmlns="jabber:iq:roster">
-                <item ask="subscribe" subscription="none" name="test2" jid="test2@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com"/>
-            </query>
-         </iq>
-        */
-        
-    }
-    **/
-    
     
 }
 

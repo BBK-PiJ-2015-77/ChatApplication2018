@@ -11,7 +11,6 @@ import XMPPFramework
 
 class MessageTableViewCell: UITableViewCell {
 
-    //@IBOutlet weak var messageText: UITextView!
     @IBOutlet weak var messageLabel: UILabel!
     
     func setMessage(xmppMessage: XMPPMessage) {

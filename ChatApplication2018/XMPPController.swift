@@ -84,7 +84,7 @@ class XMPPController: NSObject {
         self.xmppRoster?.addDelegate(self, delegateQueue: DispatchQueue.main)
         self.xmppMessageArchiving?.addDelegate(self, delegateQueue: DispatchQueue.main)
 
-        Log.print("XMPPController added as delegate fo xmppStream, xmppRoster and xmppMessageArchiving",loggingVerbosity: .high)
+        Log.print("XMPPController added as delegate for xmppStream, xmppRoster and xmppMessageArchiving",loggingVerbosity: .high)
     }
     
     func connect() {

@@ -16,7 +16,7 @@ import SwiftKeychainWrapper
 
 @testable import ChatApplication2018
 
-class XMPPControllerTestsv2: XCTestCase, XMPPStreamDelegate {
+class XMPPControllerTestsv2: XCTestCase, XMPPStreamDelegate, XMPPRosterDelegate {
     
     var xmppController: XMPPController!
     var expectation: XCTestExpectation? = nil
@@ -53,8 +53,11 @@ class XMPPControllerTestsv2: XCTestCase, XMPPStreamDelegate {
         
         if addDelegate {
             self.xmppController.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
+            self.xmppController.xmppRoster?.addDelegate(self, delegateQueue: DispatchQueue.main)
         }
     }
+    
+    // MARK: - XMPPController Tests
     
     func testXMPPStreamConfig() {
         //given a valid userJID & userPassword
@@ -124,6 +127,7 @@ class XMPPControllerTestsv2: XCTestCase, XMPPStreamDelegate {
         XCTAssertFalse((self.xmppController.xmppStream?.isAuthenticating)! && (self.xmppController.xmppStream?.isAuthenticated)!)
     }
     
+    // MARK: - Roster Tests
     
     var activeRosterExpectation: XCTestExpectation? = nil
     
@@ -140,7 +144,33 @@ class XMPPControllerTestsv2: XCTestCase, XMPPStreamDelegate {
     }
     
     /**
-     The following are implementations of the XMPPStreamDelegate. These are required to verify that various asynchronous tasks have completed.
+    var userAddedExpectation: XCTestExpectation? = nil
+    
+    func testUserAdded() {
+        //given a stream setup/connection
+        initiateXMPPController(addDelegate: true)
+        xmppController.connect()
+        
+        //make sure there is an active roster before testing
+        self.activeRosterExpectation = expectation(description: "Active roster")
+        
+        
+        //check user is added to roster
+        let newUser = XMPPJID(string: "abc1@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com")
+        self.xmppController.xmppRoster?.addUser(newUser!, withNickname: "abc1")
+        print("add user to roster")
+        self.userAddedExpectation = expectation(description: "User added to roster")
+        
+        waitForExpectations(timeout: 5, handler: nil)
+        let jids = self.xmppController.xmppRosterStorage?.jids(for: self.xmppController.xmppStream!)
+        XCTAssertTrue((jids?.contains(newUser!))!)
+    }
+    **/
+    
+    // MARK: - Delegate Implementations
+    
+    /**
+     The following are implementations of the XMPPStreamDelegate & XMPPRosterDelegate. These are required to verify that various asynchronous tasks have completed.
     **/
     
     func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
@@ -167,9 +197,19 @@ class XMPPControllerTestsv2: XCTestCase, XMPPStreamDelegate {
         if iq.isResultIQ && iq.child(at: 0)?.name! == "query" {
             if iq.child(at: 0)?.description.range(of: "jabber:iq:roster") != nil {
                 self.activeRosterExpectation?.fulfill()
+                print("activeRosterExpectation fulfilled")
             }
         }
         return true
+    }
+    
+    func xmppRoster(_ sender: XMPPRoster, didReceiveRosterItem item: DDXMLElement) {
+        print("Received roster item")
+        
+        for attribute in item.attributesAsDictionary() {
+            print(attribute)
+        }
+        //userAddedExpectation?.fulfill()
     }
     
 }

@@ -9,7 +9,12 @@
 //  https://medium.com/@dzungnguyen.hcm/autolayout-for-scrollview-keyboard-handling-in-ios-5a47d73fd023
 //  https://developer.apple.com/library/archive/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
 //  https://stackoverflow.com/questions/14173251/xmppframework-retrieving-openfire-message-archives
+//  https://stackoverflow.com/questions/38626004/add-subtitle-under-the-title-in-navigation-bar-controller-in-xcode?noredirect=1&lq=1
 
+/**
+ The ChatViewController class provides a table showing all the messages sent/received with another user
+ Provides a means to send messages
+ **/
 
 import UIKit
 import XMPPFramework
@@ -20,69 +25,62 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var chatTableView: UITableView!
-    //@IBOutlet weak var constraintContentHeight: NSLayoutConstraint!
     
     var xmppController: XMPPController?
     var recipientJID: XMPPJID?
     var xmppMessages: [XMPPMessage] = []
     var userPresence: String = "offline"
     
-    //used for adaptive scrolling
+    // The following are required for adaptive scrolling
     var activeField: UITextField?
     var lastOffset: CGPoint!
     var keyboardHeight: CGFloat!
     
-    var count = 0
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("Chat View Controller did load")
-        
+        Log.print("ChatViewController did load", loggingVerbosity: .high)
         self.xmppController?.xmppStream?.addDelegate(self, delegateQueue: DispatchQueue.main)
         
         //Following makes sure the keyboard can be dismissed by interacting with the table view
         self.chatTableView.keyboardDismissMode = .onDrag
         
-        // Size the table cells appropriately
+        // Size the table size appropriately
         setTableConstraints()
         
-        // initialise archive and display messages
+        // Retrieve and display messages
         retrieveMessages()
         
-        // keyboard setup
+        // Keyboard setup
         chatInput.delegate = self
         chatInput.returnKeyType = .send
         
-        // will need a method to dismiss the keyboard without sending a message
-        
-        // Observe keyboard change
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        initateObservers()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        count += 1
-        print("Chat view controller loaded. Count: \(count)")
         presenceProbe()
         setTitle()
     }
     
+    func initateObservers() {
+        // Observe keyboard changes
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
     @IBAction func backButton(_ sender: Any) {
-        //Shouldn't be required as view is removed from memory
-        //self.xmppMessages = []
         dismiss(animated: true, completion: nil)
     }
     
     func presenceProbe() {
-        //As per XEP-0318 - request presence from recipient
+        // Request presence from recipient
         let probe = DDXMLElement.element(withName: "presence") as! DDXMLElement
         probe.addAttribute(withName: "to", stringValue: (self.recipientJID?.bare)!)
         probe.addAttribute(withName: "type", stringValue: "probe")
         self.xmppController?.xmppStream?.send(probe)
         
-        //As per XEP-0012 - request last time the user was active
+        // As per XEP-0012 - request last time the user was active
         let lastActiveQuery = DDXMLElement.element(withName: "iq") as! DDXMLElement
         lastActiveQuery.addAttribute(withName: "id", stringValue: "last1")
         lastActiveQuery.addAttribute(withName: "to", stringValue: (self.recipientJID?.bare)!)
@@ -96,6 +94,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func setTitle() {
+        // Set the other user's username as the main title
         let titleLabel = UILabel(frame: CGRect(x: 0, y: -2, width: 0, height: 0))
         titleLabel.backgroundColor = .clear
         titleLabel.textColor = .black
@@ -103,6 +102,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         titleLabel.text = self.recipientJID?.user!
         titleLabel.sizeToFit()
         
+        // Set the other user's presence
         let subtitleLabel = UILabel(frame: CGRect(x: 0, y: 18, width: 0, height: 0))
         subtitleLabel.backgroundColor = .clear
         subtitleLabel.textColor = .gray
@@ -126,15 +126,14 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.navigationItem.titleView = titleView
     }
     
+    // Send a 'chat' type message on the XMPP stream
     func sendMessage(message: String) {
         let xmppMessage = XMPPMessage(type: "chat", to: recipientJID)
-        
-        
         xmppMessage.addBody(message)
-        
         self.xmppController?.xmppStream?.send(xmppMessage)
     }
     
+    // Retrieve messages from core data
     func retrieveMessages() {
 
         let storage = xmppController?.xmppMessageArchivingStorage
@@ -147,9 +146,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let request = NSFetchRequest<NSFetchRequestResult>()
         
-        /**
-         As users can login and out of any device, the following was required to restrict the messages being retrieved to just those concerned between the logged in user and the other chat participant
-         **/
         let predicateFormat = "bareJidStr like %@ "
         let predicateFormat2 = "streamBareJidStr like %@ "
         /**
@@ -169,8 +165,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         printMessages((messages_arc as! [AnyHashable]))
     }
     
+    // Add messages to the array xmppMessages, then load this data into the table view
     func printMessages(_ messages_arc: [AnyHashable]?) {
-        
         autoreleasepool {
             for message: XMPPMessageArchiving_Message_CoreDataObject? in messages_arc as? [XMPPMessageArchiving_Message_CoreDataObject?] ?? [XMPPMessageArchiving_Message_CoreDataObject?]() {
                 let element = try? XMLElement(xmlString: message?.messageStr ?? "")
@@ -184,6 +180,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // MARK: - Scroll to bottom
+    
     // Called to make sure the most recent messages at the bottom of the table are showing
     func scrollToBottom() {
         if xmppMessages.count != 0 {
@@ -192,7 +189,12 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    // MARK: - UITableView setup
+    // MARK: - TableView setup
+    
+    func setTableConstraints() {
+        chatTableView.rowHeight = UITableViewAutomaticDimension
+        chatTableView.estimatedRowHeight = 140
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return xmppMessages.count
@@ -202,6 +204,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         let message = xmppMessages[indexPath.row]
         let cell: MessageTableViewCell
 
+        // Check whether the message should be contained within a "sentMessageCell" or a "receivedMessageCell - affecting whether the message is aligned right (for sent messages) or left (for recieved messages)
         switch message.to?.bare {
         case  recipientJID?.bare:
             cell = tableView.dequeueReusableCell(withIdentifier: "sentMessageCell") as! MessageTableViewCell
@@ -217,11 +220,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         chatTableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func setTableConstraints() {
-        chatTableView.rowHeight = UITableViewAutomaticDimension
-        chatTableView.estimatedRowHeight = 140
-    }
-    
+    // Returns a String, stating that the other user is offline and when they were last online
     func getTimeLastActive(seconds: Double = 0) -> String {
         let formatter = DateFormatter()
         
@@ -241,6 +240,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 
 extension ChatViewController: XMPPStreamDelegate {
     
+    // If a message is received, add it to the xmppMessages array and reload the table
     func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
         if message.isChatMessage {
             self.xmppMessages.append(message)
@@ -249,6 +249,7 @@ extension ChatViewController: XMPPStreamDelegate {
         }
     }
     
+    // If a message is sent, add it to the xmppMessages array and reload the table
     func xmppStream(_ sender: XMPPStream, didSend message: XMPPMessage) {
         if message.isMessageWithBody {
             self.xmppMessages.append(message)
@@ -257,12 +258,14 @@ extension ChatViewController: XMPPStreamDelegate {
         }
     }
     
+    // Handles received presence stanzas
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
         print("ChatViewController XMPPStreamDelegate did receive presence")
         if presence.isErrorPresence {
-            print("Error presence received from \((presence.from?.bare)!)")
+            Log.print("ChatViewController - Error presence received from \((presence.from?.bare)!)", loggingVerbosity: .high)
         }
         
+        // Check that the presence received is from the other user
         if presence.from?.bare == self.recipientJID?.bare {
             switch presence.type {
             case "available" :
@@ -278,6 +281,7 @@ extension ChatViewController: XMPPStreamDelegate {
         }
     }
     
+    // Handles received iq stanzas with time last active information
     func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
         if iq.elementID == "last1" && iq.type == "result" {
             let sec = iq.childElement?.attributeDoubleValue(forName: "seconds") as! Double
@@ -291,6 +295,8 @@ extension ChatViewController: XMPPStreamDelegate {
 
 }
 
+
+// These UITextFieldDelegate functions have been seperated to an extension for clarity.
 extension ChatViewController: UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -323,11 +329,6 @@ extension ChatViewController {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
             //increase contentView's height by keyboard height
-            /*
-            UIView.animate(withDuration: 0.3, animations: {
-                self.constraintContentHeight.constant += self.keyboardHeight
-            })
-            */
             
             // move if keyboard hides input field
             let distanceToBottom = self.scrollView.frame.size.height - (activeField?.frame.origin.y)! - (activeField?.frame.size.height)!
@@ -347,7 +348,6 @@ extension ChatViewController {
     
     @objc func keyboardWillHide(notification: NSNotification) {
         UIView.animate(withDuration: 0.3) {
-            //self.constraintContentHeight.constant -= self.keyboardHeight
             self.scrollView.contentOffset = self.lastOffset
         }
         keyboardHeight = nil
