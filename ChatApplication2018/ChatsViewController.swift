@@ -243,7 +243,7 @@ extension ChatsViewController: XMPPStreamDelegate {
 extension ChatsViewController: XMPPRosterDelegate {
     
     func xmppRosterDidEndPopulating(_ sender: XMPPRoster) {
-        print("XMPPRosterDelegate called updateChatsTable")
+        Log.print("XMPPRosterDelegate called updateChatsTable", loggingVerbosity: .high)
         updateChatsTable()
     }
     

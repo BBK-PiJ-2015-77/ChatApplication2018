@@ -100,12 +100,13 @@ class XMPPControllerTestsv2: XCTestCase, XMPPStreamDelegate, XMPPRosterDelegate 
     var authenticationExpectation: XCTestExpectation? = nil
     
     func testXMPPStreamAuthenticates() {
+        //given valid credentials
         self.authenticationExpectation = expectation(description: "Stream authenticates")
         print("Initiating XMPPController")
         initiateXMPPController(addDelegate: true)
-        
         self.xmppController.connect()
         
+        //check stream authenticates
         waitForExpectations(timeout: 5, handler: nil)
         XCTAssertTrue((self.xmppController.xmppStream?.isAuthenticated)!)
     }

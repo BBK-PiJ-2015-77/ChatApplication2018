@@ -173,9 +173,9 @@ extension XMPPController: XMPPStreamDelegate {
         Log.print("XMPPController: XMPPStreamDelegate didReceieve presence", loggingVerbosity: .high)
         if presence.type == "subscribe" {
             self.xmppRoster?.acceptPresenceSubscriptionRequest(from: presence.from!, andAddToRoster: false)
-            if !(self.xmppRosterStorage?.jids(for: self.xmppStream!).contains(presence.from!))! {
+            //if !(self.xmppRosterStorage?.jids(for: self.xmppStream!).contains(presence.from!))! {
                 self.xmppRoster?.subscribePresence(toUser: presence.from!)
-            }
+            //}
         }
     }
     

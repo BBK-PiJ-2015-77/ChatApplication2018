@@ -32,9 +32,11 @@ class XMPPRosterTests: XCTestCase, XMPPStreamDelegate, XMPPRosterDelegate {
             xmppController.disconnect()
             print("Disconnected in teardown")
         }
-        
+        newUser = nil
+        jids = nil
         xmppController = nil
         usleep(200000)
+        //sleep(5)
         super.tearDown()
     }
     
@@ -53,7 +55,7 @@ class XMPPRosterTests: XCTestCase, XMPPStreamDelegate, XMPPRosterDelegate {
     }
     
     var activeRosterExpectation: XCTestExpectation? = nil
-    
+
     func testRosterActive() {
         //given a stream setup/connection
         initiateXMPPController(addDelegate: true)
@@ -65,32 +67,46 @@ class XMPPRosterTests: XCTestCase, XMPPStreamDelegate, XMPPRosterDelegate {
         waitForExpectations(timeout: 5, handler: nil)
         XCTAssertTrue((self.xmppController.xmppRoster?.hasRoster)!)
     }
-    
+
     var userAddedExpectation: XCTestExpectation? = nil
-    
-    
-    //This isn't working because the new user is added before the roster has been established. Need to wait for roser to be established before proceeding
+    var newUser: XMPPJID? = nil
+    var jids: [XMPPJID]? = nil
+ 
     func testUserAdded() {
-        //given a stream setup/connection
+        
+        //given a stream setup & connection
         initiateXMPPController(addDelegate: true)
         xmppController.connect()
         
-        //make sure there is an active roster before testing
-        self.activeRosterExpectation = expectation(description: "Active roster")
-        
-        
         //check user is added to roster
-        let newUser = XMPPJID(string: "abc1@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com")
-        self.xmppController.xmppRoster?.addUser(newUser!, withNickname: "abc1")
-        print("add user to roster")
-        //self.userAddedExpectation = expectation(description: "User added to roster")
+        self.newUser = XMPPJID(string: "abc1@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com")
+        //user is added in delegate method
+        
+        self.userAddedExpectation = expectation(description: "User added to roster")
         
         waitForExpectations(timeout: 5, handler: nil)
-        let jids = self.xmppController.xmppRosterStorage?.jids(for: self.xmppController.xmppStream!)
         XCTAssertTrue((jids?.contains(newUser!))!)
     }
     
-    // Delegates
+    var removeUser = false
+    
+    func testUserRemoved() {
+        //given a stream setup & connection
+        initiateXMPPController(addDelegate: true)
+        xmppController.connect()
+        
+        //add user to roster. If 'newUser' != nil, then user will be added
+        self.newUser = XMPPJID(string: "abc2@ec2-35-177-34-255.eu-west-2.compute.amazonaws.com")
+        
+        self.removeUser = true
+        
+    }
+    
+    // MARK: - Delegate Implementations
+    
+    /**
+     The following are implementations of the XMPPStreamDelegate & XMPPRosterDelegate. These are required to verify that various asynchronous tasks have completed.
+     **/
     
     func xmppStream(_ sender: XMPPStream, didReceive iq: XMPPIQ) -> Bool {
         print("Test Stream: IQ received")
@@ -104,6 +120,21 @@ class XMPPRosterTests: XCTestCase, XMPPStreamDelegate, XMPPRosterDelegate {
             }
         }
         return true
+    }
+    
+    func xmppRosterDidEndPopulating(_ sender: XMPPRoster) {
+        if newUser != nil {
+            print("XMPPRosterDelegate: user added")
+            self.xmppController.xmppRoster?.addUser(newUser!, withNickname: "abc1")
+        }
+    }
+    
+    func xmppRoster(_ sender: XMPPRoster, didReceiveRosterPush iq: XMPPIQ) {
+        self.userAddedExpectation?.fulfill()
+        self.jids = self.xmppController.xmppRosterStorage?.jids(for: self.xmppController.xmppStream!)
+        if removeUser {
+            self.xmppController.xmppRoster?.removeUser(self.newUser)
+        }
     }
     
     /**
