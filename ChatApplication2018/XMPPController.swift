@@ -168,7 +168,7 @@ extension XMPPController: XMPPStreamDelegate {
         Log.print("Stream: Disconnected", loggingVerbosity: .high)
     }
     
-    //Automatically accept presence requests.
+    //Automatically accept presence requests, and reciprocate presence subscription
     func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
         Log.print("XMPPController: XMPPStreamDelegate didReceieve presence", loggingVerbosity: .high)
         if presence.type == "subscribe" {
